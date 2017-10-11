@@ -1,4 +1,4 @@
-import GameSession as m
+import Evening as m
 
 member_h = m.Member(0, "Михаил", 0)
 

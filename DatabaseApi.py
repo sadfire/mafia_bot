@@ -1,6 +1,6 @@
 import MySQLdb
 
-from GameSession import Member
+from Evening import Member
 
 
 class MafiaDB:
