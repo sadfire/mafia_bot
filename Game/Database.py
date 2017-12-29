@@ -1,8 +1,5 @@
 import MySQLdb
 
-from Evening import Member
-
-
 class MafiaDB:
     def __init__(self, user, passw):
         self.db = MySQLdb.connect(host="localhost", user=user, passwd=passw, db="mafia_rate", charset='utf8')
