@@ -6,7 +6,7 @@ class IGameState:
         self._game = game
         self._next_state = next_state
 
-    def process(self, event) -> bool:
+    def _process(self, event):
         pass
 
     def next(self) -> None:
@@ -18,6 +18,9 @@ class CardWait(IGameState):
         super().__init__(game, next_state)
         self._card = card
 
+    def _process(self, event):
+        pass
+
     @staticmethod
     def _swap_role_callback(init_player, target_player):
         init_player.role, target_player.role = target_player.role, init_player.role
@@ -28,7 +31,8 @@ class CardWait(IGameState):
             self._game.log_event(Event.SuccessListen, self._game.active_player.id, player.id)
 
     def _recruitment_callback(self, player):
-        self._game.
+        pass
+
 
 class MafiaNight(IGameState):
     pass

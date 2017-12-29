@@ -1,7 +1,10 @@
+import time
 from emoji import emojize as em
 from telegram.ext import MessageHandler, Filters
 
 from Game.Evening import Evening
+from Game.States import CardWait, MafiaNight
+from Game.Cards import CardsBeginner as Cards
 from KeyboardFactory import KBFactory
 
 
@@ -122,8 +125,9 @@ class EveningManagement(IState):
         if data == "end_evening_adding_approve":
             if self._session.evening.is_ready():
                 self._session.bot.delete_message(self._session.t_id, self._message.message_id)
-                members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name) for member in self._session.evening.members.values()]
-                self._session.send_message("Игроки: \n{}" .format("".join(members)))
+                members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name) for member in
+                           self._session.evening.members.values()]
+                self._session.send_message("Игроки: \n{}".format("".join(members)))
                 self._next = Game
                 return True
             else:
@@ -188,9 +192,18 @@ class EveningManagement(IState):
 
 
 class Game(IState):
+    def __init__(self, session, previous=None):
+        super().__init__(session, previous)
+        self._game_state = CardWait(Cards.ChangeRole, self, MafiaNight)
+        self._session.send_message("Будет ли использована карта смена роли?", KBFactory.confirm())
+
+    def process(self, bot, update):
+        pass
+
     def _greeting(self) -> None:
         super()._greeting()
-        self._session.send_message("Игра начинается")
+        self._session.send_message("Игра начинается")  # TODO Добавить счетчик игр и чтобы тут писался номер игры
+        time.sleep(1)
 
 
 class PlayerManagement(IState):
