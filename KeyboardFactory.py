@@ -45,6 +45,10 @@ class KBFactory:
         return Markup(kb)
 
     @classmethod
+    def confirm(cls):
+        return Markup([[Button("Да", callback_data="yes"), Button("Нет", callback_data="no")]])
+
+    @classmethod
     def button(cls, text, callback=""):
         return Markup([[Button(text, callback_data=callback)]])
 
