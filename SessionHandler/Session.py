@@ -5,12 +5,12 @@ from SessionHandler.States import StartState
 
 
 class Session:
-    def __init__(self, bot, updater, t_id):
+    def __init__(self, bot, updater, t_id, database_class=Database):
         self.bot = bot
         self.t_id = t_id
         self._updater = updater
 
-        self.db = Database("u{}".format(self.t_id), 'mafia_api')
+        self.db = database_class("u{}".format(self.t_id), 'mafia_api')
         self.host = self.db.get_member_by_telegram(self.t_id)
 
         self.evening = None

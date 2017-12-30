@@ -3,6 +3,7 @@ from emoji import emojize as em
 from telegram.ext import MessageHandler, Filters
 
 from Game.Evening import Evening
+from Game.Game import Game
 from Game.States import CardWait, MafiaNight
 from Game.Cards import CardsBeginner as Cards
 from KeyboardFactory import KBFactory
@@ -128,7 +129,7 @@ class EveningManagement(IState):
                 members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name) for member in
                            self._session.evening.members.values()]
                 self._session.send_message("Игроки: \n{}".format("".join(members)))
-                self._next = Game
+                self._next = CalculationOfPlayers
                 return True
             else:
                 self._update_players_message()
@@ -191,19 +192,68 @@ class EveningManagement(IState):
                                                                       request_result]))
 
 
-class Game(IState):
+class CalculationOfPlayers(IState):
     def __init__(self, session, previous=None):
+        self.game = Game(session.evening)
         super().__init__(session, previous)
-        self._game_state = CardWait(Cards.ChangeRole, self, MafiaNight)
-        self._session.send_message("Будет ли использована карта смена роли?", KBFactory.confirm())
+        self._game_state = CardWait(Cards.ChangeRole, self.game, MafiaNight)
+
+        self._active_member = None
+        self._active_number = None
 
     def process(self, bot, update):
-        pass
+        data = get_data(update)
+        id = data.split()[0]
+        if data.find(self.get_number_prefix):
+            self._active_number = int(id)
+        elif data.find(self.get_member_prefix):
+            self._active_member = self._session.evening.members[id]
+        elif data.find(self.get_random_callback):
+            pass
+
+        if self._active_member is not None and self._active_number is not None:
+            self._active_member.number = self._active_number
+            self._active_number = None
+            self._active_member = None
+
+        if len([player for player in self.game.players if player.number is not None]) :
+            return True
+
+    @property
+    def get_number_prefix(self):
+        return "select_number_"
+
+    @property
+    def get_member_prefix(self):
+        return "select_member_"
+
+    @property
+    def get_random_callback(self):
+        return "random"
+
+    @property
+    def emoji_number_list(self):
+        tmp = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
+        tmp.reverse()
+        return tmp
+
+    def update_message(self):
+        members = {}
+        for number, player in self._players_nums:
+            pass # TODO CURPOINT
+
+        #self._message.edit_reply_markup(reply_markup=)
 
     def _greeting(self) -> None:
         super()._greeting()
-        self._session.send_message("Игра начинается")  # TODO Добавить счетчик игр и чтобы тут писался номер игры
-        time.sleep(1)
+        self._message \
+            = self._session.send_message("Расчет игроков",
+                                         KBFactory.players(self._session.evening.members,
+                                                           postfix=(self.get_member_prefix, self.get_number_prefix),
+                                                           emoji=self.emoji_number_list)
+                                         +
+                                         KBFactory.button("Произвольное распределение", self.get_random_callback))
+        # TODO Добавить счетчик игр и чтобы тут писался номер игры
 
 
 class PlayerManagement(IState):

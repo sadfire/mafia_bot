@@ -53,11 +53,36 @@ class KBFactory:
         return Markup([[Button(text, callback_data=callback)]])
 
     @classmethod
+    def players_with_dic(cls, members_dict) -> Markup:
+        pass
+
+    @classmethod
     def players(cls, members, postfix="", emoji=None):
         kb = []
         if emoji is None:
             emoji = em(":x:")
 
+        id_postfix = ""
+        if isinstance(postfix, tuple) and len(postfix) > 1:
+            id_postfix = postfix[0]
+            postfix = postfix[1]
+
+        if isinstance(emoji, list) and len(emoji) < len(members):
+            emoji = em(":x:")
+
+        if isinstance(members, dict):
+            members = members.values()
+
         for member in members:
-            kb.append([Button(member.name, callback_data="no"), Button(emoji, callback_data=str(member.id) + postfix)])
+            kb.append([Button(member.name, callback_data=str(member.id) + id_postfix),
+                       Button((emoji if not isinstance(emoji, list) else em(emoji.pop())),
+                              callback_data=str(member.id) + postfix)])
         return Markup(kb)
+
+    @classmethod
+    def game_menu(cls, players, postfix=""):
+        kb = []
+        actions = {}
+        for player in players:
+            tmp = []
+            tmp.append(Button(player.number, callback_data="{}{}".format(postfix, player.id)))
