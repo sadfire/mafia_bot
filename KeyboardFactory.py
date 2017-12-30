@@ -53,8 +53,16 @@ class KBFactory:
         return Markup([[Button(text, callback_data=callback)]])
 
     @classmethod
-    def players_with_dic(cls, members_dict) -> Markup:
-        pass
+    def turple_list_to_kb(cls, turpl_list) -> Markup:
+        kb = []
+
+        for attributs in turpl_list:
+            kb_line = []
+            for attribut in attributs:
+                kb_line.append(Button(attribut[0], callback_data=attribut[1]))
+            kb.append(kb_line)
+
+        return Markup(kb)
 
     @classmethod
     def players(cls, members, postfix="", emoji=None):
