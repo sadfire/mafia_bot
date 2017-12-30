@@ -53,13 +53,13 @@ class KBFactory:
         return Markup([[Button(text, callback_data=callback)]])
 
     @classmethod
-    def turple_list_to_kb(cls, turpl_list) -> Markup:
+    def turple_list_to_kb(cls, objects, callbacks, postfix) -> Markup:
         kb = []
 
-        for attributs in turpl_list:
+        for obj in objects:
             kb_line = []
-            for attribut in attributs:
-                kb_line.append(Button(attribut[0], callback_data=attribut[1]))
+            for index, attribut in enumerate(obj):
+                kb_line.append(Button(attribut, callback_data="{}_{}".format(callbacks[attribut] if attribut in callbacks else attribut, postfix[index])))
             kb.append(kb_line)
 
         return Markup(kb)

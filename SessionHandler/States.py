@@ -192,6 +192,10 @@ class EveningManagement(IState):
                                                                       request_result]))
 
 
+def emoji_number(num):
+    return ["0", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"][num]
+
+
 class CalculationOfPlayers(IState):
     def __init__(self, session, previous=None):
         self.game = Game(session.evening)
@@ -203,57 +207,57 @@ class CalculationOfPlayers(IState):
 
     def process(self, bot, update):
         data = get_data(update)
-        id = data.split()[0]
-        if data.find(self.get_number_prefix):
-            self._active_number = int(id)
-        elif data.find(self.get_member_prefix):
-            self._active_member = self._session.evening.members[id]
-        elif data.find(self.get_random_callback):
+        id = int(data.split('_')[0])
+        if self.get_number_prefix in data:
+            self._active_number = id
+        elif self.get_member_prefix in data:
+            for player in self.game.players:
+                if player.id == id:
+                    self._active_member = player
+                    self._active_member.postfix = em("self._active_member")
+                    break
+            else:
+                raise ValueError("!!!")  # TODO
+        elif "random" in data:
             pass
 
         if self._active_member is not None and self._active_number is not None:
             self._active_member.number = self._active_number
+            self._active_member.player.postfix = ""
             self._active_number = None
             self._active_member = None
 
-        if len([player for player in self.game.players if player.number is not None]) :
+        self._update_message()
+
+        if len([player for player in self.game.players if player.number is not None]):
             return True
 
     @property
     def get_number_prefix(self):
-        return "select_number_"
+        return "select_number"
 
     @property
     def get_member_prefix(self):
-        return "select_member_"
+        return "select_member"
 
-    @property
-    def get_random_callback(self):
-        return "random"
+    def _update_message(self):
+        tmp = []
+        number_pull = list(range(1, 1 + len(self.game.players)))
+        number_pull.reverse()
+        for player in self.game.players:
+            tmp.append((player.name + player.postfix,
+                        emoji_number(player.number if player.number is not None else number_pull.pop())))
 
-    @property
-    def emoji_number_list(self):
-        tmp = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
-        tmp.reverse()
-        return tmp
+        self._message.edit_reply_markup(
+            reply_markup=KBFactory.turple_list_to_kb(tmp,
+                                                     dict([(player.name, player.id) for player in self.game.players]),
+                                                     (self.get_member_prefix, self.get_number_prefix)))
 
-    def update_message(self):
-        members = {}
-        for number, player in self._players_nums:
-            pass # TODO CURPOINT
-
-        #self._message.edit_reply_markup(reply_markup=)
-
+    # TODO Добавить счетчик игр и чтобы тут писался номер игры
     def _greeting(self) -> None:
         super()._greeting()
-        self._message \
-            = self._session.send_message("Расчет игроков",
-                                         KBFactory.players(self._session.evening.members,
-                                                           postfix=(self.get_member_prefix, self.get_number_prefix),
-                                                           emoji=self.emoji_number_list)
-                                         +
-                                         KBFactory.button("Произвольное распределение", self.get_random_callback))
-        # TODO Добавить счетчик игр и чтобы тут писался номер игры
+        self._message = self._session.send_message("Расчет игроков")
+        self._update_message()
 
 
 class PlayerManagement(IState):

@@ -12,7 +12,7 @@ class Game:
         super().__init__()
         self.active_player = None
         self._evening = evening
-        self.players = [Player(member.id) for member in self._evening.members.values()]
+        self.players = [Player(member.id, member.name) for member in self._evening.members.values()]
 
     @property
     def get_alive_players(self):
