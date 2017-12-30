@@ -1,6 +1,6 @@
-from Game.Member import Member
 from SessionHandler.Session import Session
-import Mocks
+from Tests import Mocks
+
 
 def test_create_session():
     bot = Mocks.Bot()

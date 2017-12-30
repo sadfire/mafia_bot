@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a6ccdbfb-6cfe-4120-b7ae-98bb10f5435e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Mocks.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game/Game.py" afterPath="$PROJECT_DIR$/Game/Game.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game/Member.py" afterPath="$PROJECT_DIR$/Game/Member.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game/Player.py" afterPath="$PROJECT_DIR$/Game/Player.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game/States.py" afterPath="$PROJECT_DIR$/Game/States.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/KeyboardFactory.py" afterPath="$PROJECT_DIR$/KeyboardFactory.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SessionHandler/Session.py" afterPath="$PROJECT_DIR$/SessionHandler/Session.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SessionHandler/States.py" afterPath="$PROJECT_DIR$/SessionHandler/States.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game_test.py" afterPath="$PROJECT_DIR$/game_test.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/game_test.py" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/game_test.py" afterPath="$PROJECT_DIR$/Tests/GameTests.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,7 +15,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/mafia_bot$Unnamed.coverage" NAME="bot Coverage Results" MODIFIED="1514641498792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/mafia_bot$test.coverage" NAME="test Coverage Results" MODIFIED="1514648274566" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/mafia_bot$test.coverage" NAME="test Coverage Results" MODIFIED="1514648412889" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MafiaBot_v2$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1512754371684" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
@@ -54,13 +46,13 @@
     <splitter split-orientation="horizontal" split-proportion="0.31820968">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="game_test.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/game_test.py">
+          <file leaf-file-name="GameTests.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Tests/GameTests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
+                <state relative-caret-position="255">
                   <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
                   <folding>
-                    <element signature="e#0#30#0" expanded="true" />
+                    <marker date="1514648560405" expanded="true" signature="0:43" ph="import ..." />
                   </folding>
                 </state>
               </provider>
@@ -77,7 +69,7 @@
             </entry>
           </file>
           <file leaf-file-name="Mocks.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Mocks.py">
+            <entry file="file://$PROJECT_DIR$/Tests/Mocks.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="986">
                   <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
@@ -86,11 +78,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Member.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Member.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Game/Member.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="136">
                   <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/.gitignore">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="68">
+                  <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
                   <folding />
                 </state>
               </provider>
@@ -325,16 +327,6 @@
               <item name="mafia_bot" type="b2602c69:ProjectViewProjectNode" />
               <item name="mafia_bot" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="mafia_bot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mafia_bot" type="462c0819:PsiDirectoryNode" />
-              <item name="Game" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mafia_bot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mafia_bot" type="462c0819:PsiDirectoryNode" />
-              <item name="SessionHandler" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -350,6 +342,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Patrician\Documents\github\mafia_bot\Tests" />
       <recent name="C:\Users\Patrician\PycharmProjects\MafiaBot_v2\db_struct_damp" />
       <recent name="C:\Users\Patrician\PycharmProjects\MafiaBot_v2\Game" />
       <recent name="C:\Users\Patrician\PycharmProjects\MafiaBot_v2\Sessions" />
@@ -399,7 +392,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="MafiaBot_v2" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/game_test.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\Patrician\Documents\github\mafia_bot\Tests\GameTests.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -456,7 +449,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32782516" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32903227" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32903227" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25266525" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25266525" sideWeight="0.5043011" order="2" side_tool="true" content_ui="tabs" />
@@ -505,7 +498,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="das://table:/d4a88422/3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5/mafia_rate.Telegram" />
     <entry file="das://table:/d4a88422/3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5/mafia_rate.Telegram" />
     <entry file="das://table:/d4a88422/3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5/mafia_rate.Telegram" />
     <entry file="das://table:/d4a88422/3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5/mafia_rate.Telegram" />
@@ -802,7 +794,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Callbacks.py" />
     <entry file="file://$PROJECT_DIR$/UserHandler.py" />
-    <entry file="file://$PROJECT_DIR$/db_stuff/mafia_rate.sql" />
+    <entry file="file://$PROJECT_DIR$/.database_stuff/mafia_rate.sql" />
     <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/inline/inlinekeyboardmarkup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -814,6 +806,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1141">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1512673632953" expanded="true" signature="624:688" ph="SELECT * FRO... Members" />
+            <marker date="1512673632953" expanded="true" signature="980:1015" ph="SELECT * FRO... Members" />
+            <marker date="1512673632953" expanded="true" signature="1319:2370" ph="SELECT Eveni... Members" />
+            <marker date="1512673632953" expanded="true" signature="3479:3538" ph="SELECT ID, N... Members" />
+            <marker date="1512673632953" expanded="true" signature="4353:4374" ph="SELECT * FRO... Members" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -879,7 +878,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Mocks.py">
+    <entry file="file://$PROJECT_DIR$/Tests/Mocks.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="986">
           <caret line="58" column="0" lean-forward="false" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
@@ -929,12 +928,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game_test.py">
+    <entry file="file://$PROJECT_DIR$/Tests/GameTests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
+        <state relative-caret-position="255">
           <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
           <folding>
-            <element signature="e#0#30#0" expanded="true" />
+            <marker date="1514648560405" expanded="true" signature="0:43" ph="import ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SessionHandler/States.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="244" column="9" lean-forward="false" selection-start-line="244" selection-start-column="9" selection-end-line="244" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -947,13 +956,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SessionHandler/States.py">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="244" column="9" lean-forward="false" selection-start-line="244" selection-start-column="9" selection-end-line="244" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="68">
+          <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
