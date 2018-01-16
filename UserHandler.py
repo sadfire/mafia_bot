@@ -1,6 +1,6 @@
 from telegram.ext import MessageHandler, Filters
 
-from KeyboardFactory import KBFactory
+from KeyboardFactory import KeyboardFactory
 from SessionHandler.States import get_query_text
 
 
@@ -22,7 +22,7 @@ class UserHandler:
             tmp = '@' + user.username
         bot.send_message(chat_id=t_id,
                          text="Приветствую тебя, {}. Это бот учета статистики игры Мафия.".format(tmp),
-                         reply_markup=KBFactory.start_user())
+                         reply_markup=KeyboardFactory.start_user())
 
     def request_handler(self, bot, update):
         t_id = update.effective_chat.id
@@ -54,12 +54,12 @@ class UserHandler:
     def _open_evening_statistic_callback(self, bot, data, t_id):
         e_id = data.split('.')[1]
         bot.send_message(chat_id=t_id, text=self._db.get_evening_statistic(e_id),
-                         reply_markup=KBFactory.statistic_reply())
+                         reply_markup=KeyboardFactory.statistic_reply())
 
     def _open_game_statistic_callback(self, bot, data, t_id):
         g_id = data.split('.')[1]
         bot.send_message(chat_id=t_id, text=self._db.get_game_statistic(g_id),
-                         reply_markup=KBFactory.button("Открыть подробнее", "open_advancer"))
+                         reply_markup=KeyboardFactory.button("Открыть подробнее", "open_advancer"))
 
     def _info_approve_callback(self, bot, t_id, update):
         self._updater.dispatcher.remove_handler(self._tmp_dispatcher)
@@ -74,9 +74,9 @@ class UserHandler:
 
     def _user_open_statistic_callback(self, t_id, update):
         update.effective_message.edit_text(text=self._db.get_member_statistic_format(t_id),
-                                           reply_markup=KBFactory.statistic_reply())
+                                           reply_markup=KeyboardFactory.statistic_reply())
 
     def _text_wait(self, bot, update):
         self._wait_text = get_query_text(update)
         bot.send_message(chat_id=update.effective_message.char_id, text="Подтверждаете свои данные?",
-                         reply_to_message_id=update.effective_message.id, reply_markup=KBFactory.approve("Info"))
+                         reply_to_message_id=update.effective_message.id, reply_markup=KeyboardFactory.approve("Info"))

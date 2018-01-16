@@ -1,12 +1,11 @@
-import time
+from random import shuffle
+from collections import OrderedDict
+
 from emoji import emojize as em
 from telegram.ext import MessageHandler, Filters
 
 from Game.Evening import Evening
-from Game.Game import Game
-from Game.States import CardWait, MafiaNight
-from Game.Cards import CardsBeginner as Cards
-from KeyboardFactory import KBFactory
+from KeyboardFactory import KeyboardFactory as KBF
 
 
 def get_query_text(update):
@@ -51,7 +50,7 @@ class StartState(IState):
         appeal = self._session.host.name if self._session.host.name != "" else "Ведущий"
         self._session.send_message(text="Приветствую {}. \n "
                                         "Я бот учета статистики игры мафия {}".format(appeal, '🕵'),
-                                   reply_markup=KBFactory.main())
+                                   reply_markup=KBF.main())
 
     def process_callback(self, bot, update):
         data = get_query_text(update)
@@ -94,7 +93,7 @@ class EveningManagement(IState):
 
     @property
     def _main_keyboard(self):
-        return KBFactory.button("Открыть 'завсегдатаев'", "open_regular") + KBFactory.approve("end_evening_adding")
+        return KBF.button("Открыть 'завсегдатаев'", "open_regular") + KBF.approve("end_evening_adding")
 
     def _add_member(self, bot, updater):
         txt = updater.effective_message.text
@@ -119,7 +118,7 @@ class EveningManagement(IState):
 
     def _update_players_message(self):
         self._message = self._message.edit_reply_markup(
-            reply_markup=KBFactory.players(self._session.evening.members.values()) + self._main_keyboard)
+            reply_markup=KBF.players(self._session.evening.members.values()) + self._main_keyboard)
 
     def process_callback(self, bot, update):
         data = get_query_text(update)
@@ -185,15 +184,15 @@ class EveningManagement(IState):
                 members.append(member)
 
         if len(members) == 0:
-            return KBFactory.button(em(":no_good:"), "close")
+            return KBF.button(em(":no_good:"), "close")
 
-        return KBFactory.players(members, "_add", em(":heavy_plus_sign:")) + KBFactory.button(em(":x:"), "close")
+        return KBF.players(members, "_add", em(":heavy_plus_sign:")) + KBF.button(em(":x:"), "close")
 
     def _choose_member(self, request_result):
         self._session.bot.send_message(self._session.t_id,
                                        text="Под ваш запрос подходит несколько игроков. Ввыберите подходящее",
-                                       reply_markup=KBFactory.choose("choose_member",
-                                                                     [em(":bust_in_silhouette:") + str(
+                                       reply_markup=KBF.choose("choose_member",
+                                                                           [em(":bust_in_silhouette:") + str(
                                                                          member.id) + ":" + member.name for member in
                                                                       request_result]))
 
@@ -203,72 +202,103 @@ def emoji_number(num):
 
 
 class CalculationOfPlayers(IState):
-    def __init__(self, session, previous=None):
-        self.game = Game(session.evening)
-        super().__init__(session, previous)
-
-        self._game_state = CardWait(Cards.ChangeRole, self.game, MafiaNight)
-
-        self._active_member = None
-        self._active_number = None
-
-    def process_callback(self, bot, update):
-        data = get_query_text(update)
-
-        id = int(data.split('_')[0])
-
-        if self.get_number_prefix in data:
-            self._active_number = id
-
-        elif self.get_member_prefix in data:
-            for player in self.game.players:
-                if player.id == id:
-                    self._active_member = player
-                    self._active_member.postfix = em("self._active_member")
-                    break
-            else:
-                raise ValueError("!!!")  # TODO
-        elif "random" in data:
-            pass
-
-        if self._active_member is not None and self._active_number is not None:
-            self._active_member.number = self._active_number
-            self._active_member.postfix = ""
-            self._active_number = None
-            self._active_member = None
-
-        self._update_message()
-
-        if len([player for player in self.game.players if player.number is not None]):
-            return True
-
-    @property
-    def get_number_prefix(self):
-        return "select_number"
-
-    @property
-    def get_member_prefix(self):
-        return "select_member"
-
-    def _update_message(self):
-        tmp = []
-        number_pull = list(range(1, 1 + len(self.game.players)))
-        number_pull.reverse()
-        for player in self.game.players:
-            tmp.append((player.name + player.postfix,
-                        emoji_number(player.number if player.number is not None else number_pull.pop())))
-
-        self._message.edit_reply_markup(
-            reply_markup=KBFactory.turple_list_to_kb(tmp,
-                                                     dict([(player.name, player.id) for player in self.game.players]),
-                                                     (self.get_member_prefix, self.get_number_prefix)))
-
     # TODO Добавить счетчик игр и чтобы тут писался номер игры
     def _greeting(self) -> None:
         super()._greeting()
         self._message = self._session.send_message("Расчет игроков")
         self._update_message()
 
+    def __init__(self, session, previous=None):
+        super().__init__(session, previous)
+        self.players = {}
+        self.process_randomize_calculation()
+        self._update_message()
+        self._active_number = None
+        self._active_member_id = None
+        self._next = GameInProcess
+
+    def process_randomize_calculation(self):
+        self.players.clear()
+        indexes = list(range(len(self._session.evening.members)))
+        shuffle(indexes)
+        for id, member in self._session.evening.members.items():
+            self.players[indexes.pop()] = member
+
+    def process_callback(self, bot, update):
+        data = get_query_text(update)
+
+        if self.get_number_prefix in data:
+            self._number_callback(data.split('_')[-1])
+
+        elif self.get_member_prefix in data:
+            self._member_callback(data.split('_')[-1])
+
+        elif self.get_random_query == data:
+            self.process_randomize_calculation()
+
+        elif self.get_end_query == data:
+            return True
+
+        self._update_message()
+
+    def _update_message(self):
+        kb = KBF.button("Перемешать", self.get_random_query)
+        for index, member in OrderedDict(self.players.items()):
+
+            text_left = member.name
+            text_right = emoji_number(index + 1)
+
+            if self._active_member_id == member.id:
+                text_left = '*'+text_left
+            if self._active_number == index:
+                text_right = '*' + text_right
+
+            kb += KBF.button(text_left, self.get_member_prefix + member.id) * KBF.button(text_right, self.get_number_prefix + index)
+
+        self._message.edit_reply_markup(kb + KBF.button("Закончить расчет игроков", self.get_end_query))
+
+    def _member_callback(self, id):
+        self._active_member_id = id
+        self._update_calculating()
+
+    def _number_callback(self, index):
+        self._active_number = index
+        self._update_calculating()
+
+    def _update_calculating(self):
+        if self._active_member_id is None or self._active_number is None:
+            return
+
+        for index, player in self.players:
+            if player.id == self._active_member_id:
+                swap_index = index
+                break
+        else:
+            raise ValueError()
+
+        self.players[self._active_number], self.players[swap_index] = self.players[swap_index], self.players[self._active_number]
+        self._active_number, self._active_member_id = None, None
+
+
+    @property
+    def get_random_query(self):
+        return "randomize"
+
+    @property
+    def get_end_query(self):
+        return "end"
+
+    @property
+    def get_number_prefix(self):
+        return "select_number_"
+
+    @property
+    def get_member_prefix(self):
+        return "select_member_"
+
+
+class GameInProcess(IState):
+    pass
 
 class PlayerManagement(IState):
     pass

@@ -1,6 +1,6 @@
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
-from KeyboardFactory import KBFactory
+from KeyboardFactory import KeyboardFactory
 from MafiaDatabaseApi import Database
 from SessionHandler.Session import Session
 from SessionHandler.States import get_query_text
@@ -51,7 +51,7 @@ class Bot:
         if t_id in self._sessions.keys():
             bot.send_message(chat_id=update.effective_chat.id,
                              text="Вы уверены, что хотите перезагрузить бота?",
-                             reply_markup=KBFactory.button("Да", "BOT_RESET_CALLBACK") + KBFactory.button("Нет", "BOT_NOT_RESET_CALLBACK"))
+                             reply_markup=KeyboardFactory.button("Да", "BOT_RESET_CALLBACK") + KeyboardFactory.button("Нет", "BOT_NOT_RESET_CALLBACK"))
             return
 
         if not self._db.check_permission(t_id):

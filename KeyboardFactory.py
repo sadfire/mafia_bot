@@ -3,7 +3,7 @@ from telegram import InlineKeyboardButton as Button
 from telegram import InlineKeyboardMarkup as Markup
 
 
-class KBFactory:
+class KeyboardFactory:
     @staticmethod
     def start_user():
         return Markup([
