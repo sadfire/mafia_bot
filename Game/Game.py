@@ -5,6 +5,7 @@ from Game.Player import Player
 
 class Event(Enum):
     SuccessListen = 0,
+    FailedListen = 1,
 
 
 class Game:

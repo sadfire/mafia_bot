@@ -1,7 +1,7 @@
 from telegram.ext import MessageHandler, Filters
 
 from KeyboardFactory import KBFactory
-from SessionHandler.States import get_data
+from SessionHandler.States import get_query_text
 
 
 class UserHandler:
@@ -29,7 +29,7 @@ class UserHandler:
         if t_id in self._keys:
             return
 
-        data = get_data(update)
+        data = get_query_text(update)
 
         update.effective_message.edit_text(data)
 
@@ -77,6 +77,6 @@ class UserHandler:
                                            reply_markup=KBFactory.statistic_reply())
 
     def _text_wait(self, bot, update):
-        self._wait_text = get_data(update)
+        self._wait_text = get_query_text(update)
         bot.send_message(chat_id=update.effective_message.char_id, text="Подтверждаете свои данные?",
                          reply_to_message_id=update.effective_message.id, reply_markup=KBFactory.approve("Info"))

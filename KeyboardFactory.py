@@ -23,7 +23,7 @@ class KBFactory:
     def main():
         return Markup(
             [
-                [Button("{} Начать вечер".format(em(":hourglass_flowing_sand:")), callback_data='start_evening')],
+                [Button("{} Начать вечер".format(em(":hourglass:")), callback_data='start_evening')],
 
                 [Button("{} Меню рейтинга".format(em(":bar_chart:")), callback_data='statistic_menu')],
                 [Button("{} Меню игроков".format(em(":paperclip:")), callback_data='players_menu')]

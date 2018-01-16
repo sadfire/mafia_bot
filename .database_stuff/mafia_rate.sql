@@ -148,7 +148,7 @@ INSERT INTO `Location` (`ID`, `Title`, `ID_City`) VALUES
 -- Дамп структуры для таблица mafia_rate.Members
 CREATE TABLE IF NOT EXISTS `Members` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL DEFAULT '0',
+  `Name` varchar(50) NOT NULL DEFAULT '0',b
   `IsHost` tinyint(1) NOT NULL DEFAULT '0',
   `Telephone` bigint(20) DEFAULT NULL,
   `IdTelegram` int(11) DEFAULT NULL,

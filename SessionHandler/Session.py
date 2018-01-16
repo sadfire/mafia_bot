@@ -38,12 +38,12 @@ class Session:
             self._handlers.remove(handler)
 
     def query_callback(self, bot, update):
-        if not self._update_filer(update):
+        if not self._filter_update(update):
             return
 
         self._remove_markup(update)
 
-        if self.state.process(bot, update):
+        if self.state.process_callback(bot, update):
             self.state = self.state.next()
 
     @staticmethod
@@ -51,7 +51,7 @@ class Session:
         if update.callback_query.data != "":
             update.effective_message.edit_text(update.effective_message.text)
 
-    def _update_filer(self, update):
+    def _filter_update(self, update):
         return update.effective_message.chat_id == self.t_id
 
     @staticmethod

@@ -9,7 +9,7 @@ from Game.Cards import CardsBeginner as Cards
 from KeyboardFactory import KBFactory
 
 
-def get_data(update):
+def get_query_text(update):
     return update.callback_query.data
 
 
@@ -28,8 +28,8 @@ class IState:
     def _clear(update, message="Действие отменено"):
         update.effective_message.edit_text(message)
 
-    def process(self, bot, update):
-        data = get_data(update)
+    def process_callback(self, bot, update):
+        data = get_query_text(update)
         if data == "Close":
             self._clear(update)
             if self._previous is not None:
@@ -42,7 +42,7 @@ class IState:
 
     def next(self):
         if self._next is None:
-            return False
+            return self
         return self._next(self._session, self.__class__)
 
 
@@ -53,8 +53,8 @@ class StartState(IState):
                                         "Я бот учета статистики игры мафия {}".format(appeal, '🕵'),
                                    reply_markup=KBFactory.main())
 
-    def process(self, bot, update):
-        data = get_data(update)
+    def process_callback(self, bot, update):
+        data = get_query_text(update)
 
         if data == "statistic_menu":
             self._next = OpenStatistic
@@ -63,7 +63,7 @@ class StartState(IState):
         elif data == "players_menu":
             self._next = PlayerManagement
         else:
-            return super().process(bot, update)
+            return super().process_callback(bot, update)
 
         return True
 
@@ -121,13 +121,17 @@ class EveningManagement(IState):
         self._message = self._message.edit_reply_markup(
             reply_markup=KBFactory.players(self._session.evening.members.values()) + self._main_keyboard)
 
-    def process(self, bot, update):
-        data = get_data(update)
+    def process_callback(self, bot, update):
+        data = get_query_text(update)
+
         if data == "end_evening_adding_approve":
             if self._session.evening.is_ready():
+
                 self._session.bot.delete_message(self._session.t_id, self._message.message_id)
-                members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name) for member in
-                           self._session.evening.members.values()]
+
+                members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name)
+                           for member in self._session.evening.members.values()]
+
                 self._session.send_message("Игроки: \n{}".format("".join(members)))
                 self._next = CalculationOfPlayers
                 return True
@@ -166,8 +170,10 @@ class EveningManagement(IState):
         self._update_players_message()
 
     def _add_member_callback(self, data, update):
+
         if not self._session.evening.add_member(self._session.db.get_member(data[:-4])):
             self._session.send_message("Ошибка при добавление пользователя. Попробуйте снова.")
+
         update.effective_message.edit_reply_markup(reply_markup=self.regular_members)
         self._update_players_message()
 
@@ -200,16 +206,20 @@ class CalculationOfPlayers(IState):
     def __init__(self, session, previous=None):
         self.game = Game(session.evening)
         super().__init__(session, previous)
+
         self._game_state = CardWait(Cards.ChangeRole, self.game, MafiaNight)
 
         self._active_member = None
         self._active_number = None
 
-    def process(self, bot, update):
-        data = get_data(update)
+    def process_callback(self, bot, update):
+        data = get_query_text(update)
+
         id = int(data.split('_')[0])
+
         if self.get_number_prefix in data:
             self._active_number = id
+
         elif self.get_member_prefix in data:
             for player in self.game.players:
                 if player.id == id:
@@ -223,7 +233,7 @@ class CalculationOfPlayers(IState):
 
         if self._active_member is not None and self._active_number is not None:
             self._active_member.number = self._active_number
-            self._active_member.player.postfix = ""
+            self._active_member.postfix = ""
             self._active_number = None
             self._active_member = None
 
