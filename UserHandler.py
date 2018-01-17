@@ -11,6 +11,7 @@ class UserHandler:
         self._db = db
         self._updater = updater
         self._keys = keys
+        self._permissions_request = {}
 
     @staticmethod
     def query_handler(bot, update):
@@ -24,7 +25,7 @@ class UserHandler:
                          text="Приветствую тебя, {}. Это бот учета статистики игры Мафия.".format(tmp),
                          reply_markup=KeyboardFactory.start_user())
 
-    def request_handler(self, bot, update):
+    def query_callback(self, bot, update):
         t_id = update.effective_chat.id
         if t_id in self._keys:
             return
@@ -39,7 +40,7 @@ class UserHandler:
         elif data == "GetPermissions":
             self._get_permissions_callback(bot, t_id)
 
-        elif data == "InfoApprove":
+        elif data == "Info_approve": #TODO: Придумать что-то со стилем названий и блятскими колбеками
             self._info_approve_callback(bot, t_id, update)
 
         elif data.find("OpenGameStat") != -1:
@@ -63,10 +64,11 @@ class UserHandler:
 
     def _info_approve_callback(self, bot, t_id, update):
         self._updater.dispatcher.remove_handler(self._tmp_dispatcher)
-        update.message.edit_text("Действие подтверждено.")
+        update.effective_message.edit_text("Действие подтверждено.")
         bot.send_message(chat_id=t_id,
                          text="Введущий, что пригласил вас получил запрос на добавление вашего аккаунта  Telegram в базу. \n "
                               "Если в данный момент он ведет вечер, то запрос он получит после окончания вечера.")
+        self._db.add_user_permision_request(t_id, self._permissions_request[t_id])
 
     def _get_permissions_callback(self, bot, t_id):
         bot.send_message(chat_id=t_id, text="Введите либо имя и свои инициалы, либо ваш номер телефона")
@@ -77,6 +79,7 @@ class UserHandler:
                                            reply_markup=KeyboardFactory.statistic_reply())
 
     def _text_wait(self, bot, update):
-        self._wait_text = get_query_text(update)
-        bot.send_message(chat_id=update.effective_message.char_id, text="Подтверждаете свои данные?",
-                         reply_to_message_id=update.effective_message.id, reply_markup=KeyboardFactory.approve("Info"))
+        t_id = update.effective_chat.id
+        self._permissions_request.update({t_id: update.effective_message})
+        bot.send_message(chat_id= t_id, text="Подтверждаете свои данные?",
+                         reply_to_message_id=update.effective_message.message_id, reply_markup=KeyboardFactory.approve("Info"))
