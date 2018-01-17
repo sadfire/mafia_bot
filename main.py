@@ -4,7 +4,7 @@ from MafiaBot import Bot
 
 
 def main():
-    bot = Bot("381246435:AAHOxVWGkOvk7cLsvfUl2l00Ulb6RiIxDus")
+    bot = Bot("381246435:AAF0F3U0E_KPbc8iDKCkhwuSyuKkH4bNqz4")
     bot.start()
 
 
