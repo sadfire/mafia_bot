@@ -36,7 +36,7 @@ class Bot:
             return
 
         if t_id not in self._sessions.keys():
-            return self._users_handler.request_handler(bot, update)
+            return self._users_handler.query_callback(bot, update)
         else:
             return self._sessions[t_id].query_callback(bot, update)
 

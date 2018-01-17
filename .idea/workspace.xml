@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a6ccdbfb-6cfe-4120-b7ae-98bb10f5435e" name="Default" comment="" />
+    <list default="true" id="a6ccdbfb-6cfe-4120-b7ae-98bb10f5435e" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MafiaDatabaseApi.py" afterPath="$PROJECT_DIR$/MafiaDatabaseApi.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserHandler.py" afterPath="$PROJECT_DIR$/UserHandler.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -10,12 +15,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/mafia_bot$Unnamed.coverage" NAME="bot Coverage Results" MODIFIED="1514641498792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/mafia_bot_master$test.coverage" NAME="test Coverage Results" MODIFIED="1516102304214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
     <SUITE FILE_PATH="coverage/mafia_bot$test.coverage" NAME="test Coverage Results" MODIFIED="1514649298549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/mafia_bot_master$bot.coverage" NAME="bot Coverage Results" MODIFIED="1516102888099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/mafia_bot$bot.coverage" NAME="bot Coverage Results" MODIFIED="1516124197208" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MafiaBot_v2$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1512754371684" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/mafia_bot_master$bot.coverage" NAME="bot Coverage Results" MODIFIED="1516102888099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/mafia_bot$Unnamed.coverage" NAME="bot Coverage Results" MODIFIED="1514641498792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/mafia_bot$bot.coverage" NAME="bot Coverage Results" MODIFIED="1516196971529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/mafia_bot_master$test.coverage" NAME="test Coverage Results" MODIFIED="1516102304214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Tests" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -49,43 +54,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="States.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/SessionHandler/States.py">
+      <file leaf-file-name="UserHandler.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UserHandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-289">
-              <caret line="217" column="34" lean-forward="false" selection-start-line="217" selection-start-column="34" selection-end-line="217" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="builtins.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-834692556/builtins.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="5578" column="6" lean-forward="false" selection-start-line="5578" selection-start-column="6" selection-end-line="5578" selection-end-column="6" />
+            <state relative-caret-position="17">
+              <caret line="70" column="82" lean-forward="true" selection-start-line="70" selection-start-column="17" selection-end-line="70" selection-end-column="82" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Evening.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Game/Evening.py">
+      <file leaf-file-name="Mocks.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tests/Mocks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
+            <state relative-caret-position="122">
               <caret line="9" column="8" lean-forward="false" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Game/Game.py">
+      <file leaf-file-name="MafiaBot.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MafiaBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="175">
+              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -94,35 +87,27 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="6" column="60" lean-forward="false" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
+            <state relative-caret-position="85">
+              <caret line="7" column="11" lean-forward="false" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Session.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SessionHandler/Session.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="559">
-              <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MafiaDatabaseApi.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MafiaDatabaseApi.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MafiaDatabaseApi.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1615">
-              <caret line="95" column="104" lean-forward="false" selection-start-line="95" selection-start-column="104" selection-end-line="95" selection-end-column="104" />
+            <state relative-caret-position="285">
+              <caret line="119" column="53" lean-forward="true" selection-start-line="119" selection-start-column="53" selection-end-line="119" selection-end-column="53" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
-                <marker date="1514626384000" expanded="true" signature="624:688" ph="SELECT * FRO... Members" />
-                <marker date="1514626384000" expanded="true" signature="980:1015" ph="SELECT * FRO... Members" />
-                <marker date="1514626384000" expanded="true" signature="1319:2370" ph="SELECT Eveni... Members" />
-                <marker date="1514626384000" expanded="true" signature="3479:3538" ph="SELECT ID, N... Members" />
-                <marker date="1514626384000" expanded="true" signature="4353:4374" ph="SELECT * FRO... Members" />
+                <marker date="1516199978290" expanded="true" signature="219:443" ph="..." />
+                <marker date="1516199978290" expanded="true" signature="256:258" ph="..." />
+                <marker date="1516199978290" expanded="true" signature="624:688" ph="SELECT * FRO... Members" />
+                <marker date="1516199978290" expanded="true" signature="980:1015" ph="SELECT * FRO... Members" />
+                <marker date="1516199978290" expanded="true" signature="1319:2370" ph="SELECT Eveni... Members" />
+                <marker date="1516199978290" expanded="true" signature="3479:3538" ph="SELECT ID, N... Members" />
+                <marker date="1516199978290" expanded="true" signature="4353:4374" ph="SELECT * FRO... Members" />
               </folding>
             </state>
           </provider>
@@ -131,28 +116,20 @@
       <file leaf-file-name="KeyboardFactory.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/KeyboardFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="39" lean-forward="false" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
-              <folding />
+            <state relative-caret-position="277">
+              <caret line="42" column="45" lean-forward="true" selection-start-line="42" selection-start-column="45" selection-end-line="42" selection-end-column="45" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="inlinekeyboardmarkup.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/inline/inlinekeyboardmarkup.py">
+      <file leaf-file-name="inlinekeyboardbutton.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/inline/inlinekeyboardbutton.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="46" column="88" lean-forward="true" selection-start-line="46" selection-start-column="88" selection-end-line="46" selection-end-column="88" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/emoji/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="16" />
+            <state relative-caret-position="122">
+              <caret line="73" column="17" lean-forward="false" selection-start-line="73" selection-start-column="17" selection-end-line="73" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -196,6 +173,9 @@
       <find>Начать</find>
       <find>ValueError</find>
       <find>KeyboardFactory</find>
+      <find>userop</find>
+      <find>reply_to_message_id</find>
+      <find>_mul</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;</replace>
@@ -216,7 +196,6 @@
         <option value="$PROJECT_DIR$/Evening.py" />
         <option value="$PROJECT_DIR$/MafiaSession.py" />
         <option value="$PROJECT_DIR$/SessionStates.py" />
-        <option value="$PROJECT_DIR$/UserHandler.py" />
         <option value="$PROJECT_DIR$/Game/game.py" />
         <option value="$PROJECT_DIR$/Game/CardsAndRoles.py" />
         <option value="$PROJECT_DIR$/Game/Roles.py" />
@@ -227,19 +206,21 @@
         <option value="$PROJECT_DIR$/Game/Member.py" />
         <option value="$PROJECT_DIR$/Tests/GameTests.py" />
         <option value="$PROJECT_DIR$/Tests/Mocks.py" />
-        <option value="$PROJECT_DIR$/MafiaBot.py" />
         <option value="$PROJECT_DIR$/Bot/MafiaBot.py" />
         <option value="$PROJECT_DIR$/SessionHandler/Session.py" />
         <option value="$PROJECT_DIR$/Game/Evening.py" />
         <option value="$PROJECT_DIR$/Game/Database.py" />
         <option value="$PROJECT_DIR$/Game/Cards.py" />
         <option value="$PROJECT_DIR$/.database_stuff/mafia_rate.sql" />
-        <option value="$PROJECT_DIR$/MafiaDatabaseApi.py" />
-        <option value="$PROJECT_DIR$/KeyboardFactory.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Game/Game.py" />
         <option value="$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/inline/inlinekeyboardmarkup.py" />
         <option value="$PROJECT_DIR$/SessionHandler/States.py" />
+        <option value="$PROJECT_DIR$/MafiaBot.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/KeyboardFactory.py" />
+        <option value="$USER_HOME$/PycharmProjects/еуые/test.py" />
+        <option value="$PROJECT_DIR$/UserHandler.py" />
+        <option value="$PROJECT_DIR$/MafiaDatabaseApi.py" />
       </list>
     </option>
   </component>
@@ -250,10 +231,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
-    <option name="y" value="30" />
+    <option name="x" value="340" />
+    <option name="y" value="185" />
     <option name="width" value="974" />
-    <option name="height" value="1057" />
+    <option name="height" value="1036" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -304,6 +285,11 @@
               <item name="mafia_bot" type="462c0819:PsiDirectoryNode" />
               <item name="Game" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="mafia_bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mafia_bot" type="462c0819:PsiDirectoryNode" />
+              <item name="SessionHandler" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -312,7 +298,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/еуые/test.py" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
     <property name="SearchEverywhereHistoryKey" value="ValueError&#9;null&#9;null" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -344,7 +330,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Patrician\AppData\Local\Programs\Python\Python36\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\EASY\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -420,21 +406,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="22" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="722" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13432837" sideWeight="0.49569893" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32881355" sideWeight="0.4969743" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32881355" sideWeight="0.34039333" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32881355" sideWeight="0.65960664" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32881355" sideWeight="0.49394855" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32881355" sideWeight="0.4969743" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32881355" sideWeight="0.4969743" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13615733" sideWeight="0.49569893" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32782516" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32881355" sideWeight="0.49394855" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25266525" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.6248109" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25266525" sideWeight="0.5043011" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -464,9 +450,14 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/UserHandler.py</url>
+          <line>34</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/MafiaDatabaseApi.py</url>
-          <line>19</line>
-          <option name="timeStamp" value="85" />
+          <line>23</line>
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -476,7 +467,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="86" />
+      <option name="time" value="91" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -486,199 +477,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-1120166012/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="1183" column="8" lean-forward="false" selection-start-line="1183" selection-start-column="8" selection-end-line="1183" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/MySQLdb/connections.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/MySQLdb/cursors.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/message.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/ext/messagehandler.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/inline/inlinekeyboardbutton.py" />
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/typing.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="309" column="8" lean-forward="false" selection-start-line="309" selection-start-column="8" selection-end-line="309" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/bot.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/ext/callbackqueryhandler.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/ext/__init__.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/ext/commandhandler.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/threading.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/ext/dispatcher.py" />
-    <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/ext/updater.py" />
-    <entry file="uml://DATABASE/3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>DATABASE</ID>
-          <OriginalElement>3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5</OriginalElement>
-          <nodes>
-            <node x="531.0" y="482.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Cards</node>
-            <node x="312.75" y="650.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers</node>
-            <node x="168.0" y="460.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games</node>
-            <node x="354.0" y="270.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members</node>
-            <node x="354.0" y="493.5">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Inviters</node>
-            <node x="139.5" y="124.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Location</node>
-            <node x="132.0" y="281.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Evenings</node>
-            <node x="139.5" y="0.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.City</node>
-            <node x="0.0" y="493.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Roles</node>
-          </nodes>
-          <notes />
-          <edges>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Inviters" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members">
-              <point x="39.0" y="-36.5" />
-              <point x="471.0" y="435.0" />
-              <point x="457.75" y="435.0" />
-              <point x="20.75" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Cards">
-              <point x="54.75" y="-58.5" />
-              <point x="440.5" y="630.0" />
-              <point x="605.5" y="630.0" />
-              <point x="0.0" y="48.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members">
-              <point x="41.5" y="-70.0" />
-              <point x="292.5" y="435.0" />
-              <point x="374.75" y="435.0" />
-              <point x="-62.25" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Evenings" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Location">
-              <point x="0.0" y="-59.0" />
-              <point x="0.0" y="48.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Roles">
-              <point x="-54.75" y="-58.5" />
-              <point x="331.0" y="630.0" />
-              <point x="74.0" y="630.0" />
-              <point x="0.0" y="37.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games">
-              <point x="-18.25" y="-58.5" />
-              <point x="367.5" y="620.0" />
-              <point x="251.0" y="620.0" />
-              <point x="0.0" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members">
-              <point x="18.25" y="-58.5" />
-              <point x="404.0" y="620.0" />
-              <point x="520.5" y="620.0" />
-              <point x="520.5" y="435.0" />
-              <point x="499.25" y="435.0" />
-              <point x="62.250000000000014" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Location" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.City">
-              <point x="0.0" y="-48.0" />
-              <point x="0.0" y="37.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Evenings">
-              <point x="-41.5" y="-70.0" />
-              <point x="0.0" y="59.0" />
-            </edge>
-          </edges>
-          <settings layout="Hierarchic Group" zoom="0.7268106734434562" x="-44.0" y="240.0" />
-          <SelectedNodes>
-            <node>3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Roles</node>
-          </SelectedNodes>
-          <Categories>
-            <Category>Columns</Category>
-            <Category>Key columns</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5/console_1.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="149" column="0" lean-forward="true" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="uml://DATABASE/3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.SCHEMA:mafia_rate">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>DATABASE</ID>
-          <OriginalElement>3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.SCHEMA:mafia_rate</OriginalElement>
-          <nodes>
-            <node x="168.0" y="482.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Cards</node>
-            <node x="258.25" y="650.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers</node>
-            <node x="337.0" y="460.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games</node>
-            <node x="515.625" y="270.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members</node>
-            <node x="523.0" y="493.5">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Inviters</node>
-            <node x="308.5" y="124.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Location</node>
-            <node x="301.0" y="281.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Evenings</node>
-            <node x="308.5" y="0.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.City</node>
-            <node x="0.0" y="493.0">3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Roles</node>
-          </nodes>
-          <notes />
-          <edges>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Inviters" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members">
-              <point x="39.0" y="-36.5" />
-              <point x="640.0" y="435.0" />
-              <point x="619.375" y="435.0" />
-              <point x="20.75" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Cards">
-              <point x="-18.25" y="-58.5" />
-              <point x="313.0" y="620.0" />
-              <point x="242.5" y="620.0" />
-              <point x="0.0" y="48.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members">
-              <point x="41.5" y="-70.0" />
-              <point x="461.5" y="435.0" />
-              <point x="536.375" y="435.0" />
-              <point x="-62.25" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Evenings" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Location">
-              <point x="0.0" y="-59.0" />
-              <point x="0.0" y="48.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Roles">
-              <point x="-54.75" y="-58.5" />
-              <point x="276.5" y="630.0" />
-              <point x="74.0" y="630.0" />
-              <point x="0.0" y="37.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games">
-              <point x="18.25" y="-58.5" />
-              <point x="349.5" y="620.0" />
-              <point x="420.0" y="620.0" />
-              <point x="0.0" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.GamesPlayers" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Members">
-              <point x="54.75" y="-58.5" />
-              <point x="386.0" y="630.0" />
-              <point x="689.5" y="630.0" />
-              <point x="689.5" y="435.0" />
-              <point x="660.875" y="435.0" />
-              <point x="62.25" y="70.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Location" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.City">
-              <point x="0.0" y="-48.0" />
-              <point x="0.0" y="37.0" />
-            </edge>
-            <edge source="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Games" target="3cbb6bfe-1716-4d88-af0b-3b113d0eb6b5.TABLE:mafia_rate.Evenings">
-              <point x="-41.5" y="-70.0" />
-              <point x="0.0" y="59.0" />
-            </edge>
-          </edges>
-          <settings layout="Hierarchic Group" zoom="0.7268106734434562" x="-37.0" y="440.0" />
-          <SelectedNodes />
-          <Categories>
-            <Category>Columns</Category>
-            <Category>Key columns</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Callbacks.py" />
     <entry file="file://C:/Program Files/Python36/Lib/site-packages/telegram/inline/inlinekeyboardmarkup.py" />
     <entry file="file://C:/Program Files/Python36/Lib/codecs.py" />
@@ -687,13 +485,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tests/Mocks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="59" column="8" lean-forward="false" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -848,13 +639,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Bot/Session.py" />
-    <entry file="file://$PROJECT_DIR$/UserHandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="20" column="13" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.database_stuff/mafia_rate.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
@@ -862,72 +646,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/ext/updater.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2278">
-          <caret line="148" column="0" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/utils/request.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4539">
-          <caret line="271" column="0" lean-forward="false" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MafiaBot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="952">
-          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/MySQLdb/connections.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3281">
-          <caret line="203" column="0" lean-forward="false" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MafiaDatabaseApi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1615">
-          <caret line="95" column="104" lean-forward="false" selection-start-line="95" selection-start-column="104" selection-end-line="95" selection-end-column="104" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-            <marker date="1514626384000" expanded="true" signature="624:688" ph="SELECT * FRO... Members" />
-            <marker date="1514626384000" expanded="true" signature="980:1015" ph="SELECT * FRO... Members" />
-            <marker date="1514626384000" expanded="true" signature="1319:2370" ph="SELECT Eveni... Members" />
-            <marker date="1514626384000" expanded="true" signature="3479:3538" ph="SELECT ID, N... Members" />
-            <marker date="1514626384000" expanded="true" signature="4353:4374" ph="SELECT * FRO... Members" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/emoji/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="60" lean-forward="false" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/ext/updater.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/utils/request.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/MySQLdb/connections.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/emoji/__init__.py" />
     <entry file="file://$PROJECT_DIR$/SessionHandler/Session.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="559">
+        <state relative-caret-position="748">
           <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
           <folding />
         </state>
@@ -936,8 +661,11 @@
     <entry file="file://$PROJECT_DIR$/Game/Game.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding>
+            <marker date="1516187036177" expanded="true" signature="132:367" ph="..." />
+            <marker date="1516187036177" expanded="true" signature="165:167" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -945,40 +673,216 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="8" lean-forward="false" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+          <folding>
+            <marker date="1516187036175" expanded="true" signature="47:167" ph="..." />
+            <marker date="1516187036175" expanded="true" signature="77:79" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/inline/inlinekeyboardmarkup.py" />
+    <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-834692556/builtins.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/MySQLdb/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/KeyboardFactory.py">
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/ext/filters.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="39" lean-forward="false" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/telegram/inline/inlinekeyboardmarkup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="46" column="88" lean-forward="true" selection-start-line="46" selection-start-column="88" selection-end-line="46" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-834692556/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="5578" column="6" lean-forward="false" selection-start-line="5578" selection-start-column="6" selection-end-line="5578" selection-end-column="6" />
+        <state relative-caret-position="-1952">
+          <caret line="159" column="31" lean-forward="false" selection-start-line="159" selection-start-column="24" selection-end-line="159" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SessionHandler/States.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-289">
-          <caret line="217" column="34" lean-forward="false" selection-start-line="217" selection-start-column="34" selection-end-line="217" selection-end-column="34" />
+        <state relative-caret-position="115">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/ext/dispatcher.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="278" column="0" lean-forward="false" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/ext/messagehandler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="168" column="0" lean-forward="false" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13">
+          <caret line="169" column="8" lean-forward="false" selection-start-line="169" selection-start-column="8" selection-end-line="169" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/ext/updater.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="121" column="24" lean-forward="false" selection-start-line="121" selection-start-column="24" selection-end-line="121" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/686999029/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="5215" column="8" lean-forward="false" selection-start-line="5215" selection-start-column="8" selection-end-line="5215" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/message.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="291" column="8" lean-forward="false" selection-start-line="291" selection-start-column="8" selection-end-line="291" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/MySQLdb/connections.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="276" column="0" lean-forward="false" selection-start-line="276" selection-start-column="0" selection-end-line="276" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/bot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-184">
+          <caret line="198" column="8" lean-forward="false" selection-start-line="198" selection-start-column="8" selection-end-line="198" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="28" column="6" lean-forward="false" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/replymarkup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="23" column="28" lean-forward="false" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/inline/inlinekeyboardmarkup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="38" column="8" lean-forward="false" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/vendor/ptb_urllib3/urllib3/connectionpool.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="401" column="0" lean-forward="false" selection-start-line="401" selection-start-column="0" selection-end-line="401" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/utils/request.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="191" column="0" lean-forward="false" selection-start-line="191" selection-start-column="0" selection-end-line="191" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="7" column="11" lean-forward="false" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/еуые/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="13" lean-forward="true" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/Mocks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="9" column="8" lean-forward="false" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MafiaBot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/telegram/inline/inlinekeyboardbutton.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="73" column="17" lean-forward="false" selection-start-line="73" selection-start-column="17" selection-end-line="73" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/KeyboardFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="42" column="45" lean-forward="true" selection-start-line="42" selection-start-column="45" selection-end-line="42" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserHandler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="70" column="82" lean-forward="true" selection-start-line="70" selection-start-column="17" selection-end-line="70" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MafiaDatabaseApi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="119" column="53" lean-forward="true" selection-start-line="119" selection-start-column="53" selection-end-line="119" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <marker date="1516199978290" expanded="true" signature="219:443" ph="..." />
+            <marker date="1516199978290" expanded="true" signature="256:258" ph="..." />
+            <marker date="1516199978290" expanded="true" signature="624:688" ph="SELECT * FRO... Members" />
+            <marker date="1516199978290" expanded="true" signature="980:1015" ph="SELECT * FRO... Members" />
+            <marker date="1516199978290" expanded="true" signature="1319:2370" ph="SELECT Eveni... Members" />
+            <marker date="1516199978290" expanded="true" signature="3479:3538" ph="SELECT ID, N... Members" />
+            <marker date="1516199978290" expanded="true" signature="4353:4374" ph="SELECT * FRO... Members" />
           </folding>
         </state>
       </provider>
