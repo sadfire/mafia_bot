@@ -24,7 +24,7 @@ class UserHandler:
                          text="Приветствую тебя, {}. Это бот учета статистики игры Мафия.".format(tmp),
                          reply_markup=KeyboardFactory.start_user())
 
-    def request_handler(self, bot, update):
+    def query_callback(self, bot, update):
         t_id = update.effective_chat.id
         if t_id in self._keys:
             return
