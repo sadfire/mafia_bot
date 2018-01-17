@@ -116,3 +116,7 @@ class Database:
 
     def get_games(self, t_id, game, host):
         pass
+
+    def add_user_permision_request(self, t_id, text):
+        #TODO: DONE TOMORROW
+        pass
