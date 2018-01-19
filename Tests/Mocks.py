@@ -75,6 +75,22 @@ class Update:
         return self.data
 
     @property
+    def effective_chat(self):
+        return self
+
+    @property
+    def id(self):
+        return 0
+
+    @property
+    def from_user(self):
+        return self
+
+    @property
+    def username(self):
+        return "USER"
+
+    @property
     def effective_message(self):
         return self
 
