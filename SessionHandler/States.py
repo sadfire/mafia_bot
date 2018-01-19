@@ -260,18 +260,18 @@ class CalculationOfPlayers(IState):
         self._session.bot.edit_message_reply_markup(chat_id=self._message.chat_id, message_id=self._message.message_id, reply_markup=kb + KBF.button("Закончить расчет игроков", self.get_end_query))
 
     def _member_callback(self, id):
-        self._active_member_id = id
+        self._active_member_id = int(id)
         self._update_calculating()
 
     def _number_callback(self, index):
-        self._active_number = index
+        self._active_number = int(index)
         self._update_calculating()
 
     def _update_calculating(self):
         if self._active_member_id is None or self._active_number is None:
             return
 
-        for index, player in self.players:
+        for index, player in self.players.items():
             if player.id == self._active_member_id:
                 swap_index = index
                 break
