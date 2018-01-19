@@ -7,6 +7,7 @@ class Event(Enum):
     SuccessListen = 0,
     FailedListen = 1,
 
+
 class Game:
     def __init__(self, evening) -> None:
         super().__init__()

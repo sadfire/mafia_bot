@@ -1,7 +1,7 @@
 from telegram.ext import CallbackQueryHandler, CommandHandler
 
 from MafiaDatabaseApi import Database
-from SessionHandler.States import StartState
+from SessionHandler.States import StartState, get_query_text
 
 
 class Session:
@@ -43,7 +43,12 @@ class Session:
 
         self._remove_markup(update)
 
-        if self.state.process_callback(bot, update):
+        try:
+            result = getattr(self.state, get_query_text(update))(bot, update)
+        except ValueError:
+            result = self.state.process_callback(bot, update)
+
+        if result:
             self.state = self.state.next()
 
     @staticmethod

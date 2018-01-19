@@ -51,20 +51,20 @@ class StartState(IState):
         appeal = self._session.host.name if self._session.host.name != "" else "Ведущий"
         self._session.send_message(text="Приветствую {}. \n "
                                         "Я бот учета статистики игры мафия {}".format(appeal, '🕵'),
-                                   reply_markup=KBF.main())
+                                   reply_markup=KBF.main(self._open_statistic_callback,
+                                                         self._evening_manager_callback,
+                                                         self._player_manager_callback))
 
-    def process_callback(self, bot, update):
-        data = get_query_text(update)
+    def _open_statistic_callback(self, bot, update):
+        self._next = OpenStatistic
+        return True
 
-        if data == "statistic_menu":
-            self._next = OpenStatistic
-        elif data == "start_evening":
-            self._next = EveningManagement
-        elif data == "players_menu":
-            self._next = PlayerManagement
-        else:
-            return super().process_callback(bot, update)
+    def _evening_manager_callback(self, bot, update):
+        self._next = EveningManagement
+        return True
 
+    def _player_manager_callback(self, bot, update):
+        self._next = PlayerManagement
         return True
 
 
@@ -73,30 +73,27 @@ class OpenStatistic(IState):
 
 
 class EveningManagement(IState):
+    def _greeting(self):
+        self._session.bot.send_message(self._session.t_id,
+                                       text="Начнем вечер!\n"
+                                            "Добавьте игроков. \n"
+                                            "Для добавления игрока отправьте мне"
+                                            " его личный номер, номер телефона или полное имя. (NFC in progress)\n"
+                                            "Возможность удалить игроков из списка вам представится после.")
+
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
 
-        self._handler = MessageHandler(Filters.text, self._add_member)
+        self._handler = MessageHandler(Filters.text, self._add_member_handler)
         self._session.add_handler(self._handler)
 
         self._session.evening = Evening(self._session.host)
 
     def __del__(self):
         self._session.remove_handler(self._handler)
+        self._message = self._session.send_message(text="Игроки:\n", reply_markup=self._get_main_kb)
 
-    def _greeting(self):
-        self._session.bot.send_message(self._session.t_id,
-                                       text="Начнем вечер!\n"
-                                            "Добавьте игроков. \n"
-                                            "Для добавления игрока отправьте мне его личный номер, номер телефона или полное имя. (NFC in progress)\n"
-                                            "Возможность удалить игроков из списка вам представится после.")
-        self._message = self._session.send_message(text="Игроки:\n", reply_markup=self._main_keyboard)
-
-    @property
-    def _main_keyboard(self):
-        return KBF.button("Открыть 'завсегдатаев'", "open_regular") + KBF.approve("end_evening_adding")
-
-    def _add_member(self, bot, updater):
+    def _add_member_handler(self, bot, updater):
         txt = updater.effective_message.text
         request_result = self._session.db.find_member(txt)
 
@@ -118,84 +115,80 @@ class EveningManagement(IState):
         self._update_players_message()
 
     def _update_players_message(self):
-        self._message = self._message.edit_reply_markup(
-            reply_markup=KBF.players(self._session.evening.members.values()) + self._main_keyboard)
+        kb = KBF.players_with_emoji(players=self._session.evening.members.items(),
+                                    callback_player=self._session.send_player_info_callback,
+                                    callback_emoji=self._remove_member_callback,
+                                    second_line_emoji=em(":x:"))
 
-    def process_callback(self, bot, update):
-        data = get_query_text(update)
+        self._message = self._message.edit_reply_markup(reply_markup=kb + self._get_main_kb)
 
-        if data == "end_evening_adding_approve":
-            if self._session.evening.is_ready():
+    def _end_evenings_callback(self, bot, update):
+        if self._session.evening.is_ready():
 
-                self._session.bot.delete_message(self._session.t_id, self._message.message_id)
+            self._session.bot.delete_message(self._session.t_id, self._message.message_id)
 
-                members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name)
-                           for member in self._session.evening.members.values()]
+            members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name)
+                       for member in self._session.evening.members.values()]
 
-                self._session.send_message("Игроки: \n{}".format("".join(members)))
-                self._next = CalculationOfPlayers
-                return True
-            else:
-                self._update_players_message()
-                self._session.send_message("Не хватает участников")
-
-        elif data.isdigit():  # ID for delete from evening
-            self._remove_member_callback(data)
-
-        elif len(data) > 4 and data[:-4].isdigit():  # ID to add to evening
-            self._add_member_callback(data, update)
-
-        elif data == "open_regular":
-            self._open_regular_callback()
-
-        elif data == "close":
-            self._session.bot.delete_message(self._session.t_id, update.effective_message.message_id)
-
-        elif data.find("choose_member.") != -1:
-            self._choose_member_callback(data)
+            self._session.send_message("Игроки: \n{}".format("".join(members)))
+            self._next = CalculationOfPlayers
+            return True
+        else:
+            self._update_players_message()
+            self._session.send_message("Не хватает участников")
 
     def _remove_member_callback(self, data):
         self._session.evening.remove_member(int(data))
         self._update_players_message()
 
-    def _choose_member_callback(self, data):
-        member = data.split('.')[1]
+    def _open_regular_callback(self):
+        kb = self._get_regular_members_kb()
+        if not kb.is_empty():
+            self._session.send_message(em(':necktie: Ваши постоянные игроки'), reply_markup=kb)
+        else:
+            self._session.send_message("Список пуст")
+
+        self._update_players_message()
+
+    def _add_member_callback(self, bot, update, id):
+        if not self._session.evening.add_member(self._session.db.get_member(int(id))):
+            self._session.send_message("Ошибка при добавление пользователя. Попробуйте снова.")
+
+        update.effective_message.edit_reply_markup(reply_markup=self._get_regular_members_kb)
+        self._update_players_message()
+
+    def _choose_member(self, request_result):
+        self._session.bot.send_message(self._session.t_id,
+                                       text="Под ваш запрос подходит несколько игроков. Ввыберите подходящее",
+                                       reply_markup=KBF.players_with_emoji(
+                                           request_result,
+                                           em(":heavy_plus_sign:"),
+                                           self._session.send_player_info_callback,
+                                           self._choose_member_callback))
+
+    def _choose_member_callback(self, bot, update, id):
+        member = self._session.db.get_member(id)
         self._session.evening.add_member(member)
         self._session.bot.send_message(self._session.t_id,
                                        text="Игрок добавлен. \n Введите следующего или нажмите '{}' вверху.".format(
                                            em(":+1:")))
 
-    def _open_regular_callback(self):
-        self._session.send_message(em(':necktie: Ваши постоянные игроки'), reply_markup=self.regular_members)
-        self._update_players_message()
-
-    def _add_member_callback(self, data, update):
-
-        if not self._session.evening.add_member(self._session.db.get_member(data[:-4])):
-            self._session.send_message("Ошибка при добавление пользователя. Попробуйте снова.")
-
-        update.effective_message.edit_reply_markup(reply_markup=self.regular_members)
-        self._update_players_message()
-
-    @property
-    def regular_members(self):
-        members = []
-        for member in self._session.db.get_regular_members(self._session.host.id):
-            if member.id not in self._session.evening.members.keys():
-                members.append(member)
+    def _get_regular_members_kb(self):
+        members = [member
+                   for member in self._session.db.get_regular_members_by_host(self._session.host.id)
+                   if member.id not in self._session.evening.members.keys()]
 
         if len(members) == 0:
-            return KBF.button(em(":no_good:"), "close")
+            return KBF.empty()
 
-        return KBF.players(members, "_add", em(":heavy_plus_sign:")) + KBF.button(em(":x:"), "close")
+        return KBF.players_with_emoji(members, em(":heavy_plus_sign:"),
+                                      self._session.send_player_info_callback,
+                                      self._add_member_callback)
 
-    def _choose_member(self, request_result):
-        self._session.bot.send_message(self._session.t_id,
-                                       text="Под ваш запрос подходит несколько игроков. Ввыберите подходящее",
-                                       reply_markup=KBF.choose("choose_member",
-                                                                           [em(":bust_in_silhouette:") + str(
-                                                                         member.id) + ":" + member.name for member in
-                                                                      request_result]))
+    @property
+    def _get_main_kb(self):
+        return KBF.button("Последние игроки", self._open_regular_callback) + \
+               KBF.button("Закончить", self._end_evenings_callback)
 
 
 def emoji_number(num: object) -> object:
@@ -251,13 +244,16 @@ class CalculationOfPlayers(IState):
             text_right = emoji_number(index + 1)
 
             if self._active_member_id == member.id:
-                text_left = '*'+text_left
+                text_left = '*' + text_left
             if self._active_number == index:
                 text_right = '*' + text_right
 
-            kb = kb + KBF.button_line(( (text_left, f"{self.get_member_prefix}{member.id}"), (text_right,f"{self.get_number_prefix}{index}")))
+            kb = kb + KBF.button_line(
+                ((text_left, f"{self.get_member_prefix}{member.id}"), (text_right, f"{self.get_number_prefix}{index}")))
 
-        self._session.bot.edit_message_reply_markup(chat_id=self._message.chat_id, message_id=self._message.message_id, reply_markup=kb + KBF.button("Закончить расчет игроков", self.get_end_query))
+        self._session.bot.edit_message_reply_markup(chat_id=self._message.chat_id, message_id=self._message.message_id,
+                                                    reply_markup=kb + KBF.button("Закончить расчет игроков",
+                                                                                 self.get_end_query))
 
     def _member_callback(self, id):
         self._active_member_id = int(id)
@@ -278,9 +274,9 @@ class CalculationOfPlayers(IState):
         else:
             raise ValueError()
 
-        self.players[self._active_number], self.players[swap_index] = self.players[swap_index], self.players[self._active_number]
+        self.players[self._active_number], self.players[swap_index] = self.players[swap_index], self.players[
+            self._active_number]
         self._active_number, self._active_member_id = None, None
-
 
     @property
     def get_random_query(self):
@@ -301,6 +297,7 @@ class CalculationOfPlayers(IState):
 
 class GameInProcess(IState):
     pass
+
 
 class PlayerManagement(IState):
     pass

@@ -101,7 +101,7 @@ class Database:
 
         return result[0]
 
-    def get_regular_members(self, id):  # TODO Regular id add
+    def get_regular_members_by_host(self, id):  # TODO Regular id add
         return [Member(member[0], member[1], member[2] == 1, member[3], member[4]) for member in
                 self._execute("SELECT * FROM Members")]
 
