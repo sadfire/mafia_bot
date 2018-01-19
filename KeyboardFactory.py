@@ -1,12 +1,17 @@
 from emoji import emojize as em
-from telegram import InlineKeyboardButton as Button
-from telegram import InlineKeyboardMarkup as Markup
 
+from telegram import InlineKeyboardButton as Button
+from telegram import InlineKeyboardMarkup
+
+
+class MafiaMarkup(InlineKeyboardMarkup):
+    def __add__(self, other):
+        return MafiaMarkup(self.inline_keyboard + other.inline_keyboard)
 
 class KeyboardFactory:
     @staticmethod
     def start_user():
-        return Markup([
+        return MafiaMarkup([
             [Button("{0} Открыть статистику".format(em(":open_file_folder:")), callback_data="UserOpenStatistic")],
             [Button("{0} Запросить доступ".format(em(":question:")), callback_data="GetPermissions")]]
         )
@@ -17,11 +22,11 @@ class KeyboardFactory:
               [Button("{} Статистика по играм".format(em("")), callback_data="")],
               [Button("{} Поменять город".format(em("")), callback_data="")]]
 
-        return Markup(kb)
+        return MafiaMarkup(kb)
 
     @staticmethod
     def main():
-        return Markup(
+        return MafiaMarkup(
             [
                 [Button("{} Начать вечер".format(em(":hourglass:")), callback_data='start_evening')],
 
@@ -33,36 +38,44 @@ class KeyboardFactory:
     def statistic_reply(cls):
         kb = [[Button("{} Игры".format(em(":memo:")), callback_data="OpenGameStat")],
               [Button("{} Вечера".format(em(":last_quarter_moon:")), callback_data="OpenEveningStat")]]
-        return Markup(kb)
+        return MafiaMarkup(kb)
 
     @classmethod
     def approve(cls, param):
-        return Markup([[Button(em(":ok:"), callback_data=param + "_approve")]])
+        return MafiaMarkup([[Button(em(":ok:"), callback_data=param + "_approve")]])
 
     @classmethod
     def choose(cls, callback_prefix, params):
         kb = [([[Button(param, callback_data="{}.{}".format(callback_prefix, param))]]) for param in params]
-        return Markup(kb)
+        return MafiaMarkup(kb)
 
     @classmethod
     def confirm(cls):
-        return Markup([[Button("Да", callback_data="yes"), Button("Нет", callback_data="no")]])
+        return MafiaMarkup([[Button("Да", callback_data="yes"), Button("Нет", callback_data="no")]])
 
     @classmethod
     def button(cls, text, callback=""):
-        return Markup([[Button(text, callback_data=callback)]])
+        return MafiaMarkup([[Button(text, callback_data=callback)]])
 
     @classmethod
-    def turple_list_to_kb(cls, objects, callbacks, postfix) -> Markup:
+    def button_line(cls, buttons_list):
+        kb = []
+        for button in buttons_list:
+            kb.append(Button(button[0], callback_data=button[1]))
+        return MafiaMarkup([kb])
+
+    @classmethod
+    def turple_list_to_kb(cls, objects, callbacks, postfix) -> MafiaMarkup:
         kb = []
 
         for obj in objects:
             kb_line = []
             for index, attribut in enumerate(obj):
-                kb_line.append(Button(attribut, callback_data="{}_{}".format(callbacks[attribut] if attribut in callbacks else attribut, postfix[index])))
+                kb_line.append(Button(attribut, callback_data="{}_{}".format(
+                    callbacks[attribut] if attribut in callbacks else attribut, postfix[index])))
             kb.append(kb_line)
 
-        return Markup(kb)
+        return MafiaMarkup(kb)
 
     @classmethod
     def players(cls, members, postfix="", emoji=None):
@@ -85,7 +98,7 @@ class KeyboardFactory:
             kb.append([Button(member.name, callback_data=str(member.id) + id_postfix),
                        Button((emoji if not isinstance(emoji, list) else em(emoji.pop())),
                               callback_data=str(member.id) + postfix)])
-        return Markup(kb)
+        return MafiaMarkup(kb)
 
     @classmethod
     def game_menu(cls, players, postfix=""):

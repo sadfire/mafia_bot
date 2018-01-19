@@ -56,6 +56,7 @@ class Bot:
 
         if not self._db.check_permission(t_id):
             self._users_handler.query_handler(bot, update)
+            print("{} Зашел как пользователь".format(t_id))
         else:
             self._init_session(bot, update)
 

@@ -1,3 +1,4 @@
+import operator
 from random import shuffle
 from collections import OrderedDict
 
@@ -197,7 +198,7 @@ class EveningManagement(IState):
                                                                       request_result]))
 
 
-def emoji_number(num):
+def emoji_number(num: object) -> object:
     return ["0", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"][num]
 
 
@@ -206,15 +207,16 @@ class CalculationOfPlayers(IState):
     def _greeting(self) -> None:
         super()._greeting()
         self._message = self._session.send_message("Расчет игроков")
-        self._update_message()
 
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
         self.players = {}
-        self.process_randomize_calculation()
-        self._update_message()
         self._active_number = None
         self._active_member_id = None
+
+        self.process_randomize_calculation()
+
+        self._update_message()
         self._next = GameInProcess
 
     def process_randomize_calculation(self):
@@ -243,7 +245,7 @@ class CalculationOfPlayers(IState):
 
     def _update_message(self):
         kb = KBF.button("Перемешать", self.get_random_query)
-        for index, member in OrderedDict(self.players.items()):
+        for index, member in sorted(self.players.items(), key=operator.itemgetter(0)):
 
             text_left = member.name
             text_right = emoji_number(index + 1)
@@ -253,23 +255,23 @@ class CalculationOfPlayers(IState):
             if self._active_number == index:
                 text_right = '*' + text_right
 
-            kb += KBF.button(text_left, self.get_member_prefix + member.id) * KBF.button(text_right, self.get_number_prefix + index)
+            kb = kb + KBF.button_line(( (text_left, f"{self.get_member_prefix}{member.id}"), (text_right,f"{self.get_number_prefix}{index}")))
 
-        self._message.edit_reply_markup(kb + KBF.button("Закончить расчет игроков", self.get_end_query))
+        self._session.bot.edit_message_reply_markup(chat_id=self._message.chat_id, message_id=self._message.message_id, reply_markup=kb + KBF.button("Закончить расчет игроков", self.get_end_query))
 
     def _member_callback(self, id):
-        self._active_member_id = id
+        self._active_member_id = int(id)
         self._update_calculating()
 
     def _number_callback(self, index):
-        self._active_number = index
+        self._active_number = int(index)
         self._update_calculating()
 
     def _update_calculating(self):
         if self._active_member_id is None or self._active_number is None:
             return
 
-        for index, player in self.players:
+        for index, player in self.players.items():
             if player.id == self._active_member_id:
                 swap_index = index
                 break

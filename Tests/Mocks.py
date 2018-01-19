@@ -20,8 +20,15 @@ class Bot:
         self.index += 1
         return self.index
 
+    @property
+    def chat_id(self):
+        return 0
+
     def delete_message(self, chat_id, message_id):
         self._logs.append("delete message with chat {} and id")
+
+    def edit_message_reply_markup(self, chat_id, message_id, reply_markup):
+        self._logs.append("edit message reply markup message {} with chat {} and id".format(message_id, chat_id))
 
 
 class Updater:
