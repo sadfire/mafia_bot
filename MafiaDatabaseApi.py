@@ -20,9 +20,12 @@ class Database:
         self._db = MySQLdb.connect(host="localhost", user=t_id, passwd=pswrd, db="mafia_rate", charset='utf8')
         self._cursor = self._db.cursor()
 
-    def _execute(self, select):
-        self._cursor.execute(select)
+    def _execute(self, select, param=None):
+        self._cursor.execute(select, param)
         return self._cursor.fetchall()
+
+    def _commit_db(self):
+        self._db.commit()
 
     def check_permission(self, t_id):
         result = self._execute('SELECT * FROM `Members` WHERE IdTelegram = {0} AND IsHost = TRUE'.format(t_id))
@@ -117,6 +120,9 @@ class Database:
     def get_games(self, t_id, game, host):
         pass
 
-    def add_user_permision_request(self, t_id, text):
-        #TODO: DONE TOMORROW
-        pass
+    def add_user_permision_request(self, t_id, message):
+        self._execute("INSERT INTO PermRequest(TelegId, Text) VALUES (%s, %s)", (t_id, message.text))
+        self._commit_db()
+
+
+        return 0
