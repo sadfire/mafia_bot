@@ -213,7 +213,7 @@ class CalculationOfPlayers(IState):
         self.players = {}
         self._active_number = None
         self._active_member_id = None
-
+        self._current_game = None
         self.process_randomize_calculation()
 
         self._update_message()
@@ -300,7 +300,12 @@ class CalculationOfPlayers(IState):
 
 
 class GameInProcess(IState):
-    pass
+    def process_callback(self, bot, update):
+        data = get_query_text(update)
+
+
+
+
 
 class PlayerManagement(IState):
     pass
