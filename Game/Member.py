@@ -6,3 +6,6 @@ class Member:
         self.is_host = is_host
         self.phone_number = phone_number
         self.t_id = t_id
+
+    def __str__(self):
+        return self.name

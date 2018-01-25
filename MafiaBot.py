@@ -46,10 +46,13 @@ class Bot:
                              reply_markup=KBF.button("Да", self._bot_reset_callback) +
                                           KBF.button("Нет", self.bot_delete_message_callback))
             return
+# and not self._db.check_permission_by_telegram_name(update.effective_user.name)
+        username = update.effective_user.name
+        if not self._db.check_permission_by_telegram_id(t_id) and self._db.check_permission_by_telegram_name(username):
+            self._db.insert_telegram_id(username, t_id)
 
-        if not self._db.check_permission(t_id):
+        if not self._db.check_permission_by_telegram_id(t_id):
             self._users_handler.start_callback(bot, update)
-            print("{} Зашел как пользователь".format(t_id))
         else:
             self._init_session(bot, update)
 
@@ -61,8 +64,8 @@ class Bot:
         self._sessions.pop(update.effective_chat.id)
         self._start_callback(bot, update)
 
-    def bot_delete_message_callback(self, bot, updater):
-        pass
+    def bot_delete_message_callback(self, bot, update):
+        bot.delete_message(update.effective_chat.id, update.effective_message.id)
 
     def _filter_callbacks(self, data):
         return data in dir(self.__class__) and data[-9:] == "_callback"

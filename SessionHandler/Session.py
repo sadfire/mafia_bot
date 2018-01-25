@@ -19,8 +19,7 @@ class Session:
         self._handlers = []
 
     def __del__(self):
-        for handler in self._handlers:
-            self._updater.dispatcher.remove_handeler(handler)
+        pass
 
     def send_message(self, text, reply_markup=None):
         return self.bot.send_message(chat_id=self.t_id, text=text, reply_markup=reply_markup)
@@ -42,10 +41,31 @@ class Session:
             return
 
         self._remove_markup(update)
+        query = get_query_text(update)
+
+        if query[0] != '_' and self._filter_callbacks(query):
+            return getattr(self, query)
+
+        arguments = None
+        if '.' in query:
+            tmp = query.split('.')
+            query = tmp[0]
+
+            if len(tmp) == 2:
+                arguments = tmp[1]
+            else:
+                arguments = tmp[1:]
 
         try:
-            result = getattr(self.state, get_query_text(update))(bot, update)
-        except ValueError:
+            result = getattr(self.state, query)
+
+            if arguments is not None:
+                result = result(bot, update, arguments)
+            else:
+                result = result(bot, update)
+
+        except AttributeError:
+            print(get_query_text(update))
             result = self.state.process_callback(bot, update)
 
         if result:
@@ -63,3 +83,12 @@ class Session:
     def update_message_text(update, text):
         update.effective_message.edit_text(update.effective_message.text + text,
                                            reply_markup=update.effective_message.reply_markup)
+
+    def delete_message_callback(self, bot, update):
+        bot.delete_message(chat_id=update.effective_chat.id, message_id=update.effective_message.message_id)
+
+    def send_player_info_callback(self, bot, update, player_id):
+        self.send_message(self.db.get_member_statistic(player_id), reply_markup=self.delete_message_callback)
+
+    def _filter_callbacks(self, data):
+        return data in dir(self.__class__) and data[-9:] == "_callback"

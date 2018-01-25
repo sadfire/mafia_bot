@@ -51,8 +51,8 @@ class StartState(IState):
         appeal = self._session.host.name if self._session.host.name != "" else "Ведущий"
         self._session.send_message(text="Приветствую {}. \n "
                                         "Я бот учета статистики игры мафия {}".format(appeal, '🕵'),
-                                   reply_markup=KBF.main(self._open_statistic_callback,
-                                                         self._evening_manager_callback,
+                                   reply_markup=KBF.main(self._evening_manager_callback,
+                                                         self._open_statistic_callback,
                                                          self._player_manager_callback))
 
     def _open_statistic_callback(self, bot, update):
@@ -86,8 +86,9 @@ class EveningManagement(IState):
 
         self._handler = MessageHandler(Filters.text, self._add_member_handler)
         self._session.add_handler(self._handler)
-
+        self._regular_members_message = None
         self._session.evening = Evening(self._session.host)
+        self._update_players_message()
 
     def __del__(self):
         self._session.remove_handler(self._handler)
@@ -115,11 +116,12 @@ class EveningManagement(IState):
         self._update_players_message()
 
     def _update_players_message(self):
-        kb = KBF.players_with_emoji(players=self._session.evening.members.items(),
+        kb = KBF.players_with_emoji(players=self._session.evening.members.values(),
                                     callback_player=self._session.send_player_info_callback,
                                     callback_emoji=self._remove_member_callback,
-                                    second_line_emoji=em(":x:"))
-
+                                    second_line_emoji="❌")
+        if self._message is None:
+            self._message = self._session.send_message("Текущий вечер:")
         self._message = self._message.edit_reply_markup(reply_markup=kb + self._get_main_kb)
 
     def _end_evenings_callback(self, bot, update):
@@ -141,10 +143,10 @@ class EveningManagement(IState):
         self._session.evening.remove_member(int(data))
         self._update_players_message()
 
-    def _open_regular_callback(self):
-        kb = self._get_regular_members_kb()
+    def _open_regular_callback(self, bot, update):
+        kb = self._get_regular_members_kb
         if not kb.is_empty():
-            self._session.send_message(em(':necktie: Ваши постоянные игроки'), reply_markup=kb)
+            self._regular_members_message = self._session.send_message(em(':necktie: Ваши постоянные игроки'), reply_markup=kb)
         else:
             self._session.send_message("Список пуст")
 
@@ -173,6 +175,7 @@ class EveningManagement(IState):
                                        text="Игрок добавлен. \n Введите следующего или нажмите '{}' вверху.".format(
                                            em(":+1:")))
 
+    @property
     def _get_regular_members_kb(self):
         members = [member
                    for member in self._session.db.get_regular_members_by_host(self._session.host.id)
@@ -183,7 +186,7 @@ class EveningManagement(IState):
 
         return KBF.players_with_emoji(members, em(":heavy_plus_sign:"),
                                       self._session.send_player_info_callback,
-                                      self._add_member_callback)
+                                      self._add_member_callback) + KBF.button("Закрыть", self._session.delete_message_callback)
 
     @property
     def _get_main_kb(self):

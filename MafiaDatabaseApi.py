@@ -20,12 +20,19 @@ class Database:
         self._db = MySQLdb.connect(host="localhost", user=t_id, passwd=pswrd, db="mafia_rate", charset='utf8')
         self._cursor = self._db.cursor()
 
+    def __del__(self):
+        self._db.close()
+
     def _execute(self, select):
         self._cursor.execute(select)
         return self._cursor.fetchall()
 
-    def check_permission(self, t_id):
+    def check_permission_by_telegram_id(self, t_id):
         result = self._execute('SELECT * FROM `Members` WHERE IdTelegram = {0} AND IsHost = TRUE'.format(t_id))
+        return len(result) == 1
+
+    def check_permission_by_telegram_name(self, name):
+        result = self._execute('SELECT * FROM `Members` WHERE NameTelegram = "{0}" AND IsHost = TRUE'.format(name))
         return len(result) == 1
 
     def get_member_by_telegram(self, t_id):
@@ -120,3 +127,7 @@ class Database:
     def add_user_permision_request(self, t_id, text):
         #TODO: DONE TOMORROW
         pass
+
+    def insert_telegram_id(self, username, t_id):
+        self._cursor.execute(""" UPDATE Members SET IdTelegram = %s WHERE NameTelegram = %s """, (t_id, username))
+        self._db.commit()

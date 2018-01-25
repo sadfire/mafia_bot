@@ -8,7 +8,7 @@ from SessionHandler.States import get_query_text
 class UserHandler:
     def __init__(self, db, updater) -> None:
         super().__init__()
-        self._tmp_dispatcher = MessageHandler(Filters.text, self._text_wait)
+        self._tmp_dispatcher = MessageHandler(Filters.text, self._text_wait_handler)
         self._db = db
         self._updater = updater
         self._permissions_request = {}
@@ -78,7 +78,7 @@ class UserHandler:
         update.effective_message.edit_text(text=self._db.get_member_statistic_format(t_id),
                                            reply_markup=keyboard)
 
-    def _text_wait(self, bot, update):
+    def _text_wait_handler(self, bot, update):
         t_id = update.effective_chat.id
         self._permissions_request.update({t_id: update.effective_message})
         self._updater.dispatcher.remove_handler(self._tmp_dispatcher)
