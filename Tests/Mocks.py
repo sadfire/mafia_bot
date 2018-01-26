@@ -65,6 +65,9 @@ class Database:
     def get_member(self, id):
         return Member(id, "USER_{}".format(id), True, t_id=1)
 
+    def get_regular_members_by_host(self, *args):
+        return [self.get_member(i) for i in range(10)]
+
 class Update:
     def __init__(self, data='') -> None:
         super().__init__()
@@ -96,7 +99,7 @@ class Update:
     def effective_message(self):
         return self
 
-    def edit_reply_markup(self, kb):
+    def edit_reply_markup(self, reply_markup):
         pass
 
     @property

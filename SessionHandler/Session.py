@@ -1,7 +1,8 @@
 from telegram.ext import CallbackQueryHandler, CommandHandler
 
 from MafiaDatabaseApi import Database
-from SessionHandler.States import StartState, get_query_text
+from SessionHandler.States import get_query_text
+from SessionHandler.StartState import StartState
 import logging
 
 class Session:
@@ -63,8 +64,9 @@ class Session:
 
             if is_next:
                 self.state = self.state.next()
-        except AttributeError:
-            logging.warning("Callback error: ", query, arguments)
+        except AttributeError as er:
+            logging.warning(er)
+            logging.warning("Callback error: ",query, arguments)
 
     @staticmethod
     def _remove_markup(update):
