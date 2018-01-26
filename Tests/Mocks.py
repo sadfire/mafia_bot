@@ -62,6 +62,8 @@ class Database:
     def find_member(self, text):
         return Member(int(text), "USER_{}".format(text), True, t_id=1)
 
+    def get_member(self, id):
+        return Member(id, "USER_{}".format(id), True, t_id=1)
 
 class Update:
     def __init__(self, data='') -> None:
@@ -93,6 +95,9 @@ class Update:
     @property
     def effective_message(self):
         return self
+
+    def edit_reply_markup(self, kb):
+        pass
 
     @property
     def callback_query(self):

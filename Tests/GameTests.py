@@ -12,11 +12,10 @@ class MafiaTest(unittest.TestCase):
         updater = Mocks.Updater()
 
         session = Session(bot, updater, 0, Mocks.Database)
-        session.query_callback(bot, Mocks.Update(""))
-        session.query_callback(bot, Mocks.Update("start_evening"))
+        session.query_callback(bot, Mocks.Update("_evening_manager_callback"))
 
         for member_id in range(0, 10):
-            session.state._add_member_handler(bot, Mocks.Update(str(member_id)))
+            session.query_callback(bot, Mocks.Update("_add_member_callback.{}".format(str(member_id))))
 
         session.query_callback(bot, Mocks.Update("end_evening_adding_approve"))
         session.query_callback(bot, Mocks.Update("select_member_0"))

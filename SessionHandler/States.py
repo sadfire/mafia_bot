@@ -55,7 +55,7 @@ class StartState(IState):
                                                          self._open_statistic_callback,
                                                          self._player_manager_callback))
 
-    def _open_statistic_callback(self, bot, update):
+    def _open_statistic_callback(self, bot, update, *arguments):
         self._next = OpenStatistic
         return True
 

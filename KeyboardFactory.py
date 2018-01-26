@@ -14,6 +14,7 @@ class MafiaMarkup(InlineKeyboardMarkup):
     def is_empty(self):
         return len(self.inline_keyboard) == 0
 
+
 class KeyboardFactory:
     @classmethod
     def empty(cls):

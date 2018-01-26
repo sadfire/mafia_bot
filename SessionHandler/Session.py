@@ -2,7 +2,7 @@ from telegram.ext import CallbackQueryHandler, CommandHandler
 
 from MafiaDatabaseApi import Database
 from SessionHandler.States import StartState, get_query_text
-
+import logging
 
 class Session:
     def __init__(self, bot, updater, t_id, database_class=Database):
@@ -17,6 +17,7 @@ class Session:
 
         self.state = StartState(self)
         self._handlers = []
+        logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     def __del__(self):
         pass
@@ -43,33 +44,27 @@ class Session:
         self._remove_markup(update)
         query = get_query_text(update)
 
-        if query[0] != '_' and self._filter_callbacks(query):
-            return getattr(self, query)
+        if len(query) == 0:
+            return
+        elif query[0] != '_' and self._filter_callbacks(query):
+            return getattr(self, query)(bot, update)
 
-        arguments = None
-        if '.' in query:
-            tmp = query.split('.')
-            query = tmp[0]
+        query, *arguments = query.split('.') + [None]
 
-            if len(tmp) == 2:
-                arguments = tmp[1]
-            else:
-                arguments = tmp[1:]
+        if len(arguments) < 3:
+            arguments = arguments[0]
 
         try:
-            result = getattr(self.state, query)
-
-            if arguments is not None:
-                result = result(bot, update, arguments)
+            callback = getattr(self.state, query, self.state.process_callback)
+            if arguments is None:
+                is_next = callback(bot, update)
             else:
-                result = result(bot, update)
+                is_next = callback(bot, update, arguments)
 
+            if is_next:
+                self.state = self.state.next()
         except AttributeError:
-            print(get_query_text(update))
-            result = self.state.process_callback(bot, update)
-
-        if result:
-            self.state = self.state.next()
+            logging.warning("Callback error: ", query, arguments)
 
     @staticmethod
     def _remove_markup(update):
@@ -91,4 +86,4 @@ class Session:
         self.send_message(self.db.get_member_statistic(player_id), reply_markup=self.delete_message_callback)
 
     def _filter_callbacks(self, data):
-        return data in dir(self.__class__) and data[-9:] == "_callback"
+        return len(data) != 0 and data in dir(self.__class__) and data[-9:] == "_callback"
