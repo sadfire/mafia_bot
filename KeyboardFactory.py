@@ -68,7 +68,9 @@ class KeyboardFactory:
                                     left_callback=callback_player.__name__,
                                     left_arguments=str(player.id),
 
-                                    right_text=second_line_emoji,
+                                    right_text=second_line_emoji
+                                    if not isinstance(second_line_emoji, list) else next(second_line_emoji),
+
                                     right_callback=callback_emoji.__name__,
                                     right_arguments=str(player.id))
         return kb

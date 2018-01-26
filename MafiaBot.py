@@ -3,7 +3,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from KeyboardFactory import KeyboardFactory as KBF
 from MafiaDatabaseApi import Database
 from SessionHandler.Session import Session
-from SessionHandler.States import get_query_text
+from SessionHandler.IStates import get_query_text
 from UserHandler import UserHandler
 
 

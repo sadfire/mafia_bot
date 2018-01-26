@@ -1,7 +1,7 @@
 from telegram.ext import CallbackQueryHandler, CommandHandler
 
 from MafiaDatabaseApi import Database
-from SessionHandler.States import get_query_text
+from SessionHandler.IStates import get_query_text
 from SessionHandler.StartState import StartState
 import logging
 

@@ -1,4 +1,4 @@
-from SessionHandler.States import IState, get_query_text
+from SessionHandler.IStates import IState, get_query_text
 
 
 class GameInProcess(IState):

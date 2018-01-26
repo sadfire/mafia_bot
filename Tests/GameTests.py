@@ -18,8 +18,8 @@ class MafiaTest(unittest.TestCase):
             session.query_callback(bot, Mocks.Update("_add_member_callback.{}".format(str(member_id))))
 
         session.query_callback(bot, Mocks.Update("_end_evenings_callback"))
-        session.query_callback(bot, Mocks.Update("select_member_0"))
-        session.query_callback(bot, Mocks.Update("select_number_1"))
+        session.query_callback(bot, Mocks.Update("_choose_player_callback.1"))
+        session.query_callback(bot, Mocks.Update("_choose_number_callback.1"))
 
 if __name__ == "__main__":
     unittest.main()

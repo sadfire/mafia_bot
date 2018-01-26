@@ -3,7 +3,7 @@ from telegram.ext import MessageHandler, Filters
 
 from Game.Evening import Evening
 from KeyboardFactory import KeyboardFactory as KBF
-from SessionHandler.States import IState
+from SessionHandler.IStates import IState
 from SessionHandler.CalculationOfPlayers import CalculationOfPlayers
 
 
@@ -60,8 +60,8 @@ class EveningManagement(IState):
         self._message = self._message.edit_reply_markup(reply_markup=kb + self._get_main_kb)
 
     def _end_evenings_callback(self, bot, update):
-        if self._session.evening.is_ready():
 
+        if self._session.evening.is_ready():
             self._session.bot.delete_message(self._session.t_id, self._message.message_id)
 
             members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name)

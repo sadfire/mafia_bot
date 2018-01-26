@@ -1,4 +1,4 @@
-from SessionHandler.States import IState
+from SessionHandler.IStates import IState
 
 
 class PlayerManagement(IState):

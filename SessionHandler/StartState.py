@@ -1,5 +1,5 @@
 from KeyboardFactory import KeyboardFactory as KBF
-from SessionHandler.States import IState
+from SessionHandler.IStates import IState
 from SessionHandler.PlayerManagement import PlayerManagement
 from SessionHandler.EveningManagement import EveningManagement
 from SessionHandler.OpenStatistic import OpenStatistic
