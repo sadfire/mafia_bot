@@ -19,10 +19,11 @@ class CallbackProvider:
 
     @classmethod
     def get_arguments(cls, query):
-        query, *arguments = query.split('.') + [None]
+        query, *arguments = query.split('.')
 
-        if len(arguments) < 2:
+        if len(arguments) == 1:
             arguments = arguments[0]
+
         return query, arguments
 
     @classmethod

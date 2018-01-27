@@ -36,6 +36,10 @@ class IState:
             return self
         return self._next(self._session, self.__class__)
 
+    def back_callback(self):
+        if self._previous is None:
+            return self
+        return self._previous(self._session, None)
 
 def emoji_number(num=None) -> object:
     emoji = ["0", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]

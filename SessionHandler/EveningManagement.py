@@ -28,6 +28,7 @@ class EveningManagement(IState):
     def __del__(self):
         self._session.remove_handler(self._handler)
         self._message = self._session.send_message(text="Игроки:\n", reply_markup=self._get_main_kb)
+        self._session.bot.delete_message(chat_id=self._session.t_id, message_id=self._regular_members_message.message_id)
 
     def _add_member_handler(self, bot, updater):
         txt = updater.effective_message.text
@@ -55,10 +56,13 @@ class EveningManagement(IState):
                                     callback_player=self._session.send_player_info_callback,
                                     callback_emoji=self._remove_member_callback,
                                     second_line_emoji="❌")
-        if self._message is None:
-            self._message = self._session.send_message("Текущий вечер:")
         kb += self._get_main_kb
-        self._message = self._message.edit_reply_markup(reply_markup=kb)
+
+        if self._message is None:
+            self._message = self._session.send_message("Вы пока не добавили игроков", reply_markup=kb)
+        else:
+            self._message = self._message.edit_text("👥 Игроки:", reply_markup=kb)
+            #self._message = self._message.edit_reply_markup()
 
     def _end_evenings_callback(self, bot, update):
 
@@ -126,5 +130,9 @@ class EveningManagement(IState):
 
     @property
     def _get_main_kb(self):
-        return KBF.button("Последние игроки", self._open_regular_callback) + \
-               KBF.button("Закончить", self._end_evenings_callback)
+        kb = KBF.button("Последние игроки", self._open_regular_callback)
+        if self._session.evening.is_ready():
+            kb += KBF.button("Закончить", self._end_evenings_callback)
+        else:
+            kb += KBF.button("Отменить вечер", self.back_callback)
+        return kb
