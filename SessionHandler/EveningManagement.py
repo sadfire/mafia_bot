@@ -57,7 +57,8 @@ class EveningManagement(IState):
                                     second_line_emoji="❌")
         if self._message is None:
             self._message = self._session.send_message("Текущий вечер:")
-        self._message = self._message.edit_reply_markup(reply_markup=kb + self._get_main_kb)
+        kb += self._get_main_kb
+        self._message = self._message.edit_reply_markup(reply_markup=kb)
 
     def _end_evenings_callback(self, bot, update):
 
@@ -69,7 +70,7 @@ class EveningManagement(IState):
 
             self._session.send_message("Игроки: \n{}".format("".join(members)))
             self._next = CalculationOfPlayers
-            return True
+            self._session.to_next_state()
         else:
             self._update_players_message()
             self._session.send_message("Не хватает участников")

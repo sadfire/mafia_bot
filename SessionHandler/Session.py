@@ -5,6 +5,7 @@ from SessionHandler.IStates import get_query_text
 from SessionHandler.StartState import StartState
 import logging
 
+
 class Session:
     def __init__(self, bot, updater, t_id, database_class=Database):
         self.bot = bot
@@ -26,9 +27,6 @@ class Session:
     def send_message(self, text, reply_markup=None):
         return self.bot.send_message(chat_id=self.t_id, text=text, reply_markup=reply_markup)
 
-    def _add_handlers(self):
-        self.add_handler(CallbackQueryHandler(self.query_callback))
-
     def add_handler(self, handler):
         self._handlers.append(handler)
         self._updater.dispatcher.add_handler(handler)
@@ -37,36 +35,6 @@ class Session:
         if handler in self._handlers:
             self._updater.dispatcher.remove_handeler(handler)
             self._handlers.remove(handler)
-
-    def query_callback(self, bot, update):
-        if not self._filter_update(update):
-            return
-
-        self._remove_markup(update)
-        query = get_query_text(update)
-
-        if len(query) == 0:
-            return
-        elif query[0] != '_' and self._filter_callbacks(query):
-            return getattr(self, query)(bot, update)
-
-        query, *arguments = query.split('.') + [None]
-
-        if len(arguments) < 3:
-            arguments = arguments[0]
-
-        try:
-            callback = getattr(self.state, query, self.state.process_callback)
-            if arguments is None:
-                is_next = callback(bot, update)
-            else:
-                is_next = callback(bot, update, arguments)
-
-            if is_next:
-                self.state = self.state.next()
-        except AttributeError as er:
-            logging.warning(er)
-            logging.warning("Callback error: ",query, arguments)
 
     @staticmethod
     def _remove_markup(update):
@@ -89,3 +57,6 @@ class Session:
 
     def _filter_callbacks(self, data):
         return len(data) != 0 and data in dir(self.__class__) and data[-9:] == "_callback"
+
+    def to_next_state(self):
+        self.state = self.state.next()

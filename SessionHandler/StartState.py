@@ -16,12 +16,12 @@ class StartState(IState):
 
     def _open_statistic_callback(self, bot, update):
         self._next = OpenStatistic
-        return True
+        self._session.to_next_state()
 
     def _evening_manager_callback(self, bot, update):
         self._next = EveningManagement
-        return True
+        self._session.to_next_state()
 
     def _player_manager_callback(self, bot, update):
         self._next = PlayerManagement
-        return True
+        self._session.to_next_state()

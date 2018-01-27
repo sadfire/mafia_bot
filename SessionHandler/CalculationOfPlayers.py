@@ -62,4 +62,5 @@ class CalculationOfPlayers(IState):
         self._message.edit_reply_markup(self.state_kb)
 
     def _end_players_calculating_callback(self, bot, update):
-        pass
+        # TODO Save players to evening
+        self._session.to_next_state()
