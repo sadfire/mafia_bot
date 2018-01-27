@@ -8,7 +8,7 @@ class Player:
         self.id = member_id
         self.name = name
         self.postfix = ""
-        self._role = role
+        self.role = role
         self._card = card
         self.is_alive = is_alive
         self.number = None

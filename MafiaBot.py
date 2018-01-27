@@ -29,7 +29,7 @@ class Bot:
         t_id = update.effective_chat.id
 
         query = update.callback_query.data
-        if '.' not in query and self._filter_callbacks(query):
+        if self._filter_callbacks(query):
             return getattr(self, query)(bot, update)
 
         if t_id not in self._sessions.keys():

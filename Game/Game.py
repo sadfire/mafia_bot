@@ -24,3 +24,4 @@ class Game:
 
     def log_event(self, event, initiator_player, target_player):
         pass
+
