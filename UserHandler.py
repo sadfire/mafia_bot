@@ -26,27 +26,6 @@ class UserHandler:
                          reply_markup=KBF.start_user(
                              self._user_open_statistic_callback, self._get_permissions_callback))
 
-    def query_callback(self, bot, update):
-        query = get_query_text(update)
-
-        update.effective_message.edit_reply_markup()
-
-        arguments = None
-        if '.' in query:
-            arguments = query.split('.')
-            query = arguments[0]
-            arguments = arguments[1:]
-
-        if not self._filter_callbacks(query):
-            return
-
-        callback = getattr(self, query)
-
-        if arguments is not None:
-            return callback(bot, update, arguments)
-
-        return callback(self, query)(bot, update)
-
     def _filter_callbacks(self, data):
         return data in dir(self.__class__) and data[-9:] == "_callback"
 

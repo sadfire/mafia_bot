@@ -1,9 +1,9 @@
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
+from CallbackProvider import CallbackProvider
 from KeyboardFactory import KeyboardFactory as KBF
 from MafiaDatabaseApi import Database
 from SessionHandler.Session import Session
-from SessionHandler.IStates import get_query_text
 from UserHandler import UserHandler
 
 
@@ -23,19 +23,17 @@ class Bot:
 
     def _add_base_handlers(self):
         self._updater.dispatcher.add_handler(CommandHandler("start", self._start_callback))
-        self._updater.dispatcher.add_handler(CallbackQueryHandler(self._query_callback))
+        self._updater.dispatcher.add_handler(CallbackQueryHandler(self.query_callback))
 
-    def _query_callback(self, bot, update):
+    def query_callback(self, bot, update):
         t_id = update.effective_chat.id
 
-        query = update.callback_query.data
-        if '.' not in query and self._filter_callbacks(query):
-            return getattr(self, query)(bot, update)
-
         if t_id not in self._sessions.keys():
-            return self._users_handler.query_callback(bot, update)
+            providers = self, self._users_handler
         else:
-            return self._sessions[t_id].query_callback(bot, update)
+            providers = self, self._sessions[t_id], self._sessions[t_id].state
+
+        return CallbackProvider.process_callback(bot, update, providers)
 
     def _start_callback(self, bot, update):
         t_id = update.effective_chat.id
@@ -46,7 +44,7 @@ class Bot:
                              reply_markup=KBF.button("Да", self._bot_reset_callback) +
                                           KBF.button("Нет", self.bot_delete_message_callback))
             return
-# and not self._db.check_permission_by_telegram_name(update.effective_user.name)
+        # and not self._db.check_permission_by_telegram_name(update.effective_user.name)
         username = update.effective_user.name
         if not self._db.check_permission_by_telegram_id(t_id) and self._db.check_permission_by_telegram_name(username):
             self._db.insert_telegram_id(username, t_id)
@@ -66,6 +64,3 @@ class Bot:
 
     def bot_delete_message_callback(self, bot, update):
         bot.delete_message(update.effective_chat.id, update.effective_message.id)
-
-    def _filter_callbacks(self, data):
-        return data in dir(self.__class__) and data[-9:] == "_callback"
