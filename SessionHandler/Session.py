@@ -50,14 +50,14 @@ class Session:
         elif query[0] != '_' and self._filter_callbacks(query):
             return getattr(self, query)(bot, update)
 
-        query, *arguments = query.split('.') + [None]
+        query, *arguments = query.split('.')
 
-        if len(arguments) < 3:
+        if len(arguments) < 2:
             arguments = arguments[0]
 
         try:
             callback = getattr(self.state, query, self.state.process_callback)
-            if arguments is None:
+            if isinstance(arguments, list) and len(arguments) == 0:
                 is_next = callback(bot, update)
             else:
                 is_next = callback(bot, update, arguments)
