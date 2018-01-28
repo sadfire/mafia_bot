@@ -19,16 +19,17 @@ class EveningManagement(IState):
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
 
+        self._next = CalculationOfPlayers
+
         self._handler = MessageHandler(Filters.text, self._add_member_handler)
         self._session.add_handler(self._handler)
-        self._regular_members_message = None
+        self._members_list_message = None
         self._session.evening = Evening(self._session.host)
         self._update_players_message()
 
     def __del__(self):
         self._session.remove_handler(self._handler)
         self._message = self._session.send_message(text="Игроки:\n", reply_markup=self._get_main_kb)
-        self._session.bot.delete_message(chat_id=self._session.t_id, message_id=self._regular_members_message.message_id)
 
     def _add_member_handler(self, bot, updater):
         txt = updater.effective_message.text
@@ -62,18 +63,19 @@ class EveningManagement(IState):
             self._message = self._session.send_message("Вы пока не добавили игроков", reply_markup=kb)
         else:
             self._message = self._message.edit_text("👥 Игроки:", reply_markup=kb)
-            #self._message = self._message.edit_reply_markup()
 
-    def _end_evenings_callback(self, bot, update):
-
+    def _end_added_players_callback(self, bot, update):
         if self._session.evening.is_ready():
+            if self._members_list_message is not None:
+                self._session.bot.delete_message(chat_id=self._session.t_id,
+                                                 message_id=self._members_list_message.message_id)
+
             self._session.bot.delete_message(self._session.t_id, self._message.message_id)
 
             members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name)
                        for member in self._session.evening.members.values()]
 
-            self._session.send_message("Игроки: \n{}".format("".join(members)))
-            self._next = CalculationOfPlayers
+            #self._session.send_message("Игроки: \n{}".format("".join(members)))
             self._session.to_next_state()
         else:
             self._update_players_message()
@@ -83,10 +85,11 @@ class EveningManagement(IState):
         self._session.evening.remove_member(int(data))
         self._update_players_message()
 
-    def _open_regular_callback(self, bot, update):
+    def _open_member_list_callback(self, bot, update):
         kb = self._get_regular_members_kb
         if not kb.is_empty():
-            self._regular_members_message = self._session.send_message(em(':necktie: Ваши постоянные игроки'), reply_markup=kb)
+            self._members_list_message = self._session.send_message(em(':necktie: Ваши постоянные игроки'), reply_markup=kb)
+            self._members_list_message = None
         else:
             self._session.send_message("Список пуст")
 
@@ -96,8 +99,12 @@ class EveningManagement(IState):
         if not self._session.evening.add_member(self._session.db.get_member(int(id))):
             self._session.send_message("Ошибка при добавление пользователя. Попробуйте снова.")
 
-        update.effective_message.edit_reply_markup(reply_markup=self._get_regular_members_kb)
-        self._update_players_message()
+        kb = self._get_regular_members_kb
+        if kb.is_empty():
+            self._session.delete_message_callback(bot, update)
+        else:
+            update.effective_message.edit_reply_markup(reply_markup=kb)
+            self._update_players_message()
 
     def _choose_member(self, request_result):
         self._session.bot.send_message(self._session.t_id,
@@ -130,9 +137,9 @@ class EveningManagement(IState):
 
     @property
     def _get_main_kb(self):
-        kb = KBF.button("Последние игроки", self._open_regular_callback)
+        kb = KBF.button("Последние игроки", self._open_member_list_callback)
         if self._session.evening.is_ready():
-            kb += KBF.button("Закончить", self._end_evenings_callback)
+            kb += KBF.button("Закончить", self._end_added_players_callback)
         else:
             kb += KBF.button("Отменить вечер", self.back_callback)
         return kb

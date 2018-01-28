@@ -11,6 +11,7 @@ class IState:
         self._session = session
         self._previous = previous
         self._greeting()
+        self._next = None
 
     def _greeting(self) -> None:
         pass

@@ -14,14 +14,16 @@ class StartState(IState):
                                                          self._open_statistic_callback,
                                                          self._player_manager_callback))
 
-    def _open_statistic_callback(self, bot, update):
-        self._next = OpenStatistic
+    def process_state(self, next_state, update):
+        self._next = next_state
+        self._session.remove_markup(update)
         self._session.to_next_state()
+
+    def _open_statistic_callback(self, bot, update):
+        self.process_state(OpenStatistic, update)
 
     def _evening_manager_callback(self, bot, update):
-        self._next = EveningManagement
-        self._session.to_next_state()
+        self.process_state(EveningManagement, update)
 
     def _player_manager_callback(self, bot, update):
-        self._next = PlayerManagement
-        self._session.to_next_state()
+        self.process_state(PlayerManagement, update)

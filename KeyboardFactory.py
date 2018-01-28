@@ -12,7 +12,7 @@ class MafiaMarkup(InlineKeyboardMarkup):
         return MafiaMarkup(self.inline_keyboard + other.inline_keyboard)
 
     def is_empty(self):
-        return len(self.inline_keyboard) == 0
+        return self.inline_keyboard is None
 
 
 class KeyboardFactory:

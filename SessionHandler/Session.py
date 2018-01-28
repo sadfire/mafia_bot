@@ -37,7 +37,7 @@ class Session:
             self._handlers.remove(handler)
 
     @staticmethod
-    def _remove_markup(update):
+    def remove_markup(update):
         if update.callback_query.data != "":
             update.effective_message.edit_text(update.effective_message.text)
 
