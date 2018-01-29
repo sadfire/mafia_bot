@@ -5,6 +5,15 @@ from telegram import InlineKeyboardMarkup
 
 
 class MafiaMarkup(InlineKeyboardMarkup):
+    def __init__(self, inline_keyboard, **kwargs):
+        super().__init__(inline_keyboard, **kwargs)
+        if "pages" in kwargs:
+            self._pages_mode = True
+            self._pages_count = kwargs["pages"]
+
+    def _to_page(self, page_num):
+        pass
+
     def __add__(self, other):
         if self.inline_keyboard is None:
             return other

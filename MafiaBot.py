@@ -32,7 +32,7 @@ class Bot:
         else:
             providers = self, self._sessions[t_id], self._sessions[t_id].state
 
-        return CallbackProvider.process_callback(bot, update, providers)
+        return CallbackProvider.process(bot, update, providers)
 
     def _start_callback(self, bot, update):
         t_id = update.effective_chat.id

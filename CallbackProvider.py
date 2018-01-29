@@ -3,7 +3,7 @@ import logging
 
 class CallbackProvider:
     @classmethod
-    def process_callback(cls, bot, update, callback_destinations):
+    def process(cls, bot, update, callback_destinations):
         query, arguments = cls.get_arguments(update.callback_query.data)
 
         for callback_destination in callback_destinations:
