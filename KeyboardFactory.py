@@ -45,8 +45,8 @@ class KeyboardFactory:
     def start_user(cls, open_stat_callback, get_access_callback):
         return MafiaMarkup(
             [
-                [cls.button(f"{em(':open_file_folder:')} Открыть статистику", open_stat_callback)],
-                [cls.button(f"{em(':question:')} Запросить доступ", get_access_callback)]
+                [cls.__button(f"{em(':open_file_folder:')} Открыть статистику", open_stat_callback)],
+                [cls.__button(f"{em(':question:')} Запросить доступ", get_access_callback)]
             ]
         )
 
