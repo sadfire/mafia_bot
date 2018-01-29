@@ -31,7 +31,8 @@ class EveningHostAdd(IState):
         return "\n".join("👁 🔛 👤{}".format(host) for host in self._session.evening.hosts)
 
     def _end_evening_host_manager(self, bot, update):
-        self._session.delete_message_callback(bot, update)
+        self._session.edit_message(message=update.effective_message,
+                                   text="Все администраторы могут зайти в текущий вечер из главного меню.")
         self._session.to_next_state()
 
     @property

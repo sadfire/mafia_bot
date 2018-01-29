@@ -52,6 +52,7 @@ class Session:
     def add_handler(self, handler):
         self._handlers.append(handler)
         self._updater.dispatcher.add_handler(handler)
+        return handler
 
     def remove_handler(self, handler):
         if handler in self._handlers:
