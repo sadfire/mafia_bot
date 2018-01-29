@@ -2,19 +2,21 @@ from emoji import emojize as em
 from telegram.ext import MessageHandler, Filters
 
 from Game.Evening import Evening
-from KeyboardFactory import KeyboardFactory as KBF
+from KeyboardUtils import KeyboardFactory as KBF
+from KeyboardUtils import MultiPageKeyboardFactory as MKBF
+
 from SessionHandler.IStates import IState
 from SessionHandler.CalculationOfPlayers import CalculationOfPlayers
 
 
 class EveningManagement(IState):
     def _greeting(self):
-        self._session.bot.send_message(self._session.t_id,
-                                       text="Начнем вечер!\n"
-                                            "Добавьте игроков. \n"
-                                            "Для добавления игрока отправьте мне"
-                                            " его личный номер, номер телефона или полное имя. (NFC in progress)\n"
-                                            "Возможность удалить игроков из списка вам представится после.")
+        self._session.send_message(chat_id=self._session.t_id,
+                                   text="Начнем вечер!\n"
+                                        "Добавьте игроков. \n"
+                                        "Для добавления игрока отправьте мне"
+                                        " его личный номер, номер телефона или полное имя. (NFC in progress)\n"
+                                        "Возможность удалить игроков из списка вам представится после.")
 
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
@@ -57,12 +59,13 @@ class EveningManagement(IState):
                                     callback_player=self._session.send_player_info_callback,
                                     callback_emoji=self._remove_member_callback,
                                     second_line_emoji="❌")
-        kb += self._get_main_kb
+
+        kb = MKBF(kb, 7, self._get_main_kb)
 
         if self._message is None:
             self._message = self._session.send_message("Вы пока не добавили игроков", reply_markup=kb)
         else:
-            self._message = self._message.edit_text("👥 Игроки:", reply_markup=kb)
+            self._message = self._session.edit_message(self._message, "👥 Игроки:", reply_markup=kb)
 
     def _end_added_players_callback(self, bot, update):
         if self._session.evening.is_ready():
@@ -75,7 +78,7 @@ class EveningManagement(IState):
             members = ["{} {} \n".format(em(":bust_in_silhouette:"), member.name)
                        for member in self._session.evening.members.values()]
 
-            #self._session.send_message("Игроки: \n{}".format("".join(members)))
+            # self._session.send_message("Игроки: \n{}".format("".join(members)))
             self._session.to_next_state()
         else:
             self._update_players_message()
@@ -88,7 +91,8 @@ class EveningManagement(IState):
     def _open_member_list_callback(self, bot, update):
         kb = self._get_regular_members_kb
         if not kb.is_empty():
-            self._members_list_message = self._session.send_message(em(':necktie: Ваши постоянные игроки'), reply_markup=kb)
+            self._members_list_message = self._session.send_message(em(':necktie: Ваши постоянные игроки'),
+                                                                    reply_markup=kb)
             self._members_list_message = None
         else:
             self._session.send_message("Список пуст")
@@ -103,24 +107,24 @@ class EveningManagement(IState):
         if kb.is_empty():
             self._session.delete_message_callback(bot, update)
         else:
-            update.effective_message.edit_reply_markup(reply_markup=kb)
+            self._session.edit_message(update.effective_message, None, kb)
             self._update_players_message()
 
     def _choose_member(self, request_result):
-        self._session.bot.send_message(self._session.t_id,
-                                       text="Под ваш запрос подходит несколько игроков. Ввыберите подходящее",
-                                       reply_markup=KBF.players_with_emoji(
-                                           request_result,
-                                           em(":heavy_plus_sign:"),
-                                           self._session.send_player_info_callback,
-                                           self._choose_member_callback))
+        self._session.send_message(chat_id=self._session.t_id,
+                                   text="Под ваш запрос подходит несколько игроков. Ввыберите подходящее",
+                                   reply_markup=KBF.players_with_emoji(
+                                       request_result,
+                                       em(":heavy_plus_sign:"),
+                                       self._session.send_player_info_callback,
+                                       self._choose_member_callback))
 
     def _choose_member_callback(self, bot, update, id):
         member = self._session.db.get_member(id)
         self._session.evening.add_member(member)
-        self._session.bot.send_message(self._session.t_id,
-                                       text="Игрок добавлен. \n Введите следующего или нажмите '{}' вверху.".format(
-                                           em(":+1:")))
+        self._session.send_message(chat_id=self._session.t_id,
+                                   text="Игрок добавлен. \n Введите следующего или нажмите '{}' вверху.".format(
+                                       em(":+1:")))
 
     @property
     def _get_regular_members_kb(self):
@@ -133,7 +137,8 @@ class EveningManagement(IState):
 
         return KBF.players_with_emoji(members, em(":heavy_plus_sign:"),
                                       self._session.send_player_info_callback,
-                                      self._add_member_callback) + KBF.button("Закрыть", self._session.delete_message_callback)
+                                      self._add_member_callback) + KBF.button("Закрыть",
+                                                                              self._session.delete_message_callback)
 
     @property
     def _get_main_kb(self):

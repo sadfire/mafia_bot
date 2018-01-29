@@ -1,7 +1,7 @@
 import operator
 from random import shuffle, sample
 
-from KeyboardFactory import KeyboardFactory as KBF
+from KeyboardUtils import KeyboardFactory as KBF
 from SessionHandler.IStates import IState, get_query_text, emoji_number
 from SessionHandler.GameInProcess import GameInProcess
 
@@ -61,7 +61,7 @@ class CalculationOfPlayers(IState):
             self._active_number = None
             self._active_id = None
 
-        self._message.edit_reply_markup(reply_markup=self.state_kb)
+        self._session.edit_message(self._message, None, self.state_kb)
 
     def _end_players_calculating_callback(self, bot, update):
         self._session.delete_message_callback(bot, update)

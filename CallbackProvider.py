@@ -1,7 +1,7 @@
 import logging
 
 
-class CallbackProvider:
+class Provider:
     @classmethod
     def process(cls, bot, update, callback_destinations):
         query, arguments = cls.get_arguments(update.callback_query.data)

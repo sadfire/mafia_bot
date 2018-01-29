@@ -1,4 +1,4 @@
-from KeyboardFactory import KeyboardFactory as KBF
+from KeyboardUtils import KeyboardFactory as KBF
 from SessionHandler.IStates import IState
 from SessionHandler.PlayerManagement import PlayerManagement
 from SessionHandler.EveningManagement import EveningManagement

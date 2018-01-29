@@ -1,7 +1,7 @@
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
-from CallbackProvider import CallbackProvider
-from KeyboardFactory import KeyboardFactory as KBF
+import CallbackProvider
+from KeyboardUtils import KeyboardFactory as KBF
 from SessionHandler.Session import Session
 from UserHandler import UserHandler
 
@@ -32,7 +32,7 @@ class Bot:
         else:
             providers = self, self._sessions[t_id], self._sessions[t_id].state
 
-        return CallbackProvider.process(bot, update, providers)
+        return CallbackProvider.Provider.process(bot, update, providers)
 
     def _start_callback(self, bot, update):
         t_id = update.effective_chat.id
@@ -51,6 +51,7 @@ class Bot:
         if not self._db.check_permission_by_telegram_id(t_id):
             self._users_handler.start_callback(bot, update)
         else:
+            # TODO Add mutex Чтобы если бот подвиснет, а пользователь будет долбиться в кнопку - ничего не сломалось
             self._init_session(bot, update)
 
     def _init_session(self, bot, update):
