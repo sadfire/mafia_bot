@@ -17,6 +17,7 @@ class Statistic(Enum):
 class Database:
     def __init__(self, t_id, pswrd) -> None:
         super().__init__()
+        self._db = None
         self._db = MySQLdb.connect(host="localhost", user=t_id, passwd=pswrd, db="mafia_rate", charset='utf8')
         self._cursor = self._db.cursor()
 
@@ -28,7 +29,8 @@ class Database:
         self._db.commit()
 
     def __del__(self):
-        self._db.close()
+        if self._db is not None:
+            self._db.close()
 
     def _execute(self, select):
         self._cursor.execute(select)

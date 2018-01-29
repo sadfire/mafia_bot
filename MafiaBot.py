@@ -2,18 +2,17 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
 from CallbackProvider import CallbackProvider
 from KeyboardFactory import KeyboardFactory as KBF
-from MafiaDatabaseApi import Database
 from SessionHandler.Session import Session
 from UserHandler import UserHandler
 
 
 class Bot:
-    def __init__(self, bot_key):
+    def __init__(self, bot_key, database):
         super(Bot, self).__init__()
         self._updater = Updater(bot_key)
         self._sessions = {}
         self._wait_text = None
-        self._db = Database('bot', 'YWqYvadPZ35eDHDs')
+        self._db = database
         self._users_handler = UserHandler(self._db, self._updater)
 
     def start(self):
