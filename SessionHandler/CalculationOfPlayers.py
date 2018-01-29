@@ -65,7 +65,8 @@ class CalculationOfPlayers(IState):
 
     def _end_players_calculating_callback(self, bot, update):
         self._session.delete_message_callback(bot, update)
-        message_text = "👁 🔛 👤{}\n\n".format(self._session.host.name)
+        message_text = "\n".join("👁 🔛 👤{}".format(host) for host in self._session.evening.hosts)
+        message_text += '\n'
         for number, player in self.players.items():
             message_text += "{} 🔛 👤{}\n".format(emoji_number(number), player.name)
 

@@ -1,14 +1,12 @@
 from telegram import Message
 
-from KeyboardUtils import MultiPageKeyboardFactory
+from KeyboardUtils import MultiPageKeyboardFactory, KeyboardFactory
 from MafiaDatabaseApi import Database
 from MultiPageProvider import Provider as MultiPageProvider
 from SessionHandler.StartState import StartState
 import logging
 
-
-def delete_message_callback(bot, update):
-    bot.delete_message(chat_id=update.effective_chat.id, message_id=update.effective_message.message_id)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 class Session:
@@ -18,7 +16,7 @@ class Session:
         self._updater = updater
 
         self.db = database_class("u{}".format(self.t_id), 'mafia_api')
-        self.host = self.db.get_member_by_telegram(self.t_id)
+        self.owner = self.db.get_member_by_telegram(self.t_id)
 
         self.evening = None
 
@@ -26,7 +24,6 @@ class Session:
 
         self.state = StartState(self)
         self._handlers = []
-        logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     def __del__(self):
         pass
@@ -72,7 +69,8 @@ class Session:
                                            reply_markup=update.effective_message.reply_markup)
 
     def send_player_info_callback(self, bot, update, player_id):
-        self.send_message(self.db.get_member_statistic(player_id), reply_markup=delete_message_callback)
+        self.send_message(self.db.get_member_statistic(player_id),
+                          reply_markup=KeyboardFactory.button("Закрыть", callback_data=delete_message_callback))
 
     def to_next_state(self):
         self.state = self.state.next()
@@ -82,3 +80,11 @@ class Session:
             self.multi_page_provider.callback(bot, update, page)
         except ValueError:
             logging.error("MultiPage error. Session have't this multi kb")
+
+    @classmethod
+    def delete_message_callback(cls, self, bot, update):
+        bot.delete_message(chat_id=update.effective_chat.id, message_id=update.effective_message.message_id)
+
+    @classmethod
+    def remove_message_keyboard_callback(cls, bot, update):
+        update.effective_message.edit_text(update.effective_message.text)

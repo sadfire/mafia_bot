@@ -8,8 +8,9 @@ from KeyboardUtils import KeyboardFactory as kbf, MultiPageKeyboardFactory
 
 
 class KeyboardTests:
-    def __init__(self):
+    def __init__(self, token):
         self.kb = None
+        self.token = token
 
     def callback_test(self, bot, update):
         Provider.process(bot, update, (self,))
@@ -20,7 +21,7 @@ class KeyboardTests:
                                            reply_markup=self.kb.to_markup(int(page)))
 
     def kb_test(self):
-        updater = Updater(sys.argv[1])
+        updater = Updater(self.token)
         updater.dispatcher.add_handler(CallbackQueryHandler(self.callback_test))
         self.kb = kbf.double_button("Button1", "Button", "Button1", "Button") + \
                   kbf.button(text="Button2", callback_data="Button") + \
@@ -37,5 +38,5 @@ class KeyboardTests:
 
 
 if __name__ == "__main__":
-    test = KeyboardTests()
+    test = KeyboardTests(sys.argv[1])
     test.kb_test()

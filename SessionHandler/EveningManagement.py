@@ -4,9 +4,8 @@ from telegram.ext import MessageHandler, Filters
 from Game.Evening import Evening
 from KeyboardUtils import KeyboardFactory as KBF
 from KeyboardUtils import MultiPageKeyboardFactory as MKBF
-
+from SessionHandler import EveningHostAdd
 from SessionHandler.IStates import IState
-from SessionHandler.CalculationOfPlayers import CalculationOfPlayers
 
 
 class EveningManagement(IState):
@@ -15,13 +14,12 @@ class EveningManagement(IState):
                                    text="Начнем вечер!\n"
                                         "Добавьте игроков. \n"
                                         "Для добавления игрока отправьте мне"
-                                        " его личный номер, номер телефона или полное имя. (NFC in progress)\n"
-                                        "Возможность удалить игроков из списка вам представится после.")
+                                        " его личный номер, номер телефона или полное имя. (NFC in progress)\n")
 
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
 
-        self._next = CalculationOfPlayers
+        self._next = EveningHostAdd
 
         self._handler = MessageHandler(Filters.text, self._add_member_handler)
         self._session.add_handler(self._handler)
@@ -125,6 +123,8 @@ class EveningManagement(IState):
         self._session.send_message(chat_id=self._session.t_id,
                                    text="Игрок добавлен. \n Введите следующего или нажмите '{}' вверху.".format(
                                        em(":+1:")))
+
+
 
     @property
     def _get_regular_members_kb(self):

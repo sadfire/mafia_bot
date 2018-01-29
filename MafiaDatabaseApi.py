@@ -55,7 +55,10 @@ class Database:
         if len(result) != 1:
             return None
 
-        member_raw = result[0]
+        return self.init_member(result[0])
+
+    @staticmethod
+    def init_member(member_raw):
         return Member(member_raw[0], member_raw[1], member_raw[2] == 1, member_raw[3], member_raw[4])
 
     def get_member_statistic(self, t_id):
@@ -132,6 +135,9 @@ class Database:
 
     def get_games(self, t_id, game, host):
         pass
+
+    def get_hosts(self):
+        return [self.init_member(raw) for raw in self._execute("SELECT * FROM Members WHERE IsHost = 1")]
 
     def add_user_permission_request(self, t_id, message):
         self._execute("INSERT INTO PermRequest(TelegId, Text) VALUES (%s, %s)", (t_id, message.text))
