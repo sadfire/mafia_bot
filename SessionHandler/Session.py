@@ -10,7 +10,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 class Session:
-    def __init__(self, bot, updater, t_id, database_class=Database):
+    def __init__(self, bot, updater, t_id, all_evenings, database_class=Database):
         self.bot = bot
         self.t_id = t_id
         self._updater = updater
@@ -18,9 +18,12 @@ class Session:
         self.db = database_class("u{}".format(self.t_id), 'mafia_api')
         self.owner = self.db.get_member_by_telegram(self.t_id)
 
+        self.all_evenings = all_evenings
         self.evening = None
 
-        self.multi_page_provider = MultiPageProvider(self.t_id, self.bot.send_message, self.bot.edit_message)
+        self.multi_page_provider = MultiPageProvider(self.t_id,
+                                                     self._updater.bot.send_message,
+                                                     self._updater.bot.edit_message_text)
 
         self.state = StartState(self)
         self._handlers = []
@@ -44,7 +47,7 @@ class Session:
         if isinstance(reply_markup, MultiPageKeyboardFactory):
             return self.multi_page_provider.edit(message, text, reply_markup)
         else:
-            return self.bot.edit_message(chat_id=self.t_id, message_id=message, text=text, reply_markup=reply_markup)
+            return self.bot.edit_message_text(chat_id=self.t_id, message_id=message, text=text, reply_markup=reply_markup)
 
     def add_handler(self, handler):
         self._handlers.append(handler)
@@ -54,6 +57,16 @@ class Session:
         if handler in self._handlers:
             self._updater.dispatcher.remove_handeler(handler)
             self._handlers.remove(handler)
+
+    def to_next_state(self):
+        self.state = self.state.next()
+
+    def start_evening(self, host_id):
+        self.evening = self.db.insert_evening(host_id)
+        self.all_evenings.append(self.evening)
+
+    def close_evening(self):
+        self.all_evenings.remove(self.evening)
 
     @staticmethod
     def remove_markup(update):
@@ -70,10 +83,7 @@ class Session:
 
     def send_player_info_callback(self, bot, update, player_id):
         self.send_message(self.db.get_member_statistic(player_id),
-                          reply_markup=KeyboardFactory.button("Закрыть", callback_data=delete_message_callback))
-
-    def to_next_state(self):
-        self.state = self.state.next()
+                          reply_markup=KeyboardFactory.button("Закрыть", callback_data=self.delete_message_callback))
 
     def to_page_callback(self, bot, update, page):
         try:
@@ -82,8 +92,15 @@ class Session:
             logging.error("MultiPage error. Session have't this multi kb")
 
     @classmethod
-    def delete_message_callback(cls, self, bot, update):
-        bot.delete_message(chat_id=update.effective_chat.id, message_id=update.effective_message.message_id)
+    def delete_message_callback(cls, bot, update=None):
+        if isinstance(bot, Message):
+            message = bot
+            chat_id = message.chat.id
+            message_id = message.message_id
+        else:
+            chat_id = update.effective_chat.id
+            message_id = update.effective_message.message_id
+        bot.delete_message(chat_id=chat_id, message_id=message_id)
 
     @classmethod
     def remove_message_keyboard_callback(cls, bot, update):

@@ -1,7 +1,7 @@
 from emoji import emojize as em
 
 from KeyboardUtils import KeyboardFactory, MultiPageKeyboardFactory
-from SessionHandler import CalculationOfPlayers
+from SessionHandler.CalculationOfPlayers import CalculationOfPlayers
 from SessionHandler.IStates import IState
 
 
@@ -11,16 +11,16 @@ class EveningHostAdd(IState):
         self._next = CalculationOfPlayers
 
     def _greeting(self):
-        self._session.send_message("Хотите добавить еще ведущий в игру?\n"
-                                   "Вы можете сделать это и позже с помощью команды /add_host",
-                                   reply_markup=
-                                   KeyboardFactory.button("Да", callback_data=self._add_evening_host_callback) + \
-                                   KeyboardFactory.button("Нет", callback_data=self._end_evening_host_manager))
+        self._message = self._session.send_message("Хотите добавить еще ведущих в игру?\n"
+                                                   "Вы можете сделать это и позже с помощью команды /add_host",
+                                                   reply_markup=
+                                                   KeyboardFactory.button("Да",
+                                                                          callback_data=self._add_evening_host_callback) + \
+                                                   KeyboardFactory.button("Нет",
+                                                                          callback_data=self._end_evening_host_manager))
 
     def _add_evening_host_callback(self, bot, update):
-        self._session.delete_message_callback(bot, update)
-
-        self._message = self._session.send_message("Кандидаты в ведущие:", reply_markup=self.get_hosts_kb)
+        self._message = self._session.edit_message(self._message, "Кандидаты в ведущие:", reply_markup=self.get_hosts_kb)
 
     def _add_host_callback(self, bot, update, argument):
         self._session.evening.add_host(self._session.db.get_member(int(argument)))
@@ -31,8 +31,8 @@ class EveningHostAdd(IState):
         return "\n".join("👁 🔛 👤{}".format(host) for host in self._session.evening.hosts)
 
     def _end_evening_host_manager(self, bot, update):
-        self._session.remove_message_keyboard_callback(bot, update)
-        self._session.next_state()
+        self._session.delete_message_callback(bot, update)
+        self._session.to_next_state()
 
     @property
     def get_hosts_kb(self):

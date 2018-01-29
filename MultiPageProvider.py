@@ -27,7 +27,7 @@ class Provider:
 
         self.keyboards[m_id] = multi_page_kb
         reply_markup = self.keyboards[m_id].to_markup(page)
-        return self.send_method(chat_id=self.t_id,
+        return self.edit_method(chat_id=self.t_id,
                                 message_id=m_id,
                                 text=text,
                                 reply_markup=reply_markup)
@@ -39,4 +39,5 @@ class Provider:
 
         self.edit_method(chat_id=self.t_id,
                          message_id=m_id,
+                         text=update.effective_message.text,
                          reply_markup=self.keyboards[m_id].to_markup(page))

@@ -10,7 +10,10 @@ class Bot:
     def __init__(self, bot_key, database):
         super(Bot, self).__init__()
         self._updater = Updater(bot_key)
+
         self._sessions = {}
+        self._evenings = []
+
         self._wait_text = None
         self._db = database
         self._users_handler = UserHandler(self._db, self._updater)
@@ -55,7 +58,13 @@ class Bot:
             self._init_session(bot, update)
 
     def _init_session(self, bot, update):
-        self._sessions[update.effective_chat.id] = Session(bot, self._updater, update.effective_chat.id)
+        self._sessions[update.effective_chat.id] = Session(bot, self._updater, update.effective_chat.id, self._evenings)
+
+    def check_evening(self, host_id):
+        for evening in self._evenings:
+            if host_id in evening.hosts:
+                return evening
+        return None
 
     def _bot_reset_callback(self, bot, update):
         update.effective_message.edit_text("Бот перезагружен.")

@@ -147,3 +147,6 @@ class Database:
     def insert_telegram_id(self, username, t_id):
         self._cursor.execute(""" UPDATE Members SET IdTelegram = %s WHERE NameTelegram = %s """, (t_id, username))
         self._db.commit()
+
+    def insert_evening(self, host_id):
+        pass

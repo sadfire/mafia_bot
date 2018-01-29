@@ -59,8 +59,8 @@ class KeyboardFactory:
         )
 
     @classmethod
-    def main(cls, start_evening_callback, statistick_menu_callback, players_menu_callback):
-        return cls.button(f"{em(':hourglass:')} Начать вечер", callback_data=start_evening_callback.__name__) + \
+    def main(cls, start_evening_callback, statistick_menu_callback, players_menu_callback, evening_message="Начать вечер"):
+        return cls.button(f"{em(':hourglass:')} {evening_message}", callback_data=start_evening_callback.__name__) + \
                cls.button(f"{em(':bar_chart:')} Меню рейтинга", callback_data=statistick_menu_callback.__name__) + \
                cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__)
 
@@ -95,6 +95,10 @@ class MultiPageKeyboardFactory:
         self.post_kb = post_kb
 
         page = -1
+
+        if markup.inline_keyboard is None:
+            return
+
         for index, line in enumerate(markup.inline_keyboard):
             if index % page_size == 0:
                 page += 1
@@ -105,10 +109,12 @@ class MultiPageKeyboardFactory:
         kb = [KeyboardFactory.button_(text=em(":rewind:"),
                                       callback_data="to_page_callback",
                                       arguments="0"),
-              KeyboardFactory.button_(text=em(":arrow_left:") + " Назад",  # TODO. Is word needed?
+              KeyboardFactory.button_(text=em(":arrow_left:"),
                                       callback_data="to_page_callback",
                                       arguments=str(self.page - 1)),
-              KeyboardFactory.button_(text="Вперед " + em(":arrow_right:"),  # TODO. Is word needed?
+              KeyboardFactory.button_("{}/{}".format(self.page + 1, self.get_size()),
+                                     "empty"),
+              KeyboardFactory.button_(text=em(":arrow_right:"),
                                       callback_data="to_page_callback",
                                       arguments=str(self.page + 1)),
               KeyboardFactory.button_(text=em(":fast_forward:"),
@@ -117,7 +123,17 @@ class MultiPageKeyboardFactory:
 
         return MafiaMarkup([kb])
 
+    def is_empty(self):
+        return len(self._markup_lines) == 0
+
+    def get_size(self):
+        return len(self._markup_lines)
+
     def to_markup(self, page) -> MafiaMarkup:
+        page = int(page)
+        if self.is_empty():
+            return self.post_kb if self.post_kb is not None else KeyboardFactory.empty()
+
         if page < 0:
             page = 0
         elif page >= len(self._markup_lines):

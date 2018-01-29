@@ -14,6 +14,10 @@ class Evening:
         self.members[member.id] = member
         return True
 
+    def add_host(self, host):
+        if host.is_host:
+            self.hosts.append(host)
+
     def remove_member(self, member):
         if isinstance(member, Member):
             member = member.id

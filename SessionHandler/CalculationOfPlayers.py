@@ -1,8 +1,7 @@
-import operator
-from random import shuffle, sample
+from random import shuffle
 
 from KeyboardUtils import KeyboardFactory as KBF
-from SessionHandler.IStates import IState, get_query_text, emoji_number
+from SessionHandler.IStates import IState, emoji_number
 from SessionHandler.GameInProcess import GameInProcess
 
 
@@ -16,15 +15,18 @@ class CalculationOfPlayers(IState):
     def state_kb(self):
         kb = KBF.empty()
         for number, player in self.players.items():
-            kb += KBF.double_button(left_text=("⚪️ " if player.id != self._active_id else "🔘 ") + player.name,
-                                    left_callback=self._choose_player_callback,
-                                    left_arguments=player.id,
-                                    right_text=("⚪️ " if int(number) != self._active_number else "🔘 ") +
-                                                                                            str(emoji_number(number)),
-                                    right_callback=self._choose_number_callback,
-                                    right_arguments=number)
-        return kb + KBF.button("➰ Случайный порядок", self._randomize_callback) + KBF.button("☑️Закончить",
-                                                                                           self._end_players_calculating_callback)
+            kb += KBF.double_button(right_text=("⚪️ " if player.id != self._active_id else "🔘 ") + player.name,
+                                    right_callback=self._choose_player_callback,
+                                    right_arguments=player.id,
+
+                                    left_text=("⚪️ " if int(number) != self._active_number else "🔘 ") +
+                                              str(emoji_number(number)),
+                                    left_callback=self._choose_number_callback,
+                                    left_arguments=number)
+        return kb + \
+               KBF.button("📊 Отсортировать по рейтингу", self._sort_by_rate_callback) + \
+               KBF.button("➰ Случайный порядок", self._randomize_callback) + \
+               KBF.button("☑️Закончить", self._end_players_calculating_callback)
 
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
@@ -34,7 +36,10 @@ class CalculationOfPlayers(IState):
 
         self._randomize_callback()
 
-    def _randomize_callback(self, bot=None, update=None):
+    def _sort_by_rate_callback(self, bot, update):
+        pass
+
+    def _randomize_callback(self, _=None, __=None):
         self.players = self._session.evening.members.values()
 
         indexes = list(range(1, 1 + len(self.players)))
@@ -45,11 +50,11 @@ class CalculationOfPlayers(IState):
                 key=lambda elem: elem[0]))
         self.update_players_list()
 
-    def _choose_player_callback(self, bot, update, id):
+    def _choose_player_callback(self, _, __, id):
         self._active_id = int(id)
         self.update_players_list()
 
-    def _choose_number_callback(self, bot, update, number):
+    def _choose_number_callback(self, _, __, number):
         self._active_number = int(number)
         self.update_players_list()
 
@@ -61,12 +66,11 @@ class CalculationOfPlayers(IState):
             self._active_number = None
             self._active_id = None
 
-        self._session.edit_message(self._message, None, self.state_kb)
+        self._session.edit_message(self._message, "Расчёт игроков", self.state_kb)
 
     def _end_players_calculating_callback(self, bot, update):
         self._session.delete_message_callback(bot, update)
-        message_text = "\n".join("👁 🔛 👤{}".format(host) for host in self._session.evening.hosts)
-        message_text += '\n'
+        message_text = "👁 🔛 👤{}".format(self._session.owner.name) + '\n\n'
         for number, player in self.players.items():
             message_text += "{} 🔛 👤{}\n".format(emoji_number(number), player.name)
 
