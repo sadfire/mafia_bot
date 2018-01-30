@@ -36,8 +36,6 @@ class KeyboardTests:
         self.kb = MultiPageKeyboardFactory(self.kb, 2, kbf.button("Закончить", "end"))
 
         self.updater.bot.send_message(chat_id=self.t_id, text="Test", reply_markup=self.kb.to_markup(0))
-        self.updater.start_polling()
-        self.updater.idle()
 
     def callback_player(self, bot, update, id):
         pass
@@ -56,7 +54,7 @@ class KeyboardTests:
                                       reply_markup=kbf.confirmation(self.callback_action, self.callback_action))
         warning_button = (":warning:", self.callback_action)
         warning_button2 = (":warning: 2", self.callback_action)
-        warning_button3 = (":no_entry_sign:", self.callback_action)
+        warning_button3 = ("👺", self.callback_action)
         voting_button = (":white_circle:", self.callback_action)
         no_voting_button = (":red_circle:", self.callback_action)
         card_button = (':flower_playing_cards:', self.callback_player)
@@ -106,4 +104,5 @@ class KeyboardTests:
 
 if __name__ == "__main__":
     test = KeyboardTests(sys.argv[1])
+    test.multi_page_test()
     test.game_view_test()
