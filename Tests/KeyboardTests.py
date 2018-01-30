@@ -14,6 +14,7 @@ class KeyboardTests:
         self.kb = None
         self.token = token
         self.updater = Updater(self.token)
+        self.t_id = 193019697
 
     def callback_test(self, bot, update):
         Provider.process(bot, update, (self,))
@@ -34,7 +35,7 @@ class KeyboardTests:
 
         self.kb = MultiPageKeyboardFactory(self.kb, 2, kbf.button("Закончить", "end"))
 
-        self.updater.bot.send_message(chat_id=193019697, text="Test", reply_markup=self.kb.to_markup(0))
+        self.updater.bot.send_message(chat_id=self.t_id, text="Test", reply_markup=self.kb.to_markup(0))
         self.updater.start_polling()
         self.updater.idle()
 
@@ -46,11 +47,11 @@ class KeyboardTests:
 
     def game_view_test(self):
         kb = kbf.empty()
-        self.updater.bot.send_message(chat_id=193019697, text=f"🗡 Убивали игрока 1️⃣\n"
+        self.updater.bot.send_message(chat_id=self.t_id, text=f"🗡 Убивали игрока 1️⃣\n"
                                                               f"Будет ли использована "
                                                               f"{em(':flower_playing_cards:')} карта лечение?",
                                       reply_markup=kbf.confirmation(self.callback_action, self.callback_action))
-        self.updater.bot.send_message(chat_id=193019697, text=f"Игрок 1️⃣ есть ли у вас"
+        self.updater.bot.send_message(chat_id=self.t_id, text=f"Игрок 1️⃣ есть ли у вас"
                                                               f"{em(':flower_playing_cards:')}карта Бронижилет?",
                                       reply_markup=kbf.confirmation(self.callback_action, self.callback_action))
         warning_button = (":warning:", self.callback_action)
@@ -60,19 +61,20 @@ class KeyboardTests:
         no_voting_button = (":red_circle:", self.callback_action)
         card_button = (':flower_playing_cards:', self.callback_player)
         no_card_button = ('🚬', self.callback_player)
-        clock_button = (":alarm_clock:", self.callback_action)
-        no_clock_button = (":end:", self.callback_action)
+        clock_button = (":sound:", self.callback_action)
+        no_clock_button = (":mute:", self.callback_action)
 
         for i in range(2, 11):
             role = '🕵🏼' if i in [2, 5, 8] else '👨🏼‍💼'
             role = role if i != 4 else '👮🏼'
             kb += kbf.action_line((str(emoji_number(i)) + role, self.callback_player, 123),
-                                  warning_button if i not in [4, 9] else (warning_button2 if i != 4 else warning_button3),
+                                  warning_button if i not in [4, 9] else (
+                                  warning_button2 if i != 4 else warning_button3),
                                   voting_button if i not in [3, 7] else no_voting_button,
                                   card_button if i not in [8, 2, 1] else no_card_button,
                                   clock_button if i >= 6 else no_clock_button)
 
-        self.updater.bot.send_message(chat_id=193019697,
+        self.updater.bot.send_message(chat_id=self.t_id,
                                       text=f"День №1\n"
                                            f"🗡 Убили игрока 1️⃣\n"
                                            f"{em(':cop:')} Коммисар попал\n"
@@ -84,8 +86,19 @@ class KeyboardTests:
         kb = kbf.action_line(("⏸", self.callback_action, 1),
                              (em(":arrow_forward:"), self.callback_action),
                              ("⏹", self.callback_action))
-        self.updater.bot.send_message(chat_id=193019697,
-                                      text="Минута игрока номер 6️⃣\nОсталось 40 секунд",
+        self.updater.bot.send_message(chat_id=self.t_id,
+                                      text=f"Минута игрока номер 6️⃣\nОсталось 40 секунд {em(':alarm_clock:')}",
+                                      reply_markup=kb)
+        kb = kbf.empty()
+        man_with_hand = "🙋🏻‍♂️"
+        man_without_hand = "🙅🏽‍♂️"
+        for i in range(0, 10):
+            kb += kbf.button(f"{emoji_number(i)} {man_with_hand*2} {man_without_hand*2} {emoji_number(i)}", self.callback_action, 2)
+
+        self.updater.bot.send_message(chat_id=self.t_id,
+                                      text=f"На голосование выставлены игроки под номерами 3️⃣, 7️⃣")
+        self.updater.bot.send_message(chat_id=self.t_id,
+                                      text="Кто голосует за игрока номер 3️⃣",
                                       reply_markup=kb)
         self.updater.start_polling()
         self.updater.idle()

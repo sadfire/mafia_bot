@@ -7,7 +7,7 @@ from telegram import InlineKeyboardMarkup
 
 
 def emoji_number(num=None) -> object:
-    emoji = ["0", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
+    emoji = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
     if int(num) > len(emoji):
         return em(":detective:")
 
