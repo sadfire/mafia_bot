@@ -1,3 +1,5 @@
+import copy
+
 from Game.Member import Member
 
 
@@ -13,6 +15,15 @@ class Evening:
 
         self.members[member.id] = member
         return True
+
+    def get_players(self, host) -> list:
+        players = copy.deepcopy(self.members)
+        if host.id in self.members:
+            players.pop(host.id)
+        return list(players.values())
+
+    def get_players_id(self, host):
+        return [player.id for player in self.get_players(host)]
 
     def add_host(self, host):
         if host.is_host:
