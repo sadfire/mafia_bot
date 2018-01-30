@@ -1,10 +1,14 @@
 from enum import Enum
 
+
 class GameInfo(Enum):
     Role = 0
     Card = 1
     IsAlive = 2
     Number = 3
+    IsVoting = 4
+    IsSilence = 5
+
 
 class Member:
     def __init__(self, id, name, is_host=False, phone_number=0, t_id=0) -> None:

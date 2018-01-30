@@ -1,6 +1,6 @@
-from Game.Game import Event
-from Game.Member import GameInfo as GI
-from Game.Models.Models import ICardModel
+from GameLogic.Game import Event
+from GameLogic.Member import GameInfo as GI
+from GameLogic.Models.Models import ICardModel
 
 
 class SwapRoleModel(ICardModel):

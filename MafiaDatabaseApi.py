@@ -3,7 +3,7 @@ from enum import Enum
 import MySQLdb
 from emoji import emojize as em
 
-from Game.Member import Member
+from GameLogic.Member import Member
 
 
 class Statistic(Enum):

@@ -1,5 +1,5 @@
-from Game.Models.Models import ICardModel
-from Game.Views.Views import IGameView
+from GameLogic.Models.Models import ICardModel
+from GameLogic.Views.Views import IGameView
 from KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 
@@ -37,6 +37,6 @@ class CardView(IGameView):
 
     def get_alive_players_keyboard(self, callback):
         kb = kbf.empty()
-        for player in self._game.get_alive():
+        for player in self.game.get_alive():
             kb += kbf.button(emoji_number(player.number), callback, player.num)
         return kb

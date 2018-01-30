@@ -4,7 +4,7 @@ from emoji import emojize as em
 from telegram.error import BadRequest
 from telegram.ext import MessageHandler, Filters
 
-from Game.Evening import Evening
+from GameLogic.Evening import Evening
 from KeyboardUtils import KeyboardFactory as KBF
 from KeyboardUtils import MultiPageKeyboardFactory as MKBF
 from SessionHandler.EveningHostAdd import EveningHostAdd

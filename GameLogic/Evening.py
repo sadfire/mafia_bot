@@ -1,7 +1,7 @@
 import copy
 
-from Game import Game
-from Game.Member import Member
+from GameLogic import Game
+from GameLogic.Member import Member
 
 
 class Evening:

@@ -1,12 +1,14 @@
 from emoji import emojize
 
+from SessionHandler.Session import Session
+
 
 def get_query_text(update):
     return update.callback_query.data
 
 
 class IState:
-    def __init__(self, session, previous=None):
+    def __init__(self, session: Session, previous=None):
         self._message = None
         self._session = session
         self._previous = previous
