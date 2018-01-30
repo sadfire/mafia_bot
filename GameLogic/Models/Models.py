@@ -35,7 +35,7 @@ class ICardModel(IGameModel):
         self._target = number
 
     def end(self):
-        self.game.log_event(self._get_action(), self._initiator, self._target)
+        self.game.log_event(self._get_action, self._initiator, self._target)
 
     @abstractmethod
     @property

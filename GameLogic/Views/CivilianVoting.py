@@ -20,9 +20,12 @@ class CivilianVoting(IGameView):
 
         kb = kbf.empty()
         for vote_count in range(len(self._model.voters)):
-            kb += kbf.button(f"{emoji_number(vote_count)} {man_with_hand*2} {man_without_hand*2} {emoji_number(vote_count)}",
-                             self.vote_callback,
-                             vote_count)
+            kb += kbf.button(f"{emoji_number(vote_count)}"
+                             f"{man_with_hand*2}"
+                             f"{emoji_number(vote_count)}"
+                             f"{man_without_hand*2}"
+                             f"{emoji_number(vote_count)}",
+                             self.vote_callback, vote_count)
 
         return kb
 

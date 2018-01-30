@@ -36,6 +36,9 @@ class Game:
     def clear_candidates(self):
         self.candidates.clear()
 
+    def __getitem__(self, key: int):
+        return self.players.get(key, None)
+
     @property
     def get_alive_players(self, is_vote_mode=False):
         return [player for player in self.players

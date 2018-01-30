@@ -16,8 +16,7 @@ class SwapRoleModel(ICardModel):
         return True
 
     def end(self):
+        self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] =\
+            self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]
+
         super().end()
-        self.game.players[self._initiator][GI.Role], self.game.players[self._target][GI.Role] = \
-        self.game.players[self._target][GI.Role],    self.game.players[self._initiator][GI.Role]
-
-
