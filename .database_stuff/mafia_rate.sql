@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Хост:                         127.0.0.1
--- Версия сервера:               5.6.37 - MySQL Community Server (GPL)
+-- Версия сервера:               5.6.38 - MySQL Community Server (GPL)
 -- Операционная система:         Win32
--- HeidiSQL Версия:              9.4.0.5125
+-- HeidiSQL Версия:              9.5.0.5196
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `Cards` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.Cards: ~1 rows (приблизительно)
+DELETE FROM `Cards`;
 /*!40000 ALTER TABLE `Cards` DISABLE KEYS */;
 INSERT INTO `Cards` (`ID`, `Title`, `IsActive`) VALUES
 	(1, 'Нейтральна', 0);
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `City` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.City: ~1 rows (приблизительно)
+DELETE FROM `City`;
 /*!40000 ALTER TABLE `City` DISABLE KEYS */;
 INSERT INTO `City` (`ID`, `Title`) VALUES
 	(1, 'Москва');
@@ -53,17 +55,21 @@ CREATE TABLE IF NOT EXISTS `Evenings` (
   `Date` datetime NOT NULL,
   `EndDate` datetime DEFAULT NULL,
   `ID_Location` int(10) NOT NULL,
+  `ID_Initiator` int(10) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Evenings_ID_uindex` (`ID`),
   KEY `Evenings_Location_ID_fk` (`ID_Location`),
-  CONSTRAINT `Evenings_Location_ID_fk` FOREIGN KEY (`ID_Location`) REFERENCES `Location` (`ID`)
+  KEY `Evenings_Members_ID_fk` (`ID_Initiator`),
+  CONSTRAINT `Evenings_Location_ID_fk` FOREIGN KEY (`ID_Location`) REFERENCES `Location` (`ID`),
+  CONSTRAINT `Evenings_Members_ID_fk` FOREIGN KEY (`ID_Initiator`) REFERENCES `Members` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.Evenings: ~2 rows (приблизительно)
+DELETE FROM `Evenings`;
 /*!40000 ALTER TABLE `Evenings` DISABLE KEYS */;
-INSERT INTO `Evenings` (`ID`, `Date`, `EndDate`, `ID_Location`) VALUES
-	(3, '2017-12-04 18:19:13', '2017-12-04 19:02:18', 1),
-	(4, '2017-12-05 19:01:39', '2017-12-04 19:02:21', 1);
+INSERT INTO `Evenings` (`ID`, `Date`, `EndDate`, `ID_Location`, `ID_Initiator`) VALUES
+	(3, '2017-12-04 18:19:13', '2017-12-04 19:02:18', 1, NULL),
+	(4, '2017-12-05 19:01:39', '2017-12-04 19:02:21', 1, NULL);
 /*!40000 ALTER TABLE `Evenings` ENABLE KEYS */;
 
 -- Дамп структуры для таблица mafia_rate.Games
@@ -82,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `Games` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.Games: ~3 rows (приблизительно)
+DELETE FROM `Games`;
 /*!40000 ALTER TABLE `Games` DISABLE KEYS */;
 INSERT INTO `Games` (`ID`, `IdHost`, `IdEvening`, `CourseCount`, `IsMafiaWin`) VALUES
 	(1, 1, 3, 12, 1),
@@ -106,6 +113,7 @@ CREATE TABLE IF NOT EXISTS `GamesPlayers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.GamesPlayers: ~3 rows (приблизительно)
+DELETE FROM `GamesPlayers`;
 /*!40000 ALTER TABLE `GamesPlayers` DISABLE KEYS */;
 INSERT INTO `GamesPlayers` (`ID_Player`, `ID_Games`, `ID_Card`, `ID_Role`) VALUES
 	(1, 1, 1, 2),
@@ -124,6 +132,7 @@ CREATE TABLE IF NOT EXISTS `Inviters` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.Inviters: ~0 rows (приблизительно)
+DELETE FROM `Inviters`;
 /*!40000 ALTER TABLE `Inviters` DISABLE KEYS */;
 /*!40000 ALTER TABLE `Inviters` ENABLE KEYS */;
 
@@ -140,6 +149,7 @@ CREATE TABLE IF NOT EXISTS `Location` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.Location: ~1 rows (приблизительно)
+DELETE FROM `Location`;
 /*!40000 ALTER TABLE `Location` DISABLE KEYS */;
 INSERT INTO `Location` (`ID`, `Title`, `ID_City`) VALUES
 	(1, 'Зеленая Дверь', 1);
@@ -148,20 +158,29 @@ INSERT INTO `Location` (`ID`, `Title`, `ID_City`) VALUES
 -- Дамп структуры для таблица mafia_rate.Members
 CREATE TABLE IF NOT EXISTS `Members` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL DEFAULT '0',b
+  `Name` varchar(50) NOT NULL DEFAULT '0',
   `IsHost` tinyint(1) NOT NULL DEFAULT '0',
   `Telephone` bigint(20) DEFAULT NULL,
   `IdTelegram` int(11) DEFAULT NULL,
+  `NameTelegram` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `Members_IdTelegram_uindex` (`IdTelegram`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `Members_IdTelegram_uindex` (`IdTelegram`),
+  UNIQUE KEY `Members_NameTelegram_uindex` (`NameTelegram`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы mafia_rate.Members: ~3 rows (приблизительно)
+-- Дамп данных таблицы mafia_rate.Members: ~9 rows (приблизительно)
+DELETE FROM `Members`;
 /*!40000 ALTER TABLE `Members` DISABLE KEYS */;
-INSERT INTO `Members` (`ID`, `Name`, `IsHost`, `Telephone`, `IdTelegram`) VALUES
-	(1, 'Михаил', 1, 78001010, 193019697),
-	(5, 'Петр Ебанько', 0, 79999801929, 1),
-	(11, 'Петр', 0, 7999, 2);
+INSERT INTO `Members` (`ID`, `Name`, `IsHost`, `Telephone`, `IdTelegram`, `NameTelegram`) VALUES
+	(1, 'Михаил Солнцев', 1, 78001010, 193019697, NULL),
+	(2, 'Михаил Ватутин', 1, 79999801929, 1, '@va2tin'),
+	(11, 'Петр Масляков', 0, 7999, 2, ''),
+	(12, 'Дмитрий Хабаров', 1, NULL, NULL, '@mrDarcky'),
+	(13, 'Даниил Узвалок', 1, NULL, NULL, NULL),
+	(14, 'Александр Редькин', 0, NULL, NULL, NULL),
+	(15, 'Ибрагим Зубаилов', 0, NULL, NULL, NULL),
+	(16, 'Дмитрий Факин ', 0, NULL, NULL, NULL),
+	(17, 'Денис Инокеньтевич', 0, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `Members` ENABLE KEYS */;
 
 -- Дамп структуры для таблица mafia_rate.Roles
@@ -174,6 +193,7 @@ CREATE TABLE IF NOT EXISTS `Roles` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Дамп данных таблицы mafia_rate.Roles: ~3 rows (приблизительно)
+DELETE FROM `Roles`;
 /*!40000 ALTER TABLE `Roles` DISABLE KEYS */;
 INSERT INTO `Roles` (`ID`, `Name`) VALUES
 	(3, 'Коммисар'),
@@ -184,14 +204,3 @@ INSERT INTO `Roles` (`ID`, `Name`) VALUES
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
---Создания таблицы PermRequest
-CREATE TABLE IF NOT EXISTS `PermRequest` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Text` varchar(256) NOT NULL,
-  `TelegId` int(10) NOT NULL,
-  `Date` datetime NOT NULL,
-  PRIMARY KEY (`ID`)
-)
-COLLATE=`utf8_general_ci`
-ENGINE=InnoDB;
