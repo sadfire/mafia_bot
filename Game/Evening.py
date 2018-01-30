@@ -1,5 +1,6 @@
 import copy
 
+from Game import Game
 from Game.Member import Member
 
 
@@ -8,6 +9,7 @@ class Evening:
         super().__init__()
         self.members = {}
         self.hosts = [host]
+        self.games = {}
 
     def add_member(self, member):
         if not isinstance(member, Member) or member.id in self.members.keys():
@@ -16,14 +18,22 @@ class Evening:
         self.members[member.id] = member
         return True
 
-    def get_players(self, host) -> list:
-        players = copy.deepcopy(self.members)
-        if host.id in self.members:
-            players.pop(host.id)
-        return list(players.values())
+    def get_busy_players_id(self) -> list:
+        busy = []
+        for game in self.games.values():
+            busy += [player.id for player in game.players()]
+            busy.append(game.host.id)
+        return busy
+
+    def get_game(self, host):
+        return self.games.get(host.id, None)
+
+    def get_game_bidder(self, host) -> list:
+        stop_list = self.get_busy_players_id() + [host.id]
+        return [member for member in self.members if member.id not in stop_list]
 
     def get_players_id(self, host):
-        return [player.id for player in self.get_players(host)]
+        return [player.id for player in self.get_game_bidder(host)]
 
     def add_host(self, host):
         if host.is_host:

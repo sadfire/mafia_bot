@@ -1,27 +1,34 @@
 from enum import Enum
 
-from Game.Player import Player
+from Game.Roles import Roles as R
+from Game.Member import GameInfo as GI
 
 
 class Event(Enum):
     SuccessListen = 0,
     FailedListen = 1,
+    SwapRole = 2,
 
 
 class Game:
-    def __init__(self, evening) -> None:
+    def __init__(self, host, evening, players) -> None:
         super().__init__()
-        self.active_player = None
-        #Q: Либо оставить общее поле для всех случаев, когда для чего-либо выбирается игрок (Голосование, выбор мафии)
-        #   Либо для каждого такого события сделать отдельное поле
-        self.selected_player = None
         self._evening = evening
-        self.players = [Player(member.id, member.name) for member in self._evening.members.values()]
+        self._host = host
+        self.players = players
+        self.__init_game_info()
+
+    def __init_game_info(self):
+        for player in self.players:
+            player.game_info = {GI.IsAlive: True,
+                                GI.Card: None,
+                                GI.Role: R.Civilian}
+
+        self.players = dict([(player.number, player) for player in self.players])
 
     @property
     def get_alive_players(self):
-        return [player for player in self.players if player.is_alive]
+        return [player for player in self.players if player.game_info[GI.IsAlive]]
 
-    def log_event(self, event, initiator_player, target_player):
+    def log_event(self, event, initiator_player, target_player=None):
         pass
-

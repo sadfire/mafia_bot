@@ -60,7 +60,7 @@ class EveningManagement(IState):
         self._update_players_message()
 
     def _update_players_message(self):
-        kb = KBF.players_with_action(players=self._session.evening.get_players(self._session.owner),
+        kb = KBF.players_with_action(players=self._session.evening.get_game_bidder(self._session.owner),
                                      callback_player=self._session.send_player_info_callback,
                                      callback_emoji=self._remove_member_callback,
                                      second_line_emoji="❌")
