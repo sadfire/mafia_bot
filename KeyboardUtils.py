@@ -74,15 +74,15 @@ class KeyboardFactory:
                cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__)
 
     @classmethod
-    def player_action_line(cls, *buttons):
+    def action_line(cls, *buttons):
         kb = []
         for button in buttons:
             button = list(button)
             if len(button[0]) > 0 and ":" in button[0]:
                 end_emoji_index = button[0].index(':', 1)
-                button[0] = " "*5 + em(button[0][:end_emoji_index + 1]) + " "*5 + button[0][end_emoji_index + 1:]
+                button[0] = em(button[0][:end_emoji_index + 1]) + button[0][end_emoji_index + 1:]
 
-            kb.append(cls.button_simple(button[0], button[1], button[2] if len(button) > 2 else button[0][2]))
+            kb.append(cls.button_simple(button[0], button[1], button[2] if len(button) > 2 else buttons[0][2]))
         return MafiaMarkup([kb])
 
     @classmethod

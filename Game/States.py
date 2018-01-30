@@ -25,23 +25,6 @@ class IGameAction:
         return int(player_number)
 
 
-# Мне кажется его надо выпелить
-class CardWait(IGameAction):
-    def __init__(self, card, game, next_state):
-        super().__init__(game, next_state)
-        self._card = card
-
-    def _swap_role_callback(self, init_player, target_player):
-        init_player.role, target_player.role = target_player.role, init_player.role
-        self._game.log_event(Event.ChangeRole, init_player.id, target_player.id)
-
-    def _listener_callback(self, player):
-        self._game.send(player.role)
-
-        if self._game.active_player.role != player.role:
-            self._game.log_event(Event.SuccessListen, self._game.active_player.id, player.id)
-
-
 class RoleChange(IGameAction):
     def _action_callback(self, init_index, target_index):
         self._game.players[init_index].role, self._game.players[target_index].role = \

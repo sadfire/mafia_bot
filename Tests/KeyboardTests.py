@@ -1,7 +1,7 @@
 import sys
 from random import random
 
-from emoji import emojize
+from emoji import emojize as em
 from telegram.ext import Updater, CallbackQueryHandler
 
 from CallbackProvider import Provider
@@ -48,22 +48,44 @@ class KeyboardTests:
         kb = kbf.empty()
         self.updater.bot.send_message(chat_id=193019697, text=f"🗡 Убивали игрока 1️⃣\n"
                                                               f"Будет ли использована "
-                                                              f"{emojize(':flower_playing_cards:')} карта лечение?",
+                                                              f"{em(':flower_playing_cards:')} карта лечение?",
                                       reply_markup=kbf.confirmation(self.callback_action, self.callback_action))
-        self.updater.bot.send_message(chat_id=193019697, text=f"🗡 Игрока 1️⃣\nЕсть ли у вас"
-                                                              f"{emojize(':flower_playing_cards:')}карта Бронижилет?",
+        self.updater.bot.send_message(chat_id=193019697, text=f"Игрок 1️⃣ есть ли у вас"
+                                                              f"{em(':flower_playing_cards:')}карта Бронижилет?",
                                       reply_markup=kbf.confirmation(self.callback_action, self.callback_action))
+        warning_button = (":warning:", self.callback_action)
+        warning_button2 = (":warning: 2", self.callback_action)
+        warning_button3 = (":no_entry_sign:", self.callback_action)
+        voting_button = (":white_circle:", self.callback_action)
+        no_voting_button = (":red_circle:", self.callback_action)
+        card_button = (':flower_playing_cards:', self.callback_player)
+        no_card_button = ('🚬', self.callback_player)
+        clock_button = (":alarm_clock:", self.callback_action)
+        no_clock_button = (":end:", self.callback_action)
 
         for i in range(2, 11):
-            kb += kbf.player_action_line((emoji_number(i), self.callback_player, 123),
-                                         (":pushpin:", self.callback_action),
-                                         (":fist:", self.callback_action),
-                                         (':flower_playing_cards:', self.callback_player),
-                                         (":alarm_clock:", self.callback_action))
-        self.updater.bot.send_message(chat_id=193019697, text=f"День №1\n"
-                                                              f"🗡 Убили игрока 1️⃣\n"
-                                                              f"{emojize(':cop:')} Коммисар попал\n"
-                                                              f"{emojize(':flower_playing_cards:')} Прослушки не было",
+            role = '🕵🏼' if i in [2, 5, 8] else '👨🏼‍💼'
+            role = role if i != 4 else '👮🏼'
+            kb += kbf.action_line((str(emoji_number(i)) + role, self.callback_player, 123),
+                                  warning_button if i not in [4, 9] else (warning_button2 if i != 4 else warning_button3),
+                                  voting_button if i not in [3, 7] else no_voting_button,
+                                  card_button if i not in [8, 2, 1] else no_card_button,
+                                  clock_button if i >= 6 else no_clock_button)
+
+        self.updater.bot.send_message(chat_id=193019697,
+                                      text=f"День №1\n"
+                                           f"🗡 Убили игрока 1️⃣\n"
+                                           f"{em(':cop:')} Коммисар попал\n"
+                                           f"{em(':flower_playing_cards:')} Прослушки не было\n"
+                                           f"{'🔪'*4} Меню Игры {'🔪'*4}"
+                                           f"Выставлены игроки под номерами 3️⃣, 7️⃣",
+                                      reply_markup=kb)
+
+        kb = kbf.action_line(("⏸", self.callback_action, 1),
+                             (em(":arrow_forward:"), self.callback_action),
+                             ("⏹", self.callback_action))
+        self.updater.bot.send_message(chat_id=193019697,
+                                      text="Минута игрока номер 6️⃣\nОсталось 40 секунд",
                                       reply_markup=kb)
         self.updater.start_polling()
         self.updater.idle()
