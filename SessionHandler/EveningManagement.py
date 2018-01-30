@@ -60,7 +60,7 @@ class EveningManagement(IState):
         self._update_players_message()
 
     def _update_players_message(self):
-        kb = KBF.players_with_action(players=self._session.evening.members.values(),
+        kb = KBF.players_with_action(players=self._session.evening.get_players(self._session.owner),
                                      callback_player=self._session.send_player_info_callback,
                                      callback_emoji=self._remove_member_callback,
                                      second_line_emoji="❌")
@@ -148,7 +148,7 @@ class EveningManagement(IState):
     def _get_regular_members_kb(self):
         members = [member
                    for member in self._session.db.get_regular_members_by_host(self._session.owner.id)
-                   if member.id not in self._session.evening.members.keys()]
+                   if member.id not in self._session.evening.get_players_id(self._session.owner)]
 
         if len(members) == 0:
             return KBF.empty()
