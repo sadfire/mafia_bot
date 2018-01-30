@@ -6,6 +6,14 @@ from telegram import InlineKeyboardButton as Button
 from telegram import InlineKeyboardMarkup
 
 
+def emoji_number(num=None) -> object:
+    emoji = ["0", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
+    if int(num) > len(emoji):
+        return em(":detective:")
+
+    return emoji if num is None else emoji[int(num)]
+
+
 class MafiaMarkup(InlineKeyboardMarkup):
     def __init__(self, inline_keyboard, **kwargs):
         super().__init__(inline_keyboard, **kwargs)
@@ -30,10 +38,10 @@ class KeyboardFactory:
 
     @classmethod
     def button(cls, text, callback_data, arguments=""):
-        return MafiaMarkup([[cls.button_(text, callback_data, arguments)]])
+        return MafiaMarkup([[cls.button_simple(text, callback_data, arguments)]])
 
     @classmethod
-    def button_(cls, text, callback_data, arguments=""):
+    def button_simple(cls, text, callback_data, arguments=""):
         if arguments != "":
             if isinstance(arguments, tuple):
                 arguments = ",".join(arguments)
@@ -46,26 +54,39 @@ class KeyboardFactory:
 
     @classmethod
     def double_button(cls, left_text, left_callback, right_text, right_callback, left_arguments="", right_arguments=""):
-        return MafiaMarkup([[cls.button_(left_text, left_callback, left_arguments),
-                             cls.button_(right_text, right_callback, right_arguments)]])
+        return MafiaMarkup([[cls.button_simple(left_text, left_callback, left_arguments),
+                             cls.button_simple(right_text, right_callback, right_arguments)]])
 
     @classmethod
     def start_user(cls, open_stat_callback, get_access_callback):
         return MafiaMarkup(
             [
-                [cls.button_(f"{em(':open_file_folder:')} Открыть статистику", open_stat_callback)],
-                [cls.button_(f"{em(':question:')} Запросить доступ", get_access_callback)]
+                [cls.button_simple(f"{em(':open_file_folder:')} Открыть статистику", open_stat_callback)],
+                [cls.button_simple(f"{em(':question:')} Запросить доступ", get_access_callback)]
             ]
         )
 
     @classmethod
-    def main(cls, start_evening_callback, statistick_menu_callback, players_menu_callback, evening_message="Начать вечер"):
+    def main(cls, start_evening_callback, statistick_menu_callback, players_menu_callback,
+             evening_message="Начать вечер"):
         return cls.button(f"{em(':hourglass:')} {evening_message}", callback_data=start_evening_callback.__name__) + \
                cls.button(f"{em(':bar_chart:')} Меню рейтинга", callback_data=statistick_menu_callback.__name__) + \
                cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__)
 
     @classmethod
-    def players_with_emoji(cls, players, second_line_emoji, callback_player, callback_emoji):
+    def player_action_line(cls, *buttons):
+        kb = []
+        for button in buttons:
+            button = list(button)
+            if len(button[0]) > 0 and ":" in button[0]:
+                end_emoji_index = button[0].index(':', 1)
+                button[0] = " "*5 + em(button[0][:end_emoji_index + 1]) + " "*5 + button[0][end_emoji_index + 1:]
+
+            kb.append(cls.button_simple(button[0], button[1], button[2] if len(button) > 2 else button[0][2]))
+        return MafiaMarkup([kb])
+
+    @classmethod
+    def players_with_action(cls, players, second_line_emoji, callback_player, callback_emoji):
         kb = cls.empty()
 
         if isinstance(players, dict):
@@ -82,6 +103,13 @@ class KeyboardFactory:
                                     right_callback=callback_emoji.__name__,
                                     right_arguments=str(player.id))
         return kb
+    @classmethod
+    def confirmation(cls, yes_callback, no_callback):
+        return MafiaMarkup([[cls.button_simple("Да", yes_callback), cls.button_simple("Нет", no_callback)]])
+
+    @classmethod
+    def empty_line(cls):
+        return cls.button(em(":small_blue_diamond:"), callback_data="empty")
 
 
 class MultiPageKeyboardFactory:
@@ -106,20 +134,20 @@ class MultiPageKeyboardFactory:
             self._markup_lines[page].append([line])
 
     def control_buttons(self) -> MafiaMarkup:
-        kb = [KeyboardFactory.button_(text=em(":rewind:"),
-                                      callback_data="to_page_callback",
-                                      arguments="0"),
-              KeyboardFactory.button_(text=em(":arrow_left:"),
-                                      callback_data="to_page_callback",
-                                      arguments=str(self.page - 1)),
-              KeyboardFactory.button_("{}/{}".format(self.page + 1, self.get_size()),
-                                     "empty"),
-              KeyboardFactory.button_(text=em(":arrow_right:"),
-                                      callback_data="to_page_callback",
-                                      arguments=str(self.page + 1)),
-              KeyboardFactory.button_(text=em(":fast_forward:"),
-                                      callback_data="to_page_callback",
-                                      arguments=str(len(self._markup_lines) - 1))]
+        kb = [KeyboardFactory.button_simple(text=em(":rewind:"),
+                                            callback_data="to_page_callback",
+                                            arguments="0"),
+              KeyboardFactory.button_simple(text=em(":arrow_left:"),
+                                            callback_data="to_page_callback",
+                                            arguments=str(self.page - 1)),
+              KeyboardFactory.button_simple("{}/{}".format(self.page + 1, self.get_size()),
+                                            "empty"),
+              KeyboardFactory.button_simple(text=em(":arrow_right:"),
+                                            callback_data="to_page_callback",
+                                            arguments=str(self.page + 1)),
+              KeyboardFactory.button_simple(text=em(":fast_forward:"),
+                                            callback_data="to_page_callback",
+                                            arguments=str(len(self._markup_lines) - 1))]
 
         return MafiaMarkup([kb])
 

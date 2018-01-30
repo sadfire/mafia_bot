@@ -1,7 +1,7 @@
 from random import shuffle
 
-from KeyboardUtils import KeyboardFactory as KBF
-from SessionHandler.IStates import IState, emoji_number
+from KeyboardUtils import KeyboardFactory as KBF, emoji_number
+from SessionHandler.IStates import IState
 from SessionHandler.GameInProcess import GameInProcess
 
 

@@ -60,10 +60,10 @@ class EveningManagement(IState):
         self._update_players_message()
 
     def _update_players_message(self):
-        kb = KBF.players_with_emoji(players=self._session.evening.members.values(),
-                                    callback_player=self._session.send_player_info_callback,
-                                    callback_emoji=self._remove_member_callback,
-                                    second_line_emoji="❌")
+        kb = KBF.players_with_action(players=self._session.evening.members.values(),
+                                     callback_player=self._session.send_player_info_callback,
+                                     callback_emoji=self._remove_member_callback,
+                                     second_line_emoji="❌")
 
         kb = MKBF(kb, 7, self._get_main_kb)
 
@@ -118,7 +118,7 @@ class EveningManagement(IState):
     def _choose_member(self, request_result):
         self._session.send_message(chat_id=self._session.t_id,
                                    text="Под ваш запрос подходит несколько игроков. Ввыберите подходящее",
-                                   reply_markup=KBF.players_with_emoji(
+                                   reply_markup=KBF.players_with_action(
                                        request_result,
                                        em(":heavy_plus_sign:"),
                                        self._session.send_player_info_callback,
@@ -153,9 +153,9 @@ class EveningManagement(IState):
         if len(members) == 0:
             return KBF.empty()
 
-        return MKBF(KBF.players_with_emoji(members, em(":heavy_plus_sign:"),
-                                           self._session.send_player_info_callback,
-                                           self._add_member_callback),
+        return MKBF(KBF.players_with_action(members, em(":heavy_plus_sign:"),
+                                            self._session.send_player_info_callback,
+                                            self._add_member_callback),
                     5,
                     KBF.button(f"{em(':x:')} Закрыть", self._close_member_list_callback))
 

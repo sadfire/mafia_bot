@@ -39,10 +39,10 @@ class EveningHostAdd(IState):
     def get_hosts_kb(self):
         hosts = [host for host in self._session.db.get_hosts() if host.id not in self._session.evening.get_hosts_ids()]
 
-        kb = KeyboardFactory.players_with_emoji(hosts,
-                                                em(":heavy_plus_sign:"),
-                                                self._session.send_player_info_callback,
-                                                self._add_host_callback)
+        kb = KeyboardFactory.players_with_action(hosts,
+                                                 em(":heavy_plus_sign:"),
+                                                 self._session.send_player_info_callback,
+                                                 self._add_host_callback)
 
         return MultiPageKeyboardFactory(kb, 5, KeyboardFactory.button(text="Закончить",
                                                                       callback_data=self._end_evening_host_manager))

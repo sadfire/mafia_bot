@@ -42,11 +42,5 @@ class IState:
             return self
         return self._previous(self._session, None)
 
-def emoji_number(num=None) -> object:
-    emoji = ["0", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
-    if num > len(emoji):
-        return emojize(":detective:")
-    return emoji if num is None else emoji[num]
-
 
 
