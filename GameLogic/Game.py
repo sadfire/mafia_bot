@@ -30,6 +30,8 @@ class Game:
 
         self.candidates = []
 
+
+
     def decode(self):
         return json.dumps((self._host_id, [(game_info, player.decode()) for player, game_info in self.players],
                            [candidate.decode() for candidate in self.candidates]))
@@ -72,9 +74,12 @@ class Game:
     def mafia_count(self):
         return len([player for number, player in self.players if player[GI.Role] is R.Mafia])
 
-    def log_event(self, event: Event, initiator_players, target_player=None):
-        pass
-
     def get_next_event_number(self):
         self._evening += 1
         return self._evening
+
+    def log_event(self, event: Event, initiator_players, target_player=None):
+        db = self._evening.db
+        #db.insert_event()
+
+

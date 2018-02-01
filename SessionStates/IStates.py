@@ -43,7 +43,7 @@ class IState:
             return self
         return self._next(self._session, self.__class__)
 
-    def back_callback(self):
+    def back_callback(self, bot, update):
         if self._previous is None:
             return self
         return self._previous(self._session, None)

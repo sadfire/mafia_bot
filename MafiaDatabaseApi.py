@@ -170,8 +170,10 @@ class Database:
         self.__execute("""INSERT INTO Evenings (Date, ID_Location, ID_Initiator) VALUES ('{}', 1, 1)""".format(now))
         self._db.commit()
         id = self._cursor.lastrowid
-        return Evening(id, host_id)
+        return Evening(id, host_id, self)
 
+    #TODO: Check and finalize for event without init or target players
+    def insert_event(self, game_id, event_id, event_number, init_player_id=0, target_player_id=0):
 
-
-
+        self.__execute("""INSERT INTO GameEvents (ID_Games, ID_Events, ID_Init_Players, ID_Target_Players, Event_Number)
+        VALUES (%s, %s, %s, %s, %s)""", (game_id, event_id, init_player_id, target_player_id, event_number))

@@ -82,8 +82,8 @@ CREATE TABLE IF NOT EXISTS `Event` (
 /*!40000 ALTER TABLE `Event` DISABLE KEYS */;
 /*!40000 ALTER TABLE `Event` ENABLE KEYS */;
 
--- Дамп структуры для таблица mafia_rate.EventGames
-CREATE TABLE IF NOT EXISTS `EventGames` (
+-- Дамп структуры для таблица mafia_rate.GameEvents
+CREATE TABLE IF NOT EXISTS `GameEvents` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Games` int(11) NOT NULL,
   `ID_Events` int(11) NOT NULL,
@@ -91,19 +91,16 @@ CREATE TABLE IF NOT EXISTS `EventGames` (
   `ID_Target_Players` int(11) NOT NULL,
   `Event_Number` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `EventGames_Games_ID_fk` (`ID_Games`),
-  KEY `EventGames_Event_ID_fk` (`ID_Events`),
-  KEY `EventGames_Members_Init_ID_fk` (`ID_Init_Players`),
-  KEY `EventGames_Members_Target_ID_fk` (`ID_Target_Players`),
-  CONSTRAINT `EventGames_Event_ID_fk` FOREIGN KEY (`ID_Events`) REFERENCES `Event` (`ID`),
-  CONSTRAINT `EventGames_Games_ID_fk` FOREIGN KEY (`ID_Games`) REFERENCES `Games` (`ID`),
-  CONSTRAINT `EventGames_Members_Init_ID_fk` FOREIGN KEY (`ID_Init_Players`) REFERENCES `Members` (`ID`),
-  CONSTRAINT `EventGames_Members_Target_ID_fk` FOREIGN KEY (`ID_Target_Players`) REFERENCES `Members` (`ID`)
+  KEY `GameEvents_Games_ID_fk` (`ID_Games`),
+  KEY `GameEvents_Event_ID_fk` (`ID_Events`),
+  KEY `GameEvents_Members_Init_ID_fk` (`ID_Init_Players`),
+  KEY `GameEvents_Members_Target_ID_fk` (`ID_Target_Players`),
+  CONSTRAINT `GameEvents_Event_ID_fk` FOREIGN KEY (`ID_Events`) REFERENCES `Event` (`ID`),
+  CONSTRAINT `GameEvents_Games_ID_fk` FOREIGN KEY (`ID_Games`) REFERENCES `Games` (`ID`),
+  CONSTRAINT `GameEvents_Members_Init_ID_fk` FOREIGN KEY (`ID_Init_Players`) REFERENCES `Members` (`ID`),
+  CONSTRAINT `GameEvents_Members_Target_ID_fk` FOREIGN KEY (`ID_Target_Players`) REFERENCES `Members` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы mafia_rate.EventGames: ~0 rows (приблизительно)
-/*!40000 ALTER TABLE `EventGames` DISABLE KEYS */;
-/*!40000 ALTER TABLE `EventGames` ENABLE KEYS */;
 
 -- Дамп структуры для таблица mafia_rate.Games
 CREATE TABLE IF NOT EXISTS `Games` (

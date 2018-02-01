@@ -68,7 +68,7 @@ class Bot:
         with open(self._evenings_dump_filename_, 'r') as evenings_file:
             evenings_raw = json.loads(evenings_file.read())
             for evening in evenings_raw:
-                self._evenings.append(Evening.encode(evening))
+                self._evenings.append(Evening.encode(evening, self._db))
 
         with open(self._sessions_dump_filename_, 'r') as session_file:
             sessions_raw = json.load(session_file.read())
