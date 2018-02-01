@@ -1,10 +1,11 @@
 import json
 
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from threading import Lock
 
 import CallbackProvider
 from GameLogic.Evening import Evening
-from KeyboardUtils import KeyboardFactory as KBF
+from KeyboardUtils import KeyboardFactory as kbf
 from Session import Session
 
 from SessionStates.CalculationOfPlayers import CalculationOfPlayers
@@ -20,8 +21,8 @@ from UserHandler import UserHandler
 
 
 class Bot:
-    _evenings_dump_filename_ = "sessions.dump"
-    _sessions_dump_filename_ = "evenings.dump"
+    _evenings_dump_filename_ = "BotDump\\sessions.dump"
+    _sessions_dump_filename_ = "BotDump\\evenings.dump"
     _states_ = {IState.__name__: IState.__class__,
                 StartState.__name__: StartState.__class__,
                 EveningHostAdd.__name__: EveningHostAdd.__class__,
@@ -35,7 +36,7 @@ class Bot:
         super(Bot, self).__init__()
         self._token = bot_key
         self._updater = Updater(bot_key)
-
+        self._mutex = Lock()
         self._sessions = {}
         self._evenings = []
 
@@ -44,6 +45,8 @@ class Bot:
         self._users_handler = UserHandler(self._db, self._updater)
 
     def decode(self):
+        self._mutex.acquire()
+
         sessions_states = {}
         for session in self._sessions:
             sessions_states[session.t_id] = session.state.__class__.__name__
@@ -57,7 +60,11 @@ class Bot:
         with open(self._evenings_dump_filename_, 'w') as file:
             json.dump(evenings_decoded, file)
 
+        self._mutex.release()
+
     def encode(self):
+        self._mutex.acquire()
+
         with open(self._evenings_dump_filename_, 'r') as evenings_file:
             evenings_raw = json.loads(evenings_file.read())
             for evening in evenings_raw:
@@ -74,6 +81,8 @@ class Bot:
                         break
 
                 self._sessions[t_id].state = self._states_[raw_state](self._sessions[t_id])
+
+        self._mutex.release()
 
     def start(self):
         self._add_base_handlers()
@@ -100,10 +109,8 @@ class Bot:
         if t_id in self._sessions.keys():
             bot.send_message(chat_id=update.effective_chat.id,
                              text="Вы уверены, что хотите перезагрузить бота?",
-                             reply_markup=KBF.button("Да", self._bot_reset_callback) +
-                                          KBF.button("Нет", self.bot_delete_message_callback))
+                             reply_markup=kbf.confirmation(self._bot_reset_callback, self.bot_delete_message_callback))
             return
-        # and not self._db.check_permission_by_telegram_name(update.effective_user.name)
         username = update.effective_user.name
         if not self._db.check_permission_by_telegram_id(t_id) and self._db.check_permission_by_telegram_name(username):
             self._db.insert_telegram_id(username, t_id)
@@ -115,7 +122,10 @@ class Bot:
             self._init_session(bot, update)
 
     def _init_session(self, bot, update):
-        self._sessions[update.effective_chat.id] = Session(bot, self._updater, update.effective_chat.id, self._evenings)
+        self._sessions[update.effective_chat.id] = Session(updater=self._updater,
+                                                           t_id=update.effective_chat.id,
+                                                           all_evenings=self._evenings,
+                                                           save_callback=self.decode())
 
     def check_evening(self, host_id):
         for evening in self._evenings:

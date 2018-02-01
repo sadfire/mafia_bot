@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 class Session:
     delimiter = "|"
 
-    def __init__(self, updater, t_id, all_evenings, database_class=Database):
+    def __init__(self, updater, t_id, all_evenings, save_callback, database_class=Database):
         self.t_id = t_id
         self._updater = updater
 
@@ -29,13 +29,15 @@ class Session:
                                                      self._updater.bot.edit_message_text)
 
         self.state = StartState(self)
+        self.save_callback = save_callback
+
         self._handlers = []
 
     def send_message(self, text, reply_markup=None):
         if isinstance(reply_markup, MultiPageKeyboardFactory):
             return self.multi_page_provider.send(text, reply_markup)
         else:
-            return self.bot.send_message(chat_id=self.t_id, text=text, reply_markup=reply_markup)
+            return self._updater.bot.send_message(chat_id=self.t_id, text=text, reply_markup=reply_markup)
 
     def edit_message(self, message, text="", reply_markup=None):
         if isinstance(message, Message):
@@ -47,8 +49,10 @@ class Session:
         if isinstance(reply_markup, MultiPageKeyboardFactory):
             return self.multi_page_provider.edit(message, text, reply_markup)
         else:
-            return self.bot.edit_message_text(chat_id=self.t_id, message_id=message, text=text,
-                                              reply_markup=reply_markup)
+            return self._updater.bot.edit_message_text(chat_id=self.t_id,
+                                                       message_id=message,
+                                                       text=text,
+                                                       reply_markup=reply_markup)
 
     def add_handler(self, handler):
         self._handlers.append(handler)
@@ -61,6 +65,7 @@ class Session:
             self._handlers.remove(handler)
 
     def to_next_state(self):
+        self.save_callback(self.t_id)
         self.state = self.state.next()
 
     def start_evening(self, host_id):
