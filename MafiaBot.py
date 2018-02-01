@@ -28,13 +28,11 @@ class Bot:
     def query_callback(self, bot, update):
         t_id = update.effective_chat.id
 
-<<<<<<< HEAD
         query = update.callback_query.data
         if self._filter_callbacks(query):
             return getattr(self, query)(bot, update)
 
-=======
->>>>>>> cefca95fa875290b6e1184562c78f98c6331b2d6
+
         if t_id not in self._sessions.keys():
             providers = self, self._users_handler
         else:
@@ -71,9 +69,8 @@ class Bot:
 
     def bot_delete_message_callback(self, bot, update):
         bot.delete_message(update.effective_chat.id, update.effective_message.id)
-<<<<<<< HEAD
+
 
     def _filter_callbacks(self, data):
         return data in dir(self.__class__) and data[-9:] == "_callback"
-=======
->>>>>>> cefca95fa875290b6e1184562c78f98c6331b2d6
+
