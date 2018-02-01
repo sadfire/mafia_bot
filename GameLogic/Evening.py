@@ -1,7 +1,7 @@
 import copy
 import json
 
-from GameLogic import Game
+from GameLogic.Game import Game
 from GameLogic.Member import Member
 
 
