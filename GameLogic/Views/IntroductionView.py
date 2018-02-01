@@ -29,6 +29,6 @@ class IntroductionView(IGameView):
             return
 
         if self.is_mafia:
-            self.game.players[GI.Role] = R.Mafia if self.game.players[GI.Role] is not R.Mafia else R.Civilian
+            self.game.players[number][GI.Role] = R.Mafia if self.game.players[number][GI.Role] is not R.Mafia else R.Civilian
         else:
-            self.game.players[GI.Role] = R.Commissar if self.game.players[GI.Role] is not R.Commissar else R.Civilian
+            self.game.players[number][GI.Role] = R.Commissar if self.game.players[number][GI.Role] is not R.Commissar else R.Civilian
