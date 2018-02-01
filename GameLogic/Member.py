@@ -1,6 +1,11 @@
 import json
 from enum import Enum
 
+from emoji import emojize
+
+from GameLogic.Roles import Roles
+from KeyboardUtils import emoji_number
+
 
 class GameInfo(Enum):
     Role = 0
@@ -20,9 +25,24 @@ class Member:
         self.phone_number = phone_number
         self.t_id = t_id
         self.game_info = None
+        self.number = None
 
     def decode(self):
         return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id))
+
+    @property
+    def get_num_str(self):
+        return emoji_number(self.number)
+
+    @property
+    def get_role_str(self):
+        if self.game_info[GameInfo.Role] is Roles.Civilian:
+            return '👨🏼‍💼'
+        elif self.game_info[GameInfo.Role] is Roles.Mafia:
+            return '🕵🏼'
+        elif self.game_info[GameInfo.Role] is Roles.Commissar:
+            return emojize(':cop:')
+        return ""
 
     @classmethod
     def encode(cls, raw):

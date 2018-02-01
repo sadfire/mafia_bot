@@ -71,7 +71,12 @@ class CalculationOfPlayers(IState):
         self._session.delete_message_callback(bot, update)
         message_text = "👁 🔛 👤{}".format(self._session.owner.name) + '\n\n'
         for number, player in self.players.items():
+
+            if number < 11: # TODO Add game func
+                player.number = number
+
             message_text += "{} 🔛 👤{}\n".format(emoji_number(number), player.name)
+
 
         self._session.send_message(message_text)
 
