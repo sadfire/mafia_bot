@@ -11,8 +11,9 @@ class IntroductionView(IGameView):
 
     def _greeting(self):
         role = "мафией" if self.is_mafia else "комиссаром"
-        self._session.send_message(text="Отметье, кто из игроков является {}.".format(role),
-                                   reply_markup=self.choose_kb)
+        self._message = self._session.send_message(text="Отметье, кто из игроков является {}.".format(role),
+                                                   reply_markup=self.choose_kb + kbf.button("Закончить",
+                                                                                            self._end_callback))
 
     @property
     def choose_kb(self):
@@ -23,12 +24,22 @@ class IntroductionView(IGameView):
                              player.number)
         return kb
 
-    def set_role_callback(self, number):
+    def set_role_callback(self, bot, update, number):
         if self.is_mafia and self.game.mafia_count == 3:
             self._session.send_message("Слишком много мафий", reply_markup=kbf.close_button())
             return
 
         if self.is_mafia:
-            self.game.players[number][GI.Role] = R.Mafia if self.game.players[number][GI.Role] is not R.Mafia else R.Civilian
+            self.game.players[number][GI.Role] = R.Mafia if self.game.players[number][
+                                                                GI.Role] is not R.Mafia else R.Civilian
         else:
-            self.game.players[number][GI.Role] = R.Commissar if self.game.players[number][GI.Role] is not R.Commissar else R.Civilian
+            self.game.players[number][GI.Role] = R.Commissar if self.game.players[number][
+                                                                    GI.Role] is not R.Commissar else R.Civilian
+
+    def _end_callback(self, bot, update):
+        if (self.is_mafia and self.game.mafia_count != 3) and (not self.is_mafia and not self.game.is_commissar):
+            self._session.send_message("Игра не может продолжится", reply_markup=kbf.close_button())
+            return
+
+        self._session.remove_markup(update)
+        self._session.to_next_state()

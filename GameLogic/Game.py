@@ -71,5 +71,13 @@ class Game:
     def mafia_count(self):
         return len([player for number, player in self.players if player[GI.Role] is R.Mafia])
 
+    @property
+    def is_commissar(self):
+        for player in self.players:
+            if player[GI.Role] == R.Commissar:
+                return True
+        return False
+
+
     def log_event(self, event: Event, initiator_players, target_player=None):
         pass
