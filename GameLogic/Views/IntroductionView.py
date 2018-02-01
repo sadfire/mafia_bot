@@ -1,19 +1,21 @@
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Roles import Roles as R
+from GameLogic.Views.MafiaVoting import MafiaVoting
 from GameLogic.Views.Views import IGameView
 from KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 
 class IntroductionView(IGameView):
-    def __init__(self, session, game, next_state, previous=None, is_mafia=False):
-        super().__init__(session, game, next_state, previous)
+    def __init__(self, session, game, next_state, model=None, is_mafia=False):
+        super().__init__(session, game, next_state, model)
         self.is_mafia = is_mafia
+        self._next = MafiaVoting
 
     def _greeting(self):
         role = "мафией" if self.is_mafia else "комиссаром"
         self._message = self._session.send_message(text="Отметье, кто из игроков является {}.".format(role),
-                                                   reply_markup=self.choose_kb + kbf.button("Закончить",
-                                                                                            self._end_callback))
+                                                   reply_markup=self.choose_kb +
+                                                                kbf.button("Закончить", self._end_callback))
 
     @property
     def choose_kb(self):

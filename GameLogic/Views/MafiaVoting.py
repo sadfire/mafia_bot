@@ -6,9 +6,13 @@ from KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf
 
 
 class MafiaVoting(IGameView):
-    def __init__(self, session, game : Game, next_state, previous):
+    def __init__(self, session, game: Game, next_state, previous):
         super().__init__(session, game, next_state, previous)
         self._model = Voting(self.game, True)
+
+    def _greeting(self):
+        self._session.send_message(text="Приветствую тебя мафия. Кого будем убивать этой ночью?",
+                                   reply_markup=self.vote_keyboard)
 
     @property
     def vote_keyboard(self) -> MafiaMarkup:
@@ -16,10 +20,6 @@ class MafiaVoting(IGameView):
         for number, candidate in self._model.get_candidate:
             kb += kbf.button(f"🔪 :{number}:", self.kill_callback, number)
         return kb
-
-    def _greeting(self):
-        self._session.send_message(text="Приветствую тебя мафия. Кого будем убивать этой ночью?",
-                                   reply_markup=self.vote_keyboard)
 
     def kill_callback(self, bot, update, number):
         self._model.init_target(number)
