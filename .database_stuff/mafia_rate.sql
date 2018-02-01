@@ -180,7 +180,8 @@ INSERT INTO `Members` (`ID`, `Name`, `IsHost`, `Telephone`, `IdTelegram`, `NameT
 	(14, 'Александр Редькин', 0, NULL, NULL, NULL),
 	(15, 'Ибрагим Зубаилов', 0, NULL, NULL, NULL),
 	(16, 'Дмитрий Факин ', 0, NULL, NULL, NULL),
-	(17, 'Денис Инокеньтевич', 0, NULL, NULL, NULL);
+	(17, 'Денис Инокеньтевич', 0, NULL, NULL, NULL),
+	(18, 'Богдан Антонов', 1, NULL, 208204876, NULL);
 /*!40000 ALTER TABLE `Members` ENABLE KEYS */;
 
 -- Дамп структуры для таблица mafia_rate.Roles

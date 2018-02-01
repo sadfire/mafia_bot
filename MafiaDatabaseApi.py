@@ -42,13 +42,10 @@ class Database:
     def __execute(self, query, arguments=None):
         while True:
             try:
-                if arguments is not None:
-                    self._cursor.execute(query, arguments)
-                else:
-                    self._cursor.execute(query)
+                self._cursor.execute(query, arguments)
                 break
-            except _mysql_exceptions.OperationalError:
-                logging.warning("Base shutdown")
+            except _mysql_exceptions.OperationalError as e:
+                logging.warning(e)
                 self.connect()
 
         return self._cursor.fetchall()
