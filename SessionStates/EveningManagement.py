@@ -29,7 +29,7 @@ class EveningManagement(IState):
         # TODO Evening manager connect mode
 
         if self._evening is None:
-            self._evening = Evening(self._session.owner)
+            self._evening = self._session.get_evening()
 
         self._update_players_message()
 
@@ -65,8 +65,9 @@ class EveningManagement(IState):
 
         busy = self._evening.get_busy_players_id()
         kb = kbf.empty()
-        for player in self._evening.members:
-            kb += kbf.action_line((str(player), self._session.send_player_info_callback), remove_button if player.id not in busy else empty_button)
+        for id, player in self._evening.members.items():
+            kb += kbf.action_line((str(player), self._session.send_player_info_callback, player.id),
+                                  remove_button if id not in busy else empty_button)
 
         kb = mkbf(kb, 7, self._get_main_kb)
 
@@ -94,7 +95,7 @@ class EveningManagement(IState):
         self._session.send_message(chat_id=self._session.t_id,
                                    text="Игрок добавлен. \n Введите следующего или нажмите '{}' вверху.".format(
                                        em(":+1:")),
-                                   reply_markup=kbf.remove_button())
+                                   reply_markup=kbf.close_button())
 
     def _open_member_list_callback(self, bot, update):
         kb = self._get_regular_members_kb
@@ -122,7 +123,7 @@ class EveningManagement(IState):
     def _add_member_callback(self, bot, update, id):
         if not self._evening.add_member(self._session.db.get_member(int(id))):
             self._session.send_message(text="Ошибка при добавление пользователя. Попробуйте снова.",
-                                       reply_markup=kbf.remove_button())
+                                       reply_markup=kbf.close_button())
             return
 
         kb = self._get_regular_members_kb
@@ -161,18 +162,16 @@ class EveningManagement(IState):
             kb += kbf.button("Отменить вечер", self.back_callback)
         return kb
 
-
-    def _end_added_players_callback(self, bot, update):
+    def _end_added_players_callback(self, _, __):
         if self._evening.is_ready():
             if self._members_message is not None:
                 try:
-                    self._session.bot.delete_message(chat_id=self._session.t_id,
-                                                     message_id=self._members_message.message_id)
+                    self._session.delete_message(self._members_message)
                 except BadRequest:
-                    logging.warning("Cant delete message in _end_added_players_callback")
+                    logging.warning("Cant delete message in {}.{}".format(self.__class__, "_end_added_players_callback"))
 
-            self._session.bot.delete_message(self._session.t_id, self._message.message_id)
+            self._session.delete_message(self._message)
             self._session.to_next_state()
         else:
             self._update_players_message()
-            self._session.send_message("Не хватает участников")
+            self._session.send_message("Не хватает участников", reply_markup=kbf.close_button())

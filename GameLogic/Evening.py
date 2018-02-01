@@ -6,10 +6,11 @@ from GameLogic.Member import Member
 
 
 class Evening:
-    def __init__(self, host) -> None:
+    def __init__(self, id, host_id :int) -> None:
         super().__init__()
+        self.id = id
         self.members = {}
-        self.hosts = [host]
+        self.hosts = [host_id]
         self.games = {}
 
     def decode(self):
@@ -46,8 +47,11 @@ class Evening:
         return self.games.get(host.id, None)
 
     def add_host(self, host):
-        if host.is_host:
+        if isinstance(host, int):
             self.hosts.append(host)
+
+        if isinstance(host, Member) and host.is_host:
+            self.hosts.append(host.id)
 
     def remove_member(self, member):
         if isinstance(member, Member):
@@ -59,4 +63,4 @@ class Evening:
         return len(self.members) > 2  # TODO More checks # TODO 2 only for debug
 
     def get_hosts_ids(self):
-        return [host.id for host in self.hosts]
+        return self.hosts

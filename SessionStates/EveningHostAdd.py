@@ -9,6 +9,7 @@ class EveningHostAdd(IState):
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
         self._next = CalculationOfPlayers
+        self._evening = self._session.get_evening()
 
     def _greeting(self):
         self._message = self._session.send_message("Хотите добавить еще ведущих в игру?\n"
@@ -23,11 +24,11 @@ class EveningHostAdd(IState):
         self._message = self._session.edit_message(self._message, "Кандидаты в ведущие:", reply_markup=self.get_hosts_kb)
 
     def _add_host_callback(self, bot, update, argument):
-        self._session.evening.add_host(self._session.db.get_member(int(argument)))
+        self._evening.add_host(self._session.db.get_member(int(argument)))
         self._message = self._session.edit_message(self._message, self.host_list(), reply_markup=self.get_hosts_kb)
 
     def host_list(self):
-        return "\n".join("👁 🔛 👤{}".format(host) for host in self._session.evening.hosts)
+        return "\n".join("👁 🔛 👤{}".format(host) for host in self._evening.hosts)
 
     def _end_evening_host_manager(self, bot, update):
         self._session.edit_message(message=update.effective_message,
@@ -36,7 +37,7 @@ class EveningHostAdd(IState):
 
     @property
     def get_hosts_kb(self):
-        hosts = [host for host in self._session.db.get_hosts() if host.id not in self._session.evening.get_hosts_ids()]
+        hosts = [host for host in self._session.db.get_hosts() if host.id not in self._evening.get_hosts_ids()]
 
         kb = KeyboardFactory.players_with_action(hosts,
                                                  em(":heavy_plus_sign:"),

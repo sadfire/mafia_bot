@@ -12,8 +12,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 class Session:
-    delimiter = "|"
-
     def __init__(self, updater, t_id, all_evenings, save_callback, database_class=Database):
         self.t_id = t_id
         self._updater = updater
@@ -54,6 +52,11 @@ class Session:
                                                        text=text,
                                                        reply_markup=reply_markup)
 
+    def delete_message(self, message):
+        if isinstance(message, Message):
+            message = message.message_id
+        self._updater.bot.delete_message(chat_id=self.t_id, message_id=message)
+
     def add_handler(self, handler):
         self._handlers.append(handler)
         self._updater.dispatcher.add_handler(handler)
@@ -65,16 +68,21 @@ class Session:
             self._handlers.remove(handler)
 
     def to_next_state(self):
-        self.save_callback(self.t_id)
+        self.save_callback()
         self.state = self.state.next()
 
-    def start_evening(self, host_id):
+    def get_evening(self, host_id=None):
+        if host_id is None:
+            host_id = self.t_id
+
         for evening in self.all_evenings:
             if host_id in evening.hosts:
-                return evening
+                self.evening = evening
+        else:
+            self.evening = self.db.insert_evening(host_id)
+            self.all_evenings.append(self.evening)
 
-        self.evening = self.db.insert_evening(host_id)
-        self.all_evenings.append(self.evening)
+        return self.evening
 
     def close_evening(self):
         self.all_evenings.remove(self.evening)

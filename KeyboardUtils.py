@@ -109,7 +109,7 @@ class KeyboardFactory:
         return MafiaMarkup([[cls.button_simple("✅ Да", yes_callback), cls.button_simple("❌ Нет", no_callback)]])
 
     @classmethod
-    def remove_button(cls):
+    def close_button(cls):
         return cls.button(f"{em(':x:')} Закрыть", "delete_message_callback")
 
     @classmethod

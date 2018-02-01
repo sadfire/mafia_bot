@@ -48,8 +48,8 @@ class Bot:
         self._mutex.acquire()
 
         sessions_states = {}
-        for session in self._sessions:
-            sessions_states[session.t_id] = session.state.__class__.__name__
+        for key, session in self._sessions.items():
+            sessions_states[key] = session.state.__class__.__name__
         evenings_decoded = []
 
         for evening in self._evenings:
@@ -118,14 +118,13 @@ class Bot:
         if not self._db.check_permission_by_telegram_id(t_id):
             self._users_handler.start_callback(bot, update)
         else:
-            # TODO Add mutex Чтобы если бот подвиснет, а пользователь будет долбиться в кнопку - ничего не сломалось
             self._init_session(bot, update)
 
     def _init_session(self, bot, update):
         self._sessions[update.effective_chat.id] = Session(updater=self._updater,
                                                            t_id=update.effective_chat.id,
                                                            all_evenings=self._evenings,
-                                                           save_callback=self.decode())
+                                                           save_callback=self.decode)
 
     def check_evening(self, host_id):
         for evening in self._evenings:
