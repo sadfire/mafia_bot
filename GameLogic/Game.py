@@ -40,13 +40,6 @@ class Game:
         game.candidates = [Member.encode(candidate) for candidate in tmp[2]]
         return game
 
-
-    @staticmethod
-    def encode(dump, evening):
-        host_id, players = json.loads(dump)
-        players = [(Member.encode(player), game_info) for player, game_info in players]
-        return Game(host_id, evening, dict(players))
-
     def __init_game_info(self):
         for player in self.players:
             player.game_info = {GI.IsAlive: True,

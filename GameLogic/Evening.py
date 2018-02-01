@@ -22,11 +22,9 @@ class Evening:
         tmp = json.loads(dump)
         id = tmp[0]
 
-        hosts = [int(raw) for raw in tmp[1]]
-
-        evening = Evening(id, hosts[0])
-        evening.hosts = hosts
-        evening.games = dict([(h_id, Game.encode(raw)) for h_id, raw in tmp[2]])
+        evening = Evening(id, tmp[1][0])
+        evening.hosts = tmp[1]
+        evening.games = dict([(h_id, Game.encode(raw, evening)) for h_id, raw in tmp[2]])
         evening.members = dict([(member.id, member) for member in [Member.encode(raw) for raw in tmp[0]]])
 
         return evening
