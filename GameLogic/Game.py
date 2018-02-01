@@ -74,6 +74,10 @@ class Game:
     def mafia_count(self):
         return len([player for number, player in self.players if player[GI.Role] is R.Mafia])
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b3902f6042d8e36fdc1fc48130e7d8a606cee7a
     def get_next_event_number(self):
         self._evening += 1
         return self._evening
