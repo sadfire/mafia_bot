@@ -1,4 +1,4 @@
-from emoji import emojize
+import pickle
 
 
 def get_query_text(update):
@@ -11,6 +11,13 @@ class IState:
         self._session = session
         self._previous = previous
         self._greeting()
+        self._next = None
+
+    def decode(self):
+        return pickle.dumps((self.__class__, self._message.message_id, self._previous.__class__, self._next.__class__))
+
+    def encode(self):
+        return pickle.loads()
 
     def _greeting(self) -> None:
         pass
@@ -36,12 +43,7 @@ class IState:
             return self
         return self._next(self._session, self.__class__)
 
-
-def emoji_number(num=None) -> object:
-    emoji = ["0", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
-    if num > len(emoji):
-        return emojize(":detective:")
-    return emoji if num is None else emoji[num]
-
-
-
+    def back_callback(self):
+        if self._previous is None:
+            return self
+        return self._previous(self._session, None)

@@ -1,4 +1,4 @@
-from Game.Member import Member
+from GameLogic.Member import Member
 
 
 class Bot:

@@ -2,3 +2,4 @@
 *.pyc
 main.py
 .idea/
+*.dump

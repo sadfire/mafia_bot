@@ -1,20 +1,88 @@
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+import json
 
-from CallbackProvider import CallbackProvider
-from KeyboardFactory import KeyboardFactory as KBF
-from MafiaDatabaseApi import Database
-from SessionHandler.Session import Session
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from threading import Lock
+
+import CallbackProvider
+from GameLogic.Evening import Evening
+from KeyboardUtils import KeyboardFactory as kbf
+from Session import Session
+
+from SessionStates.CalculationOfPlayers import CalculationOfPlayers
+from SessionStates.EveningHostAdd import EveningHostAdd
+from SessionStates.EveningManagement import EveningManagement
+from SessionStates.GameStartConfirmation import GameStartConfirmation
+from SessionStates.IStates import IState
+from SessionStates.OpenStatistic import OpenStatistic
+from SessionStates.PlayerManagement import PlayerManagement
+from SessionStates.StartState import StartState
+
 from UserHandler import UserHandler
 
 
 class Bot:
-    def __init__(self, bot_key):
+    _evenings_dump_filename_ = "BotDump\\sessions.dump"
+    _sessions_dump_filename_ = "BotDump\\evenings.dump"
+    _states_ = {IState.__name__: IState.__class__,
+                StartState.__name__: StartState.__class__,
+                EveningHostAdd.__name__: EveningHostAdd.__class__,
+                GameStartConfirmation.__name__: GameStartConfirmation.__class__,
+                CalculationOfPlayers.__name__: CalculationOfPlayers.__class__,
+                EveningManagement.__name__: EveningManagement.__class__,
+                OpenStatistic.__name__: OpenStatistic.__class__,
+                PlayerManagement.__name__: PlayerManagement.__class__}
+
+    def __init__(self, bot_key, database):
         super(Bot, self).__init__()
+        self._token = bot_key
         self._updater = Updater(bot_key)
+        self._mutex = Lock()
         self._sessions = {}
+        self._evenings = []
+
         self._wait_text = None
-        self._db = Database('bot', 'YWqYvadPZ35eDHDs')
+        self._db = database
         self._users_handler = UserHandler(self._db, self._updater)
+
+    def decode(self):
+        self._mutex.acquire()
+
+        sessions_states = {}
+        for key, session in self._sessions.items():
+            sessions_states[key] = session.state.__class__.__name__
+        evenings_decoded = []
+
+        for evening in self._evenings:
+            evenings_decoded.append(evening.decode())
+        with open(self._sessions_dump_filename_, 'w') as file:
+            json.dump(sessions_states, file)
+
+        with open(self._evenings_dump_filename_, 'w') as file:
+            json.dump(evenings_decoded, file)
+
+        self._mutex.release()
+
+    def encode(self):
+        self._mutex.acquire()
+
+        with open(self._evenings_dump_filename_, 'r') as evenings_file:
+            evenings_raw = json.loads(evenings_file.read())
+            for evening in evenings_raw:
+                self._evenings.append(Evening.encode(evening))
+
+        with open(self._sessions_dump_filename_, 'r') as session_file:
+            sessions_raw = json.load(session_file.read())
+            for t_id, raw_state in sessions_raw:
+                self._sessions[t_id] = Session(self._updater, t_id, self._evenings, self._db.__class__)
+
+                for evening in self._evenings:
+                    if t_id not in evening.hosts:
+                        self._sessions[t_id].evening = evening
+                        break
+
+                self._sessions[t_id].state = self._states_[raw_state](self._sessions[t_id])
+
+        self._mutex.release()
 
     def start(self):
         self._add_base_handlers()
@@ -28,17 +96,20 @@ class Bot:
     def query_callback(self, bot, update):
         t_id = update.effective_chat.id
 
+<<<<<<< HEAD
         query = update.callback_query.data
         if self._filter_callbacks(query):
             return getattr(self, query)(bot, update)
 
 
+=======
+>>>>>>> 08b89d0c646cd9bd26b97e1af12da35f57c2f496
         if t_id not in self._sessions.keys():
             providers = self, self._users_handler
         else:
             providers = self, self._sessions[t_id], self._sessions[t_id].state
 
-        return CallbackProvider.process_callback(bot, update, providers)
+        return CallbackProvider.Provider.process(bot, update, providers)
 
     def _start_callback(self, bot, update):
         t_id = update.effective_chat.id
@@ -46,10 +117,8 @@ class Bot:
         if t_id in self._sessions.keys():
             bot.send_message(chat_id=update.effective_chat.id,
                              text="Вы уверены, что хотите перезагрузить бота?",
-                             reply_markup=KBF.button("Да", self._bot_reset_callback) +
-                                          KBF.button("Нет", self.bot_delete_message_callback))
+                             reply_markup=kbf.confirmation(self._bot_reset_callback, self.bot_delete_message_callback))
             return
-        # and not self._db.check_permission_by_telegram_name(update.effective_user.name)
         username = update.effective_user.name
         if not self._db.check_permission_by_telegram_id(t_id) and self._db.check_permission_by_telegram_name(username):
             self._db.insert_telegram_id(username, t_id)
@@ -60,7 +129,16 @@ class Bot:
             self._init_session(bot, update)
 
     def _init_session(self, bot, update):
-        self._sessions[update.effective_chat.id] = Session(bot, self._updater, update.effective_chat.id)
+        self._sessions[update.effective_chat.id] = Session(updater=self._updater,
+                                                           t_id=update.effective_chat.id,
+                                                           all_evenings=self._evenings,
+                                                           save_callback=self.decode)
+
+    def check_evening(self, host_id):
+        for evening in self._evenings:
+            if host_id in evening.hosts:
+                return evening
+        return None
 
     def _bot_reset_callback(self, bot, update):
         update.effective_message.edit_text("Бот перезагружен.")
@@ -68,9 +146,13 @@ class Bot:
         self._start_callback(bot, update)
 
     def bot_delete_message_callback(self, bot, update):
+<<<<<<< HEAD
         bot.delete_message(update.effective_chat.id, update.effective_message.id)
 
 
     def _filter_callbacks(self, data):
         return data in dir(self.__class__) and data[-9:] == "_callback"
 
+=======
+        bot.delete_message(update.effective_chat.id, update.effective_message.message_id)
+>>>>>>> 08b89d0c646cd9bd26b97e1af12da35f57c2f496

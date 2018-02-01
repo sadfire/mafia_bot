@@ -1,9 +1,7 @@
-from SessionHandler.Session import Session
-from Tests import Mocks
 import unittest
 
-from Tests.Mocks import Update
-from UserHandler import UserHandler
+from Session import Session
+from Tests import Mocks
 
 
 class MafiaTest(unittest.TestCase):

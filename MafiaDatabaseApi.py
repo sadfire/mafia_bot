@@ -1,9 +1,13 @@
 from enum import Enum
 
 import MySQLdb
+import _mysql_exceptions
+import time
 from emoji import emojize as em
+import logging
 
-from Game.Member import Member
+from GameLogic.Evening import Evening
+from GameLogic.Member import Member
 
 
 class Statistic(Enum):
@@ -17,29 +21,44 @@ class Statistic(Enum):
 class Database:
     def __init__(self, t_id, pswrd) -> None:
         super().__init__()
-        self._db = MySQLdb.connect(host="localhost", user=t_id, passwd=pswrd, db="mafia_rate", charset='utf8')
-        self._cursor = self._db.cursor()
+        self._db = None
+        self.t_id = t_id
+        self.pswrd = pswrd
+        self._db = None
+        self._cursor = None
+        self.connect()
 
-    def _execute(self, select, param=None):
-        self._cursor.execute(select, param)
-        return self._cursor.fetchall()
+    def connect(self):
+        self._db = MySQLdb.connect(host="localhost", user=self.t_id, passwd=self.pswrd, db="mafia_rate", charset='utf8')
+        self._cursor = self._db.cursor()
 
     def _commit_db(self):
         self._db.commit()
 
     def __del__(self):
-        self._db.close()
+        if self._db is not None:
+            self._db.close()
 
-    def _execute(self, select):
-        self._cursor.execute(select)
+    def __execute(self, query, arguments=None):
+        while True:
+            try:
+                if arguments is not None:
+                    self._cursor.execute(query, arguments)
+                else:
+                    self._cursor.execute(query)
+                break
+            except _mysql_exceptions.OperationalError:
+                logging.warning("Base shutdown")
+                self.connect()
+
         return self._cursor.fetchall()
 
     def check_permission_by_telegram_id(self, t_id):
-        result = self._execute('SELECT * FROM `Members` WHERE IdTelegram = {0} AND IsHost = TRUE'.format(t_id))
+        result = self.__execute('SELECT * FROM `Members` WHERE IdTelegram = {0} AND IsHost = TRUE'.format(t_id))
         return len(result) == 1
 
     def check_permission_by_telegram_name(self, name):
-        result = self._execute('SELECT * FROM `Members` WHERE NameTelegram = "{0}" AND IsHost = TRUE'.format(name))
+        result = self.__execute('SELECT * FROM `Members` WHERE NameTelegram = "{0}" AND IsHost = TRUE'.format(name))
         return len(result) == 1
 
     def get_member_by_telegram(self, t_id):
@@ -49,15 +68,18 @@ class Database:
         return self._get_member("ID", id)
 
     def _get_member(self, field, value):
-        result = self._execute('SELECT * FROM `Members` WHERE {} = {}'.format(field, value))
+        result = self.__execute('SELECT * FROM `Members` WHERE {} = {}'.format(field, value))
         if len(result) != 1:
             return None
 
-        member_raw = result[0]
+        return self.init_member(result[0])
+
+    @staticmethod
+    def init_member(member_raw):
         return Member(member_raw[0], member_raw[1], member_raw[2] == 1, member_raw[3], member_raw[4])
 
     def get_member_statistic(self, t_id):
-        results = self._execute(
+        results = self.__execute(
             """SELECT
                                     Evenings.Date as "Дата",
                                     Location.Title as "Место",
@@ -105,9 +127,9 @@ class Database:
                 field = "Members.Telephone"
             else:
                 field = "Members.ID"
-            result = self._execute(find_request + 'WHERE {0} = "{1}"'.format(field, request))
+            result = self.__execute(find_request + 'WHERE {0} = "{1}"'.format(field, request))
         else:
-            result = self._execute(find_request + 'WHERE Members.Name = "{}"'.format(request))  # ToDo Нечеткий поиск
+            result = self.__execute(find_request + 'WHERE Members.Name = "{}"'.format(request))  # ToDo Нечеткий поиск
 
         result = [Member(member[0], member[1], member[2] == 1, member[3], member[4]) for member in result]
         if len(result) != 1:
@@ -117,7 +139,7 @@ class Database:
 
     def get_regular_members_by_host(self, id):  # TODO Regular id add
         return [Member(member[0], member[1], member[2] == 1, member[3], member[4]) for member in
-                self._execute("SELECT * FROM Members")]
+                self.__execute("SELECT * FROM Members")]
 
     def add_member(self, member, is_host):
         pass
@@ -131,11 +153,28 @@ class Database:
     def get_games(self, t_id, game, host):
         pass
 
+    def get_hosts(self):
+        return [self.init_member(raw) for raw in self.__execute("SELECT * FROM Members WHERE IsHost = 1")]
+
     def add_user_permission_request(self, t_id, message):
-        self._execute("INSERT INTO PermRequest(TelegId, Text) VALUES (%s, %s)", (t_id, message.text))
+        self.__execute("INSERT INTO PermRequest(TelegId, Text) VALUES (%s, %s)", (t_id, message.text))
         self._commit_db()
         return 0
 
     def insert_telegram_id(self, username, t_id):
         self._cursor.execute(""" UPDATE Members SET IdTelegram = %s WHERE NameTelegram = %s """, (t_id, username))
         self._db.commit()
+
+    def get_evenings(self):
+        pass
+
+    def insert_evening(self, host_id):
+        now = time.strftime('%Y-%m-%d %H:%M:%S')
+        self.__execute("""INSERT INTO Evenings (Date, ID_Location, ID_Initiator) VALUES ('{}', 1, 1)""".format(now))
+        self._db.commit()
+        id = self._cursor.lastrowid
+        return Evening(id, host_id)
+
+
+
+
