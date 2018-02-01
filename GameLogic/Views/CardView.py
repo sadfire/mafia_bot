@@ -10,11 +10,12 @@ class CardView(IGameView):
 
     def _greeting(self):
         self._session.send_message(text=f"Будет ли использована карта {self._action.get_name}",
-                                   reply_markup=KeyboardFactory.confirmation(self._ask_initiator_callback,
-                                                                             self._end_action_callback))
+                                   reply_markup=kbf.confirmation(self._ask_initiator_callback,
+                                                                 self._end_action_callback))
 
     def _ask_target(self):
-        self._session.send_message("Номер цели использования карты", reply_markup=self.get_alive_players_keyboard(self._init_target_callback))
+        self._session.send_message("Номер цели использования карты",
+                                   reply_markup=self.get_alive_players_keyboard(self._init_target_callback))
 
     def _end_action_callback(self, bot, update):
         self._action.end()
