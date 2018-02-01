@@ -16,6 +16,7 @@ class Event(Enum):
 
 class Game:
     def __init__(self, host, evening: Evening, players) -> None:
+        self._event_number = 0
         self._evening = evening
 
         if isinstance(host, Member):
@@ -69,3 +70,7 @@ class Game:
 
     def log_event(self, event, initiator_players, target_player=None):
         pass
+
+    def get_next_event_number(self):
+        self._evening += 1
+        return self._evening
