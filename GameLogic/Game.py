@@ -15,7 +15,7 @@ class Event(Enum):
 
 
 class Game:
-    def __init__(self, host, evening : Evening, players) -> None:
+    def __init__(self, host, evening: Evening, players) -> None:
         self._evening = evening
 
         if isinstance(host, Member):
@@ -30,7 +30,16 @@ class Game:
         self.candidates = []
 
     def decode(self):
-        return json.dumps((self._host_id, [(game_info, player.decode()) for player, game_info in self.players]))
+        return json.dumps((self._host_id, [(game_info, player.decode()) for player, game_info in self.players],
+                           [candidate.decode() for candidate in self.candidates]))
+
+    @staticmethod
+    def encode(dump, evening: Evening):
+        tmp = json.loads(dump)
+        game = Game(tmp[0], evening, dict([(game_info, Member.encode(player_raw)) for game_info, player_raw in tmp[1]]))
+        game.candidates = [Member.encode(candidate) for candidate in tmp[2]]
+        return game
+
 
     @staticmethod
     def encode(dump, evening):

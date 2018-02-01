@@ -15,14 +15,16 @@ class Evening:
 
     def decode(self):
         return json.dumps(
-            ([member.decode() for member in self.members], [host.decode() for host in self.hosts], dict([(host_id, game.decode()) for host_id, game in self.games])))
+            (self.id, [member.decode() for member in self.members], self.hosts, dict([(host_id, game.decode()) for host_id, game in self.games])))
 
     @staticmethod
     def encode(dump):
         tmp = json.loads(dump)
-        hosts = [Member.encode(raw) for raw in tmp[1]]
+        id = tmp[0]
 
-        evening = Evening(hosts[0])
+        hosts = [int(raw) for raw in tmp[1]]
+
+        evening = Evening(id, hosts[0])
         evening.hosts = hosts
         evening.games = dict([(h_id, Game.encode(raw)) for h_id, raw in tmp[2]])
         evening.members = dict([(member.id, member) for member in [Member.encode(raw) for raw in tmp[0]]])
