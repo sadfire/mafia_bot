@@ -22,11 +22,12 @@ class Member:
         self.game_info = None
 
     def decode(self):
-        return json.dump((self.id, self.name, self.phone_number, self.t_id))
+        return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id))
 
     @classmethod
     def encode(cls, raw):
-        pass
+        raw = json.loads(raw)
+        return Member(raw[0], raw[1], raw[2], raw[3], raw[4])
 
     def __str__(self):
         return self.name

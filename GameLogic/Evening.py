@@ -1,7 +1,7 @@
 import copy
 import json
 
-from GameLogic import Game
+from GameLogic.Game import Game
 from GameLogic.Member import Member
 
 
@@ -14,8 +14,9 @@ class Evening:
         self.games = {}
 
     def decode(self):
-        return json.dumps(
-            (self.id, [member.decode() for member in self.members], self.hosts, dict([(host_id, game.decode()) for host_id, game in self.games])))
+        member_raw = [member.decode() for _, member in self.members.items()]
+        game_raw = dict([(host_id, game.decode()) for host_id, game in self.games])
+        return json.dumps((self.id, member_raw, self.hosts, game_raw))
 
     @staticmethod
     def encode(dump):
