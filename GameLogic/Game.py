@@ -67,5 +67,5 @@ class Game:
     def get_mafia(self):
         return [player for player in self.get_alive_players if player[GI.Role] is R.Mafia]
 
-    def log_event(self, event, initiator_players, target_player=None):
+    def log_event(self, event: Event, initiator_players, target_player=None):
         pass
