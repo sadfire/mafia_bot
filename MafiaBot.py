@@ -1,14 +1,39 @@
+import json
+
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
 import CallbackProvider
+from GameLogic.Evening import Evening
 from KeyboardUtils import KeyboardFactory as KBF
-from SessionHandler.Session import Session
+from Session import Session
+
+from SessionStates.CalculationOfPlayers import CalculationOfPlayers
+from SessionStates.EveningHostAdd import EveningHostAdd
+from SessionStates.EveningManagement import EveningManagement
+from SessionStates.GameStartConfirmation import GameStartConfirmation
+from SessionStates.IStates import IState
+from SessionStates.OpenStatistic import OpenStatistic
+from SessionStates.PlayerManagement import PlayerManagement
+from SessionStates.StartState import StartState
+
 from UserHandler import UserHandler
 
 
 class Bot:
+    _evenings_dump_filename_ = "sessions.dump"
+    _sessions_dump_filename_ = "evenings.dump"
+    _states_ = {IState.__name__: IState.__class__,
+                StartState.__name__: StartState.__class__,
+                EveningHostAdd.__name__: EveningHostAdd.__class__,
+                GameStartConfirmation.__name__: GameStartConfirmation.__class__,
+                CalculationOfPlayers.__name__: CalculationOfPlayers.__class__,
+                EveningManagement.__name__: EveningManagement.__class__,
+                OpenStatistic.__name__: OpenStatistic.__class__,
+                PlayerManagement.__name__: PlayerManagement.__class__}
+
     def __init__(self, bot_key, database):
         super(Bot, self).__init__()
+        self._token = bot_key
         self._updater = Updater(bot_key)
 
         self._sessions = {}
@@ -17,6 +42,38 @@ class Bot:
         self._wait_text = None
         self._db = database
         self._users_handler = UserHandler(self._db, self._updater)
+
+    def decode(self):
+        sessions_states = {}
+        for session in self._sessions:
+            sessions_states[session.t_id] = session.state.__class__.__name__
+        evenings_decoded = []
+
+        for evening in self._evenings:
+            evenings_decoded.append(evening.decode())
+        with open(self._sessions_dump_filename_, 'w') as file:
+            json.dump(sessions_states, file)
+
+        with open(self._evenings_dump_filename_, 'w') as file:
+            json.dump(evenings_decoded, file)
+
+    def encode(self):
+        with open(self._evenings_dump_filename_, 'r') as evenings_file:
+            evenings_raw = json.loads(evenings_file.read())
+            for evening in evenings_raw:
+                self._evenings.append(Evening.encode(evening))
+
+        with open(self._sessions_dump_filename_, 'r') as session_file:
+            sessions_raw = json.load(session_file.read())
+            for t_id, raw_state in sessions_raw:
+                self._sessions[t_id] = Session(self._updater, t_id, self._evenings, self._db.__class__)
+
+                for evening in self._evenings:
+                    if t_id not in evening.hosts:
+                        self._sessions[t_id].evening = evening
+                        break
+
+                self._sessions[t_id].state = self._states_[raw_state](self._sessions[t_id])
 
     def start(self):
         self._add_base_handlers()

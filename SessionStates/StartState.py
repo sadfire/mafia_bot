@@ -1,8 +1,8 @@
 from KeyboardUtils import KeyboardFactory as KBF
-from SessionHandler.IStates import IState
-from SessionHandler.PlayerManagement import PlayerManagement
-from SessionHandler.EveningManagement import EveningManagement
-from SessionHandler.OpenStatistic import OpenStatistic
+from SessionStates.IStates import IState
+from SessionStates.PlayerManagement import PlayerManagement
+from SessionStates.EveningManagement import EveningManagement
+from SessionStates.OpenStatistic import OpenStatistic
 
 
 class StartState(IState):

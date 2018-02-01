@@ -1,10 +1,7 @@
-from SessionHandler.IStates import IState
+from SessionStates.IStates import IState
 
 
 class IGameView(IState):
-    _WRONG_PARAM_ = -1
-    _FAIL_ = 0
-
     def _greeting(self):
         pass
 

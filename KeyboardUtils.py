@@ -103,9 +103,14 @@ class KeyboardFactory:
                                     right_callback=callback_emoji.__name__,
                                     right_arguments=str(player.id))
         return kb
+
     @classmethod
     def confirmation(cls, yes_callback, no_callback):
-        return MafiaMarkup([[cls.button_simple("Да", yes_callback), cls.button_simple("Нет", no_callback)]])
+        return MafiaMarkup([[cls.button_simple("✅ Да", yes_callback), cls.button_simple("❌ Нет", no_callback)]])
+
+    @classmethod
+    def remove_button(cls):
+        return cls.button(f"{em(':x:')} Закрыть", "delete_message_callback")
 
     @classmethod
     def empty_line(cls):

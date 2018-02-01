@@ -25,7 +25,7 @@ class CivilianVoting(IGameView):
                              f"{emoji_number(vote_count)}"
                              f"{man_without_hand*2}"
                              f"{emoji_number(vote_count)}",
-                             self.vote_callback, vote_count)
+                                         self.vote_callback, vote_count)
 
         return kb
 

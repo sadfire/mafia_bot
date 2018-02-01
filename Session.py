@@ -1,17 +1,20 @@
+import json
+
 from telegram import Message
 
 from KeyboardUtils import MultiPageKeyboardFactory, KeyboardFactory
 from MafiaDatabaseApi import Database
 from MultiPageProvider import Provider as MultiPageProvider
-from SessionHandler.StartState import StartState
+from SessionStates.StartState import StartState
 import logging
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 class Session:
-    def __init__(self, bot, updater, t_id, all_evenings, database_class=Database):
-        self.bot = bot
+    delimiter = "|"
+
+    def __init__(self, updater, t_id, all_evenings, database_class=Database):
         self.t_id = t_id
         self._updater = updater
 
@@ -27,9 +30,6 @@ class Session:
 
         self.state = StartState(self)
         self._handlers = []
-
-    def __del__(self):
-        pass
 
     def send_message(self, text, reply_markup=None):
         if isinstance(reply_markup, MultiPageKeyboardFactory):
@@ -47,7 +47,8 @@ class Session:
         if isinstance(reply_markup, MultiPageKeyboardFactory):
             return self.multi_page_provider.edit(message, text, reply_markup)
         else:
-            return self.bot.edit_message_text(chat_id=self.t_id, message_id=message, text=text, reply_markup=reply_markup)
+            return self.bot.edit_message_text(chat_id=self.t_id, message_id=message, text=text,
+                                              reply_markup=reply_markup)
 
     def add_handler(self, handler):
         self._handlers.append(handler)
@@ -63,6 +64,10 @@ class Session:
         self.state = self.state.next()
 
     def start_evening(self, host_id):
+        for evening in self.all_evenings:
+            if host_id in evening.hosts:
+                return evening
+
         self.evening = self.db.insert_evening(host_id)
         self.all_evenings.append(self.evening)
 
@@ -81,6 +86,9 @@ class Session:
     def update_message_text(update, text):
         update.effective_message.edit_text(update.effective_message.text + text,
                                            reply_markup=update.effective_message.reply_markup)
+
+    def reset_session_state_callback(self, bot, update):
+        pass
 
     def send_player_info_callback(self, bot, update, player_id):
         self.send_message(self.db.get_member_statistic(player_id),

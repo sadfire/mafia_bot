@@ -1,8 +1,8 @@
 from emoji import emojize as em
 
 from KeyboardUtils import KeyboardFactory, MultiPageKeyboardFactory
-from SessionHandler.CalculationOfPlayers import CalculationOfPlayers
-from SessionHandler.IStates import IState
+from SessionStates.CalculationOfPlayers import CalculationOfPlayers
+from SessionStates.IStates import IState
 
 
 class EveningHostAdd(IState):
@@ -24,7 +24,6 @@ class EveningHostAdd(IState):
 
     def _add_host_callback(self, bot, update, argument):
         self._session.evening.add_host(self._session.db.get_member(int(argument)))
-
         self._message = self._session.edit_message(self._message, self.host_list(), reply_markup=self.get_hosts_kb)
 
     def host_list(self):

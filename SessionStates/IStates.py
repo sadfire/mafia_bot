@@ -1,6 +1,4 @@
-from emoji import emojize
-
-from SessionHandler.Session import Session
+import pickle
 
 
 def get_query_text(update):
@@ -8,12 +6,18 @@ def get_query_text(update):
 
 
 class IState:
-    def __init__(self, session: Session, previous=None):
+    def __init__(self, session, previous=None):
         self._message = None
         self._session = session
         self._previous = previous
         self._greeting()
         self._next = None
+
+    def decode(self):
+        return pickle.dumps((self.__class__, self._message.message_id, self._previous.__class__, self._next.__class__))
+
+    def encode(self):
+        return pickle.loads()
 
     def _greeting(self) -> None:
         pass
@@ -43,6 +47,3 @@ class IState:
         if self._previous is None:
             return self
         return self._previous(self._session, None)
-
-
-

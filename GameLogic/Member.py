@@ -1,3 +1,4 @@
+import json
 from enum import Enum
 
 
@@ -19,6 +20,13 @@ class Member:
         self.phone_number = phone_number
         self.t_id = t_id
         self.game_info = None
+
+    def decode(self):
+        return json.dump((self.id, self.name, self.phone_number, self.t_id))
+
+    @classmethod
+    def encode(cls, raw):
+        pass
 
     def __str__(self):
         return self.name

@@ -1,8 +1,8 @@
 from random import shuffle
 
-from KeyboardUtils import KeyboardFactory as KBF, emoji_number
-from SessionHandler.IStates import IState
-from SessionHandler.GameInProcess import GameInProcess
+from KeyboardUtils import KeyboardFactory as kbf, emoji_number
+from SessionStates.IStates import IState
+from SessionStates.GameStartConfirmation import GameStartConfirmation
 
 
 class CalculationOfPlayers(IState):
@@ -12,25 +12,24 @@ class CalculationOfPlayers(IState):
         self._message = self._session.send_message("Расчет игроков")
 
     @property
-    def state_kb(self):
-        kb = KBF.empty()
+    def calculating_keyboard(self):
+        kb = kbf.empty()
         for number, player in self.players.items():
-            kb += KBF.double_button(right_text=("⚪️ " if player.id != self._active_id else "🔘 ") + player.name,
-                                    right_callback=self._choose_player_callback,
-                                    right_arguments=player.id,
-
-                                    left_text=("⚪️ " if int(number) != self._active_number else "🔘 ") +
-                                              str(emoji_number(number)),
-                                    left_callback=self._choose_number_callback,
-                                    left_arguments=number)
+            kb += kbf.action_line((("⚪️ " if player.id != self._active_id else "🔘 ") + player.name,
+                                   self._choose_player_callback,
+                                   player.id),
+                                  (("⚪️ " if int(number) != self._active_number else "🔘 ") +
+                                   str(emoji_number(number)),
+                                   self._choose_number_callback,
+                                   number))
         return kb + \
-               KBF.button("📊 Отсортировать по рейтингу", self._sort_by_rate_callback) + \
-               KBF.button("➰ Случайный порядок", self._randomize_callback) + \
-               KBF.button("☑️Закончить", self._end_players_calculating_callback)
+               kbf.button("📊 Отсортировать по рейтингу", self._sort_by_rate_callback) + \
+               kbf.button("➰ Случайный порядок", self._randomize_callback) + \
+               kbf.button("☑️Закончить", self._end_players_calculating_callback)
 
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
-        self._next = GameInProcess
+        self._next = GameStartConfirmation
         self._active_number = None
         self._active_id = None
 
@@ -66,7 +65,7 @@ class CalculationOfPlayers(IState):
             self._active_number = None
             self._active_id = None
 
-        self._session.edit_message(self._message, "Расчёт игроков", self.state_kb)
+        self._session.edit_message(self._message, "Расчёт игроков", self.calculating_keyboard)
 
     def _end_players_calculating_callback(self, bot, update):
         self._session.delete_message_callback(bot, update)

@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import abstractmethod, abstractproperty
 
 from emoji import emojize
 
@@ -12,8 +12,8 @@ class IGameModel:
     def get_name(self):
         return emojize(':flower_playing_cards:') + " "
 
-    @abstractmethod
     @property
+    @abstractmethod
     def _get_action(self):
         pass
 

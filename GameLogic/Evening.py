@@ -1,4 +1,5 @@
 import copy
+import json
 
 from GameLogic import Game
 from GameLogic.Member import Member
@@ -10,6 +11,22 @@ class Evening:
         self.members = {}
         self.hosts = [host]
         self.games = {}
+
+    def decode(self):
+        return json.dumps(
+            ([member.decode() for member in self.members], [host.decode() for host in self.hosts], dict([(host_id, game.decode()) for host_id, game in self.games])))
+
+    @staticmethod
+    def encode(dump):
+        tmp = json.loads(dump)
+        hosts = [Member.encode(raw) for raw in tmp[1]]
+
+        evening = Evening(hosts[0])
+        evening.hosts = hosts
+        evening.games = dict([(h_id, Game.encode(raw)) for h_id, raw in tmp[2]])
+        evening.members = dict([(member.id, member) for member in [Member.encode(raw) for raw in tmp[0]]])
+
+        return evening
 
     def add_member(self, member):
         if not isinstance(member, Member) or member.id in self.members.keys():
@@ -27,13 +44,6 @@ class Evening:
 
     def get_game(self, host):
         return self.games.get(host.id, None)
-
-    def get_game_bidder(self, host) -> list:
-        stop_list = self.get_busy_players_id() + [host.id]
-        return [member for member in self.members if member.id not in stop_list]
-
-    def get_players_id(self, host):
-        return [player.id for player in self.get_game_bidder(host)]
 
     def add_host(self, host):
         if host.is_host:

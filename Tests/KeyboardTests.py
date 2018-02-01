@@ -26,14 +26,14 @@ class KeyboardTests:
 
     def multi_page_test(self):
         self.updater.dispatcher.add_handler(CallbackQueryHandler(self.callback_test))
-        self.kb = kbf.double_button("Button1", "Button", "Button1", "Button") + \
-                  kbf.button(text="Button2", callback_data="Button") + \
-                  kbf.double_button("Button3", "Button", "Button3", "Button") + \
-                  kbf.button(text="Button4", callback_data="Button") + \
-                  kbf.double_button("Button5", "Button", "Button5", "Button") + \
-                  kbf.button(text="Button6", callback_data="Button")
+        self.kb = KeyboardFactory.double_button("Button1", "Button", "Button1", "Button") + \
+                  KeyboardFactory.button(text="Button2", callback_data="Button") + \
+                  KeyboardFactory.double_button("Button3", "Button", "Button3", "Button") + \
+                  KeyboardFactory.button(text="Button4", callback_data="Button") + \
+                  KeyboardFactory.double_button("Button5", "Button", "Button5", "Button") + \
+                  KeyboardFactory.button(text="Button6", callback_data="Button")
 
-        self.kb = MultiPageKeyboardFactory(self.kb, 2, kbf.button("Закончить", "end"))
+        self.kb = MultiPageKeyboardFactory(self.kb, 2, KeyboardFactory.button("Закончить", "end"))
 
         self.updater.bot.send_message(chat_id=self.t_id, text="Test", reply_markup=self.kb.to_markup(0))
 
@@ -44,14 +44,14 @@ class KeyboardTests:
         return True
 
     def game_view_test(self):
-        kb = kbf.empty()
+        kb = KeyboardFactory.empty()
         self.updater.bot.send_message(chat_id=self.t_id, text=f"🗡 Убивали игрока 1️⃣\n"
                                                               f"Будет ли использована "
                                                               f"{em(':flower_playing_cards:')} карта лечение?",
-                                      reply_markup=kbf.confirmation(self.callback_action, self.callback_action))
+                                      reply_markup=KeyboardFactory.confirmation(self.callback_action, self.callback_action))
         self.updater.bot.send_message(chat_id=self.t_id, text=f"Игрок 1️⃣ есть ли у вас"
                                                               f"{em(':flower_playing_cards:')}карта Бронижилет?",
-                                      reply_markup=kbf.confirmation(self.callback_action, self.callback_action))
+                                      reply_markup=KeyboardFactory.confirmation(self.callback_action, self.callback_action))
         warning_button = (":warning:", self.callback_action)
         warning_button2 = (":warning: 2", self.callback_action)
         warning_button3 = ("👺", self.callback_action)
@@ -65,12 +65,12 @@ class KeyboardTests:
         for i in range(2, 11):
             role = '🕵🏼' if i in [2, 5, 8] else '👨🏼‍💼'
             role = role if i != 4 else '👮🏼'
-            kb += kbf.action_line((str(emoji_number(i)) + role, self.callback_player, 123),
-                                  warning_button if i not in [4, 9] else (
+            kb += KeyboardFactory.action_line((str(emoji_number(i)) + role, self.callback_player, 123),
+                                              warning_button if i not in [4, 9] else (
                                   warning_button2 if i != 4 else warning_button3),
-                                  voting_button if i not in [3, 7] else no_voting_button,
-                                  card_button if i not in [8, 2, 1] else no_card_button,
-                                  clock_button if i >= 6 else no_clock_button)
+                                              voting_button if i not in [3, 7] else no_voting_button,
+                                              card_button if i not in [8, 2, 1] else no_card_button,
+                                              clock_button if i >= 6 else no_clock_button)
 
         self.updater.bot.send_message(chat_id=self.t_id,
                                       text=f"День №1\n"
@@ -81,17 +81,17 @@ class KeyboardTests:
                                            f"Выставлены игроки под номерами 3️⃣, 7️⃣",
                                       reply_markup=kb)
 
-        kb = kbf.action_line(("⏸", self.callback_action, 1),
-                             (em(":arrow_forward:"), self.callback_action),
-                             ("⏹", self.callback_action))
+        kb = KeyboardFactory.action_line(("⏸", self.callback_action, 1),
+                                         (em(":arrow_forward:"), self.callback_action),
+                                         ("⏹", self.callback_action))
         self.updater.bot.send_message(chat_id=self.t_id,
                                       text=f"Минута игрока номер 6️⃣\nОсталось 40 секунд {em(':alarm_clock:')}",
                                       reply_markup=kb)
-        kb = kbf.empty()
+        kb = KeyboardFactory.empty()
         man_with_hand = "🙋🏻‍♂️"
         man_without_hand = "🙅🏽‍♂️"
         for i in range(0, 10):
-            kb += kbf.button(f"{emoji_number(i)} {man_with_hand*2} {man_without_hand*2} {emoji_number(i)}", self.callback_action, 2)
+            kb += KeyboardFactory.button(f"{emoji_number(i)} {man_with_hand*2} {man_without_hand*2} {emoji_number(i)}", self.callback_action, 2)
 
         self.updater.bot.send_message(chat_id=self.t_id,
                                       text=f"На голосование выставлены игроки под номерами 3️⃣, 7️⃣")

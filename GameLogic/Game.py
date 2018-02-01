@@ -1,3 +1,4 @@
+import json
 from enum import Enum
 
 from GameLogic.Roles import Roles as R
@@ -16,10 +17,13 @@ class Game:
     def __init__(self, host, evening, players) -> None:
         super().__init__()
         self._evening = evening
-        self._host = host
+        self._host_id = host.id
         self.players = players
         self.__init_game_info()
         self.candidates = []
+
+    def decode(self):
+        return json.dumps((self.host.id, self.players))
 
     def __init_game_info(self):
         for player in self.players:
