@@ -25,6 +25,9 @@ class MafiaMarkup(InlineKeyboardMarkup):
         if self.inline_keyboard is None:
             return other
 
+        if other.inline_keyboard is None:
+            return self
+
         return MafiaMarkup(self.inline_keyboard + other.inline_keyboard)
 
     def is_empty(self):
@@ -105,8 +108,14 @@ class KeyboardFactory:
         return kb
 
     @classmethod
-    def confirmation(cls, yes_callback, no_callback):
-        return MafiaMarkup([[cls.button_simple("✅ Да", yes_callback), cls.button_simple("❌ Нет", no_callback)]])
+    def confirmation(cls, yes_callback, no_callback, yes_message=None, no_message=None, yes_argument=""):
+        if yes_message is None:
+            yes_message = "✅ Да"
+
+        if no_message is None:
+            no_message = "❌ Нет"
+
+        return MafiaMarkup([[cls.button_simple(yes_message, yes_callback, yes_argument), cls.button_simple(no_message, no_callback)]])
 
     @classmethod
     def close_button(cls):

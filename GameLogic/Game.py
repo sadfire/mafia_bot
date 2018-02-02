@@ -18,6 +18,8 @@ class Game:
         self._event_number = 0
         self._evening = evening
 
+        self.gonna_die = None
+
         if isinstance(host, Member):
             self._host_id = host.id
         elif isinstance(host, int):
@@ -63,27 +65,34 @@ class Game:
 
     @property
     def get_alive_players(self, is_vote_mode=False):
-        return dict([(number, player) for number, player in self.players.items()
-                if player[GI.IsAlive] and (True if not is_vote_mode else player[GI.IsVoting])])
+        return [number for number, player in self.players.items()
+                if player[GI.IsAlive] and (True if not is_vote_mode else player[GI.IsVoting])]
 
     @property
-    def get_mafia_num(self):
-        return [number for number in self.players if self.players[number][GI.Role] is R.Mafia and self.players[number][GI.IsAlive]]
+    def get_mafia_numbers(self):
+        return [number for number in self.players if
+                self.players[number][GI.Role] is R.Mafia and self.players[number][GI.IsAlive]]
 
     @property
     def mafia_count(self):
-        return len([player for number, player in self.players.items() if player[GI.Role] is R.Mafia])
+        return len(self.get_mafia_numbers)
 
     @property
     def is_commissar(self):
-        for player in self.players:
-            if player[GI.Role] == R.Commissar:
-                return True
-        return False
+        return self.get_commissar_number is not None
 
     def log_event(self, event: Event, initiator_players, target_player=None):
-        pass
+        print(event._name_, str(initiator_players), str(target_player))
+        if event is Event.MafiaKilled:
+            self.gonna_die = target_player
 
     def get_next_event_number(self):
         self._evening += 1
         return self._evening
+
+    @property
+    def get_commissar_number(self):
+        for number, player in self.players.items():
+            if player[GI.Role] == R.Commissar:
+                return number
+        return None

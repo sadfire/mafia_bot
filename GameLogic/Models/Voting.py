@@ -13,7 +13,7 @@ class Voting(IGameModel):
         if not is_mafia_vote:
             self.voters = self.game.get_alive_players(True)
         else:
-            self.votes = self.game.get_mafia
+            self.voters = self.game.get_mafia_numbers
 
     @property
     def get_candidate(self):
@@ -26,7 +26,7 @@ class Voting(IGameModel):
         self._target = target
 
     def end(self):
-        self.game.log(self._get_action, self.voters, self._target)
+        self.game.log_event(self._get_action, self.voters, self._target)
 
     @property
     def _get_action(self):
