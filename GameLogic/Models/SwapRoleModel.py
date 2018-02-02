@@ -5,6 +5,10 @@ from GameLogic.Models.Models import ICardModel
 
 
 class SwapRoleModel(ICardModel):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+        self._event = Event.SwapRole
+
     @property
     def next_state(self):
         from GameLogic.Views.IntroductionView import IntroductionView
@@ -16,10 +20,7 @@ class SwapRoleModel(ICardModel):
 
     @property
     def get_name(self):
-        return super().get_name() + 'Смена Роли'
-
-    def _get_event(self):
-        return Event.SwapRole
+        return super().get_name + 'Смена Роли'
 
     @property
     def is_target_needed(self):

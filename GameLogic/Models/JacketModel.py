@@ -4,15 +4,16 @@ from GameLogic.Models.HealModel import HealModel
 
 
 class JacketModel(HealModel):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+        self._event = Event.JacketSave
+
     @property
     def get_card(self):
         return Cards.FlakJacket
 
     @property
     def get_name(self):
-        return super().get_name() + " Бронижелет"
+        return super().get_name + " Бронижелет"
 
-    @property
-    def _get_event(self):
-        return Event.JacketSave
 

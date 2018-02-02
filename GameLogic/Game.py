@@ -6,6 +6,7 @@ from GameLogic.Roles import Roles as R
 
 
 class Event(Enum):
+    WTF = -1
     SuccessListen = 0,
     FailedListen = 1,
     SwapRole = 2,

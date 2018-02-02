@@ -5,11 +5,11 @@ from KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 class CardView(IGameView):
     def __init__(self, session, game, next_state, model: ICardModel.__class__):
-        super().__init__(session, game, next_state, model)
-        self._action = model(game)
+        self._model = model(game)
+        super().__init__(session, game, next_state, self._model)
 
     def _greeting(self):
-        self._session.send_message(text=f"Будет ли использована карта {self._action.get_name}",
+        self._session.send_message(text=f"Будет ли использована карта {self._model.get_name}",
                                    reply_markup=kbf.confirmation(self._ask_initiator_callback,
                                                                  self._end_action_callback))
 
@@ -22,24 +22,33 @@ class CardView(IGameView):
                                    reply_markup=self.get_alive_players_keyboard(self._init_initiator_callback))
 
     def _init_initiator_callback(self, bot, update, number):
-        self._action.init_inititor(number)
-        if self._action.is_target_needed:
+        number = int(number)
+        self._session.edit_message(message=update.effective_message,
+                                   text="Карту {} использует игрок {}"
+                                   .format(self._model.get_name, self.game[number].get_num_str))
+        self._model.init_initiator(number)
+        if self._model.is_target_needed:
             self._ask_target()
         else:
             self._end_action_callback(bot, update)
 
     def _init_target_callback(self, bot, update, number):
-        self._action.init_target(number)
+        number = int(number)
+        self._session.edit_message(message=update.effective_message,
+                                   text="На игрока {}"
+                                   .format(self.game[number].get_num_str))
+
+        self._model.init_target(number)
         self._end_action_callback(bot, update)
 
     def get_alive_players_keyboard(self, callback):
         kb = kbf.empty()
-        for player in self.game.get_alive():
-            kb += kbf.button(emoji_number(player.number), callback, player.num)
+        for number in self.game.get_alive_players:
+            kb += kbf.button(self.game[number].get_num_str, callback, number)
         return kb
 
     def _end_action_callback(self, bot, update):
-        self._action.end()
-        self._next = self._action.next_state
+        self._model.end()
+        self._next = self._model.next_state
 
-        self._session.next_state()
+        self._session.to_next_state()

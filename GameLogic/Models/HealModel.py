@@ -4,17 +4,17 @@ from GameLogic.Models.Models import ICardModel
 
 
 class HealModel(ICardModel):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+        self._event = Event.Heal
+
     @property
     def get_card(self):
         return Cards.Heal
 
     @property
     def get_name(self):
-        return super().get_name() + " Лечение"
-
-    @property
-    def _get_event(self):
-        return Event.Heal
+        return super().get_name + " Лечение"
 
     @property
     def is_target_needed(self):

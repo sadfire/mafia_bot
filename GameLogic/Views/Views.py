@@ -13,6 +13,14 @@ class IGameView(IState):
         super(IGameView, self).__init__(session, None)
 
     def next(self):
-        if self._next is None:
-            return self
-        return self._next(self._session, self.game, None, self._model)
+        model = None
+        next_state = self._next
+
+        if isinstance(next_state, tuple):
+            model = next_state[1]
+            self._next = next_state[0]
+
+        return self._next(session=self._session,
+                          game=self.game,
+                          model=model,
+                          next_state=None)

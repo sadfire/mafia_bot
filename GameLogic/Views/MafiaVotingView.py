@@ -6,7 +6,7 @@ from KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf, emoji_number as e
 
 
 class MafiaVotingView(IGameView):
-    def __init__(self, session, game: Game, next_state, previous):
+    def __init__(self, session, game: Game, next_state, model):
         self._model = Voting(game, True)
         super().__init__(session, game, next_state, self._model)
         self._next = CommissarCheck
@@ -46,6 +46,6 @@ class MafiaVotingView(IGameView):
     def next(self):
         if not self.game.is_commissar:
             from GameLogic.Views.IntroductionView import IntroductionView
-            return IntroductionView(self._session, self.game, None, None, False)
+            return IntroductionView(self._session, self.game, None, False)
         else:
             return CommissarCheck(self._session, self.game, None, None)
