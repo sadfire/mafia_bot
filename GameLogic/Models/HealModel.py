@@ -1,6 +1,5 @@
 from GameLogic.Cards import Cards
 from GameLogic.Game import Event
-from GameLogic.Models.JacketModel import JacketModel
 from GameLogic.Models.Models import ICardModel
 
 
@@ -30,6 +29,7 @@ class HealModel(ICardModel):
     def next_state(self):
         if self.game.gonna_die is not None:
             from GameLogic.Views.CardView import CardView
+            from GameLogic.Models.JacketModel import JacketModel
             return CardView, JacketModel
 
         if self.game.is_day:
