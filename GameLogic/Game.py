@@ -1,7 +1,6 @@
 import json
 from enum import Enum
 
-from GameLogic import Evening
 from GameLogic.Roles import Roles as R
 from GameLogic.Member import GameInfo as GI, Member
 
@@ -15,7 +14,7 @@ class Event(Enum):
 
 
 class Game:
-    def __init__(self, host, evening: Evening, players) -> None:
+    def __init__(self, host, evening, players) -> None:
         self._event_number = 0
         self._evening = evening
 
@@ -35,7 +34,7 @@ class Game:
                            [candidate.decode() for candidate in self.candidates]))
 
     @staticmethod
-    def encode(dump, evening: Evening):
+    def encode(dump, evening):
         tmp = json.loads(dump)
         game = Game(tmp[0], evening, dict([(game_info, Member.encode(player_raw)) for game_info, player_raw in tmp[1]]))
         game.candidates = [Member.encode(candidate) for candidate in tmp[2]]
@@ -78,7 +77,6 @@ class Game:
             if player[GI.Role] == R.Commissar:
                 return True
         return False
-
 
     def log_event(self, event: Event, initiator_players, target_player=None):
         pass
