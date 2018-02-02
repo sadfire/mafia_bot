@@ -144,16 +144,12 @@ class Bot:
             if t_id in evening.hosts and len(evening.hosts) == 1:
                 self._evenings.remove(evening)
                 break
-                
+
         self._start_callback(bot, update)
 
-    def bot_delete_message_callback(self, bot, update):
-
+    @classmethod
+    def bot_delete_message_callback(cls, bot, update):
         bot.delete_message(update.effective_chat.id, update.effective_message.message_id)
-
 
     def _filter_callbacks(self, data):
         return data in dir(self.__class__) and data[-9:] == "_callback"
-
-        bot.delete_message(update.effective_chat.id, update.effective_message.message_id)
-

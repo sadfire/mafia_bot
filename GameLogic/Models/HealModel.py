@@ -27,6 +27,9 @@ class HealModel(ICardModel):
         return False
 
     def end(self):
+        if self._initiator is None:
+            return
+
         self._target = self.game.gonna_die
         super().end()
         self.game.gonna_die = None
