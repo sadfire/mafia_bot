@@ -9,4 +9,3 @@ class GameStartConfirmation(IState):
                                                                  self._session.reset_session_state_callback))
 
     def start_game_callback(self, bot, update):
-        pass ## TODO Pointer

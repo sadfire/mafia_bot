@@ -6,13 +6,12 @@ from GameLogic.Member import Member
 
 
 class Evening:
-    def __init__(self, id, host_id :int, db) -> None:
+    def __init__(self, id, host_id: int) -> None:
         super().__init__()
         self.id = id
         self.members = {}
         self.hosts = [host_id]
         self.games = {}
-        self.db = db
 
     def decode(self):
         member_raw = [member.decode() for _, member in self.members.items()]
@@ -23,7 +22,7 @@ class Evening:
     def encode(dump, db):
         tmp = json.loads(dump)
         id = tmp[0]
-        evening = Evening(id, tmp[1][0], db)
+        evening = Evening(id, tmp[1][0])
         evening.hosts = tmp[1]
         evening.games = dict([(h_id, Game.encode(raw, evening)) for h_id, raw in tmp[2]])
         evening.members = dict([(member.id, member) for member in [Member.encode(raw) for raw in tmp[0]]])

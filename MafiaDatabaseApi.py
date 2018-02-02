@@ -18,7 +18,16 @@ class Statistic(Enum):
     Result = 4
 
 
-class Database:
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class Database(metaclass=Singleton):
     def __init__(self, t_id, pswrd) -> None:
         super().__init__()
         self._db = None
@@ -170,9 +179,9 @@ class Database:
         self.__execute("""INSERT INTO Evenings (Date, ID_Location, ID_Initiator) VALUES ('{}', 1, 1)""".format(now))
         self._db.commit()
         id = self._cursor.lastrowid
-        return Evening(id, host_id, self)
+        return Evening(id, host_id)
 
-    #TODO: Check and finalize for event without init or target players
+    # TODO: Check and finalize for event without init or target players
     def insert_event(self, game_id, event_id, event_number, init_player_id=0, target_player_id=0):
 
         self.__execute("""INSERT INTO GameEvents (ID_Games, ID_Events, ID_Init_Players, ID_Target_Players, Event_Number)
