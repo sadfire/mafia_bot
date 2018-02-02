@@ -1,8 +1,8 @@
 from enum import Enum
 
 
-class CardsBeginner(Enum):
-    ChangeRole = 0,
+class Cards(Enum):
+    SwapRole = 0,
     Bugger = 1,
     Alibi = 2,
     FlakJacket = 3,

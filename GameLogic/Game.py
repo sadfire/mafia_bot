@@ -1,8 +1,8 @@
 import json
 from enum import Enum
 
-from GameLogic.Roles import Roles as R
 from GameLogic.Member import GameInfo as GI, Member
+from GameLogic.Roles import Roles as R
 
 
 class Event(Enum):
@@ -11,14 +11,23 @@ class Event(Enum):
     SwapRole = 2,
     MafiaKilled = 3,
     CivilianKilled = 4,
+    Heal = 5,
+    JacketSave = 6
+
+
+class GameMode(Enum):
+    Beginner = 0,
+    Standard = 1,
 
 
 class Game:
-    def __init__(self, host, evening, players) -> None:
+    def __init__(self, host, evening, players, mode=GameMode.Beginner) -> None:
         self._event_number = 0
         self._evening = evening
-
+        self.mode = mode
         self.gonna_die = None
+        self.is_day = False
+        self.wasted_cards = []
 
         if isinstance(host, Member):
             self._host_id = host.id
@@ -30,6 +39,18 @@ class Game:
             self.__init_game_info()
 
         self.candidates = []
+
+    @property
+    def get_first_view(self):
+        if self.mode is GameMode.Beginner:
+            from GameLogic.Views.CardView import CardView
+            from GameLogic.Models.SwapRoleModel import SwapRoleModel
+
+            return CardView, SwapRoleModel
+        elif self.mode is GameMode.Standard:
+            from GameLogic.Views.IntroductionView import IntroductionView
+
+            return IntroductionView, True
 
     def decode(self):
         return json.dumps((self._host_id, [player.decode() for number, player in self.players.items()],
@@ -48,7 +69,8 @@ class Game:
                                 GI.Card: None,
                                 GI.Role: R.Civilian,
                                 GI.IsVoting: True,
-                                GI.IsImmunitet: False}
+                                GI.IsImmunitet: False,
+                                GI.IsCardSpent: False}
 
         self.players = dict([(player.number, player) for player in self.players])
 

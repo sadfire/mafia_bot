@@ -17,10 +17,6 @@ class CardView(IGameView):
         self._session.send_message("Номер цели использования карты",
                                    reply_markup=self.get_alive_players_keyboard(self._init_target_callback))
 
-    def _end_action_callback(self, bot, update):
-        self._action.end()
-        self._session.next_state()
-
     def _ask_initiator_callback(self, bot, update):
         self._session.send_message(text="Номер игрока, использующего карту:",
                                    reply_markup=self.get_alive_players_keyboard(self._init_initiator_callback))
@@ -41,3 +37,9 @@ class CardView(IGameView):
         for player in self.game.get_alive():
             kb += kbf.button(emoji_number(player.number), callback, player.num)
         return kb
+
+    def _end_action_callback(self, bot, update):
+        self._action.end()
+        self._next = self._action.next_state
+
+        self._session.next_state()

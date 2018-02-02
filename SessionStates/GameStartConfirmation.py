@@ -12,14 +12,18 @@ class GameStartConfirmation(IState):
 
     def start_game_callback(self, _, update):
         self._session.remove_markup(update)
-        self._next = IntroductionView
         self._session.to_next_state()
 
     def next(self):
-        if self._next is None:
-            return self
+        game = self._session.evening.get_game(self._session.owner)
+        next_state = game.get_first_view
+        model = None
+        if isinstance(next_state, tuple):
+            model = self._next[1]
+            next_state = self._next[0]
+
+        self._next = next_state
         return self._next(session=self._session,
-                          game=self._session.evening.get_game(self._session.owner),
-                          model=None,
-                          next_state=None,
-                          is_mafia=True)
+                          game=game,
+                          model=model,
+                          next_state=None)

@@ -26,8 +26,8 @@ class Voting(IGameModel):
         self._target = target
 
     def end(self):
-        self.game.log_event(self._get_action, self.voters, self._target)
+        self.game.log_event(self._get_event, self.voters, self._target)
 
     @property
-    def _get_action(self):
+    def _get_event(self):
         return E.MafiaKilled if self.is_mafia_vote else E.CivilianKilled

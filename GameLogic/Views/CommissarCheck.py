@@ -1,6 +1,7 @@
 from GameLogic.Member import GameInfo as GI
+from GameLogic.Models.HealModel import HealModel
 from GameLogic.Roles import Roles as R
-from GameLogic.Views.DayTalkView import DayTalkView
+from GameLogic.Views.CardView import CardView
 from GameLogic.Views.Views import IGameView
 from KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
@@ -35,5 +36,7 @@ class CommissarCheck(IGameView):
                                    reply_markup=kbf.button("Разбудить город", self._end_callback))
 
     def _end_callback(self, bot, update):
-        self._next = DayTalkView
+        self.game.is_day = True
+        self._next = CardView, HealModel
         self._session.remove_markup(update)
+        self._session.to_next_state()

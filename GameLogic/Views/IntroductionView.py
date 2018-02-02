@@ -1,17 +1,17 @@
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Roles import Roles as R
 from GameLogic.Views.CommissarCheck import CommissarCheck
-from GameLogic.Views.MafiaVoting import MafiaVoting
+from GameLogic.Views.MafiaVotingView import MafiaVotingView
 from GameLogic.Views.Views import IGameView
 from KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 
 class IntroductionView(IGameView):
-    def __init__(self, session, game, next_state, model=None, is_mafia=False):
-        self.is_mafia = is_mafia
-        super().__init__(session, game, next_state, model)
+    def __init__(self, session, game, next_state, model=False):
+        self.is_mafia = model
+        super().__init__(session, game, next_state, None)
         if self.is_mafia:
-            self._next = MafiaVoting
+            self._next = MafiaVotingView
         else:
             self._next = CommissarCheck
 

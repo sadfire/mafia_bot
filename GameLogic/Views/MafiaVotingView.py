@@ -5,7 +5,7 @@ from GameLogic.Views.Views import IGameView
 from KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf, emoji_number as emn
 
 
-class MafiaVoting(IGameView):
+class MafiaVotingView(IGameView):
     def __init__(self, session, game: Game, next_state, previous):
         self._model = Voting(game, True)
         super().__init__(session, game, next_state, self._model)

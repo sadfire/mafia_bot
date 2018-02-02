@@ -2,6 +2,8 @@ from abc import abstractmethod, abstractproperty
 
 from emoji import emojize
 
+from GameLogic.Cards import Cards
+
 
 class IGameModel:
     def __init__(self, game) -> None:
@@ -14,7 +16,7 @@ class IGameModel:
 
     @property
     @abstractmethod
-    def _get_action(self):
+    def _get_event(self):
         pass
 
     @abstractmethod
@@ -35,13 +37,22 @@ class ICardModel(IGameModel):
         self._target = number
 
     def end(self):
-        self.game.log_event(self._get_action, self._initiator, self._target)
+        self.game.log_event(self._get_event, self._initiator, self._target)
+        self.game.wasted_cards.append(self.get_card)
 
     @abstractproperty
-    def _get_action(self):
+    def get_card(self):
+        return Cards.Neutral
+
+    @abstractproperty
+    def next_state(self):
         pass
 
-    @property
+    @abstractproperty
+    def _get_event(self):
+        pass
+
+    @abstractproperty
     def is_target_needed(self):
         return True
 
