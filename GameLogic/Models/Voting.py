@@ -30,4 +30,4 @@ class Voting(IGameModel):
 
     @property
     def _get_event(self):
-        return E.MafiaKilled if self.is_mafia_vote else E.CivilianKilled
+        return E.MafiaWantKilled if self.is_mafia_vote else E.CivilianWantKilled

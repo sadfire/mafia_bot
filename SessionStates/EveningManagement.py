@@ -139,6 +139,7 @@ class EveningManagement(IState):
         busy = self._evening.get_busy_players_id() + list(self._evening.members.keys())
         members = [member for member in self._session.db.get_regular_members_by_host(self._session.owner.id)
                    if member.id not in busy]
+        members = sorted(members, key=lambda m: m.name)
 
         if len(members) == 0:
             return kbf.empty()

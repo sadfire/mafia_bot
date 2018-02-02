@@ -48,3 +48,7 @@ class ICardModel(IGameModel):
     @abstractproperty
     def is_target_needed(self):
         return True
+
+    @abstractmethod
+    def get_candidate(self, is_target):
+        pass

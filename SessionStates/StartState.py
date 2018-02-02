@@ -10,7 +10,7 @@ class StartState(IState):
         self._evening_connect_mode = False
         super().__init__(session, previous)
         for evening in self._session.all_evenings:
-            if self._session.owner in evening.hosts:
+            if self._session.owner.id in evening.hosts:
                 self._evening_connect_mode = True
                 self._session.evening = evening
                 break

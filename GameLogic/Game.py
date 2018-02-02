@@ -10,11 +10,11 @@ class Event(Enum):
     SuccessListen = 0,
     FailedListen = 1,
     SwapRole = 2,
-    MafiaKilled = 3,
-    CivilianKilled = 4,
+    MafiaWantKilled = 3,
+    CivilianWantKilled = 4,
     Heal = 5,
     JacketSave = 6
-
+    MafiaKilled = 7,
 
 class GameMode(Enum):
     Beginner = 0,
