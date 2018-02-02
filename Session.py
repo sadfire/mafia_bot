@@ -18,7 +18,7 @@ class Session:
         self.t_id = t_id
         self._updater = updater
 
-        self.db = database_class("u193019697", 'mafia_api')
+        self.db = database_class("u{}".format(self.t_id), 'mafia_api')
         self.owner = self.db.get_member_by_telegram(self.t_id)
 
         self.all_evenings = all_evenings

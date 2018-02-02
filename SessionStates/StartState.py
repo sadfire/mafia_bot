@@ -22,7 +22,7 @@ class StartState(IState):
                                    reply_markup=KBF.main(self._evening_manager_callback,
                                                          self._open_statistic_callback,
                                                          self._player_manager_callback,
-                                                         "Меню вечера"))
+                                                         "Меню вечера"), self._test_game_callback)
 
     def process_state(self, next_state, update):
         self._next = next_state
@@ -36,4 +36,7 @@ class StartState(IState):
         self.process_state(EveningManagement, update)
 
     def _player_manager_callback(self, bot, update):
+        self.process_state(PlayerManagement, update)
+
+    def _test_game_callback(self, bot, update):
         self.process_state(PlayerManagement, update)
