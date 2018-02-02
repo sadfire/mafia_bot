@@ -3,6 +3,7 @@ from SessionStates.IStates import IState
 from SessionStates.PlayerManagement import PlayerManagement
 from SessionStates.EveningManagement import EveningManagement
 from SessionStates.OpenStatistic import OpenStatistic
+from SessionStates.TestGameManagement import TestGameManagement
 
 
 class StartState(IState):
@@ -39,4 +40,4 @@ class StartState(IState):
         self.process_state(PlayerManagement, update)
 
     def _test_game_callback(self, bot, update):
-        self.process_state(PlayerManagement, update)
+        self.process_state(TestGameManagement, update)

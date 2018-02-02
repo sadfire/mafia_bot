@@ -19,7 +19,7 @@ class GameInfo(Enum):
     IsCardSpent = 8
 
 class Member:
-    def __init__(self, id, name, is_host=False, t_id=0, t_name="", phone_number=0) -> None:
+    def __init__(self, id, name, is_host=False, phone_number=0, t_id=0, t_name="") -> None:
         super().__init__()
         self.id = id
         self.name = name
