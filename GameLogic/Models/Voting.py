@@ -27,6 +27,7 @@ class Voting(IGameModel):
 
     def end(self):
         self.game.log_event(self._get_event, self.voters, self._target)
+        self.game.gonna_die = self._target
 
     @property
     def _get_event(self):
