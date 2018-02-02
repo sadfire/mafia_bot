@@ -14,6 +14,7 @@ class GameInfo(Enum):
     Number = 3
     IsVoting = 4
     IsSilence = 5
+    IsImmunitet = 6
 
 
 class Member:

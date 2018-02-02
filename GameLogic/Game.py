@@ -47,7 +47,8 @@ class Game:
             player.game_info = {GI.IsAlive: True,
                                 GI.Card: None,
                                 GI.Role: R.Civilian,
-                                GI.IsVoting: True}
+                                GI.IsVoting: True,
+                                GI.IsImmunitet: False}
 
         self.players = dict([(player.number, player) for player in self.players])
 
@@ -64,9 +65,10 @@ class Game:
         self.players[key] = value
 
     @property
-    def get_alive_players(self, is_vote_mode=False):
+    def get_alive_players(self, is_vote_mode=False) -> list:
         return [number for number, player in self.players.items()
-                if player[GI.IsAlive] and (True if not is_vote_mode else player[GI.IsVoting])]
+                if player[GI.IsAlive] and
+                (True if not is_vote_mode else player[GI.IsVoting])]
 
     @property
     def get_mafia_numbers(self):
