@@ -137,8 +137,14 @@ class Bot:
         return None
 
     def _bot_reset_callback(self, bot, update):
+        t_id = update.effective_chat.id
         update.effective_message.edit_text("Бот перезагружен.")
-        self._sessions.pop(update.effective_chat.id)
+        self._sessions.pop(t_id)
+        for evening in self._evenings:
+            if t_id in evening.hosts and len(evening.hosts) == 1:
+                self._evenings.remove(evening)
+                break
+                
         self._start_callback(bot, update)
 
     def bot_delete_message_callback(self, bot, update):

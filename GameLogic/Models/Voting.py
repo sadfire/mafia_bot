@@ -23,7 +23,7 @@ class Voting(IGameModel):
         pass
 
     def init_target(self, target):
-        self._target = target
+        self._target = int(target)
 
     def end(self):
         self.game.log_event(self._get_event, self.voters, self._target)

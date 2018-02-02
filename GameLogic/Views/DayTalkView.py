@@ -45,17 +45,16 @@ class DayTalkView(IGameView):
     def __init__(self, session, game, next_state, model=None):
         super().__init__(session, game, next_state, model)
 
-        with Buttons as B:
-            self.action_dict = {
-                B.WarningCount: [":warning: {}", self.warning_callback],
-                B.WarningBan: ("👺", self.ban_callback),
-                B.Voting: (":white_circle:", self.to_vote_callback),
-                B.NoVoting: (":red_circle:", self.on_vote_callback),
-                B.Card: (':flower_playing_cards:', self.card_button_callback),
-                B.NoCard: ('🚬', "empty"),
-                B.Clock: (":sound:", self.start_time_callback),
-                B.NoClock: (":mute:", "empty")
-            }
+        self.action_dict = {
+            Buttons.WarningCount: [":warning: {}", self.warning_callback],
+            Buttons.WarningBan: ("👺", self.ban_callback),
+            Buttons.Voting: (":white_circle:", self.to_vote_callback),
+            Buttons.NoVoting: (":red_circle:", self.on_vote_callback),
+            Buttons.Card: (':flower_playing_cards:', self.card_button_callback),
+            Buttons.NoCard: ('🚬', "empty"),
+            Buttons.Clock: (":sound:", self.start_time_callback),
+            Buttons.NoClock: (":mute:", "empty")
+        }
 
     def _greeting(self):
         self._message = self._session.send_message(text="Главное меню")
