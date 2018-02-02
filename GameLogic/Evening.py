@@ -15,7 +15,7 @@ class Evening:
 
     def decode(self):
         member_raw = [member.decode() for _, member in self.members.items()]
-        game_raw = dict([(host_id, game.decode()) for host_id, game in self.games])
+        game_raw = dict([(host_id, game.decode()) for host_id, game in self.games.items()])
         return json.dumps((self.id, member_raw, self.hosts, game_raw))
 
     @staticmethod

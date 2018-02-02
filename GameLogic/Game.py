@@ -24,13 +24,13 @@ class Game:
             self._host_id = host
 
         self.players = players
-        if isinstance(players, list):
+        if not isinstance(players, dict):
             self.__init_game_info()
 
         self.candidates = []
 
     def decode(self):
-        return json.dumps((self._host_id, [(game_info, player.decode()) for player, game_info in self.players],
+        return json.dumps((self._host_id, [player.decode() for number, player in self.players.items()],
                            [candidate.decode() for candidate in self.candidates]))
 
     @staticmethod

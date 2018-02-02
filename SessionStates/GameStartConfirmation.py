@@ -11,6 +11,7 @@ class GameStartConfirmation(IState):
                                                                  self._session.reset_session_state_callback))
 
     def start_game_callback(self, _, __):
+        self._session.start_game()
         self._next = IntroductionView(self._session,
                                       self._session.evening.games[self._session.owner],
                                       None, True)

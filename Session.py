@@ -2,6 +2,7 @@ import json
 
 from telegram import Message
 
+from GameLogic.Game import Game
 from KeyboardUtils import MultiPageKeyboardFactory, KeyboardFactory
 from MafiaDatabaseApi import Database
 from MultiPageProvider import Provider as MultiPageProvider
@@ -87,6 +88,9 @@ class Session:
 
     def close_evening(self):
         self.all_evenings.remove(self.evening)
+
+    def start_game(self, players):
+        self.evening.games[self.t_id] = Game(self.owner, self.evening, players)
 
     @staticmethod
     def remove_markup(update):

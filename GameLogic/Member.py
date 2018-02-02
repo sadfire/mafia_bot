@@ -28,7 +28,14 @@ class Member:
         self.number = None
 
     def decode(self):
-        return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id))
+        return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id, self.game_info))
+
+    @classmethod
+    def encode(cls, raw):
+        raw = json.loads(raw)
+        member = Member(raw[0], raw[1], raw[2], raw[3], raw[4])
+        member.game_info = raw[5]
+        return member
 
     @property
     def get_num_str(self):
@@ -43,11 +50,6 @@ class Member:
         elif self.game_info[GameInfo.Role] is Roles.Commissar:
             return emojize(':cop:')
         return ""
-
-    @classmethod
-    def encode(cls, raw):
-        raw = json.loads(raw)
-        return Member(raw[0], raw[1], raw[2], raw[3], raw[4])
 
     def __str__(self):
         return self.name
