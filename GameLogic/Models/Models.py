@@ -27,6 +27,10 @@ class ICardModel(IGameModel):
         self._initiator = None
         self._target = None
 
+    @property
+    def is_initiator_needed(self):
+        return True
+
     def init_initiator(self, number):
         self._initiator = int(number)
 
