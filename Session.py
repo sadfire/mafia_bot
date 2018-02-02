@@ -78,6 +78,7 @@ class Session:
         for evening in self.all_evenings:
             if host_id in evening.hosts:
                 self.evening = evening
+                break
         else:
             self.evening = self.db.insert_evening(host_id)
             self.all_evenings.append(self.evening)

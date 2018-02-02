@@ -6,6 +6,15 @@ from SessionStates.GameStartConfirmation import GameStartConfirmation
 
 
 class CalculationOfPlayers(IState):
+
+    def __init__(self, session, previous=None):
+        super().__init__(session, previous)
+        self._next = GameStartConfirmation
+        self._active_number = None
+        self._active_id = None
+
+        self._randomize_callback()
+
     # TODO Добавить счетчик игр и чтобы тут писался номер игры
     def _greeting(self) -> None:
         super()._greeting()
@@ -15,25 +24,19 @@ class CalculationOfPlayers(IState):
     def calculating_keyboard(self):
         kb = kbf.empty()
         for number, player in self.players.items():
-            kb += kbf.action_line((("⚪️ " if player.id != self._active_id else "🔘 ") + player.name,
-                                   self._choose_player_callback,
-                                   player.id),
-                                  (("⚪️ " if int(number) != self._active_number else "🔘 ") +
-                                   str(emoji_number(number)),
+            point_u = ("⚪️ " if int(number) != self._active_number else "🔘 ")
+            point_n = ("⚪️ " if player.id != self._active_id else "🔘 ")
+            kb += kbf.action_line((point_u + str(emoji_number(number)),
                                    self._choose_number_callback,
-                                   number))
+                                   number),
+                                  (point_n + player.name,
+                                   self._choose_player_callback,
+                                   player.id)
+                                  )
         return kb + \
                kbf.button("📊 Отсортировать по рейтингу", self._sort_by_rate_callback) + \
                kbf.button("➰ Случайный порядок", self._randomize_callback) + \
                kbf.button("☑️Закончить", self._end_players_calculating_callback)
-
-    def __init__(self, session, previous=None):
-        super().__init__(session, previous)
-        self._next = GameStartConfirmation
-        self._active_number = None
-        self._active_id = None
-
-        self._randomize_callback()
 
     def _sort_by_rate_callback(self, bot, update):
         pass

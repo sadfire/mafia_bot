@@ -37,8 +37,7 @@ class ICardModel(IGameModel):
     def end(self):
         self.game.log_event(self._get_action, self._initiator, self._target)
 
-    @abstractmethod
-    @property
+    @abstractproperty
     def _get_action(self):
         pass
 

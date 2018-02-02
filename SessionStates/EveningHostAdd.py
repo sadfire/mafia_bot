@@ -14,11 +14,8 @@ class EveningHostAdd(IState):
     def _greeting(self):
         self._message = self._session.send_message("Хотите добавить еще ведущих в игру?\n"
                                                    "Вы можете сделать это и позже с помощью команды /add_host",
-                                                   reply_markup=
-                                                   KeyboardFactory.button("Да",
-                                                                          callback_data=self._add_evening_host_callback) + \
-                                                   KeyboardFactory.button("Нет",
-                                                                          callback_data=self._end_evening_host_manager))
+                                                   reply_markup=KeyboardFactory.confirmation(
+                                                       self._add_evening_host_callback, self._end_evening_host_manager))
 
     def _add_evening_host_callback(self, bot, update):
         self._message = self._session.edit_message(self._message, "Кандидаты в ведущие:", reply_markup=self.get_hosts_kb)
