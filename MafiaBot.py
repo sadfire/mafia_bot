@@ -143,7 +143,7 @@ class Bot:
 
     def bot_delete_message_callback(self, bot, update):
 
-        bot.delete_message(update.effective_chat.id, update.effective_message.id)
+        bot.delete_message(update.effective_chat.id, update.effective_message.message_id)
 
 
     def _filter_callbacks(self, data):

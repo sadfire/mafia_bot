@@ -58,18 +58,21 @@ class Game:
     def __getitem__(self, key: int):
         return self.players.get(key, None)
 
-    @property
-    def get_alive_players(self, is_vote_mode=False):
-        return [player for player in self.players
-                if player[GI.IsAlive] and (True if not is_vote_mode else player[GI.IsVoting])]
+    def __setitem__(self, key, value):
+        self.players[key] = value
 
     @property
-    def get_mafia(self):
-        return [player for player in self.get_alive_players if player[GI.Role] is R.Mafia]
+    def get_alive_players(self, is_vote_mode=False):
+        return dict([(number, player) for number, player in self.players.items()
+                if player[GI.IsAlive] and (True if not is_vote_mode else player[GI.IsVoting])])
+
+    @property
+    def get_mafia_num(self):
+        return [number for number in self.players if self.players[number][GI.Role] is R.Mafia and self.players[number][GI.IsAlive]]
 
     @property
     def mafia_count(self):
-        return len([player for number, player in self.players if player[GI.Role] is R.Mafia])
+        return len([player for number, player in self.players.items() if player[GI.Role] is R.Mafia])
 
     @property
     def is_commissar(self):

@@ -17,7 +17,7 @@ class GameInfo(Enum):
 
 
 class Member:
-    def __init__(self, id, name, is_host=False, phone_number=0, t_id=0) -> None:
+    def __init__(self, id, name, is_host=False, t_id=0, t_name="", phone_number=0) -> None:
         super().__init__()
         self.id = id
         self.name = name
@@ -26,15 +26,32 @@ class Member:
         self.t_id = t_id
         self.game_info = None
         self.number = None
+        self.t_name = t_name
 
     def decode(self):
-        return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id, self.game_info))
+        gi = None
+        if self.game_info is not None:
+            gi = {}
+            for info in self.game_info:
+                gi[info._name_] = self.game_info[info] if info != GameInfo.Role else self.game_info[info]._name_
+
+        return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id, gi))
 
     @classmethod
     def encode(cls, raw):
         raw = json.loads(raw)
         member = Member(raw[0], raw[1], raw[2], raw[3], raw[4])
-        member.game_info = raw[5]
+        if raw[5] is not None:
+            member.game_info = {}
+
+            for raw_key, raw_info in raw[5].items():
+
+                type = getattr(GameInfo, raw_key, None)
+                if type is GameInfo.Role:
+                    raw_info = getattr(Roles, raw_info, None)
+
+                member.game_info[type] = raw_info
+
         return member
 
     @property
@@ -59,3 +76,6 @@ class Member:
 
     def __getitem__(self, key: GameInfo):
         return self.game_info.get(key, None)
+
+    def __setitem__(self, key, value):
+        self.game_info[key] = value

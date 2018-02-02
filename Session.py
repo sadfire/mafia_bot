@@ -40,7 +40,7 @@ class Session:
 
     def edit_message(self, message, text="", reply_markup=None):
         if isinstance(message, Message):
-            if text == "":
+            if text == "" or text is None:
                 text = message.text
 
             message = message.message_id
