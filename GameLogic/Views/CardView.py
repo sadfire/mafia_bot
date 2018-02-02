@@ -4,9 +4,9 @@ from KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 
 class CardView(IGameView):
-    def __init__(self, session, game, next_state, previous, model_class: ICardModel.__class__):
-        super().__init__(session, game, next_state, previous)
-        self._action = model_class(game)
+    def __init__(self, session, game, next_state, model: ICardModel.__class__):
+        super().__init__(session, game, next_state, model)
+        self._action = model(game)
 
     def _greeting(self):
         self._session.send_message(text=f"Будет ли использована карта {self._action.get_name}",
