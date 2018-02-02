@@ -8,6 +8,12 @@ class HealModel(ICardModel):
         super().__init__(game)
         self._event = Event.Heal
 
+    def get_candidate(self, is_target):
+        candidate = list(self.game.get_alive_players)
+        if not is_target:
+            candidate.remove(self.game.gonna_die)
+        return candidate
+
     @property
     def get_card(self):
         return Cards.Heal

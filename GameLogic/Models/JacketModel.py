@@ -15,5 +15,3 @@ class JacketModel(HealModel):
     @property
     def get_name(self):
         return super().get_name + " Бронижелет"
-
-

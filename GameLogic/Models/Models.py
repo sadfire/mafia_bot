@@ -28,10 +28,10 @@ class ICardModel(IGameModel):
         self._target = None
 
     def init_initiator(self, number):
-        self._initiator = number
+        self._initiator = int(number)
 
     def init_target(self, number):
-        self._target = number
+        self._target = int(number)
 
     def end(self):
         self.game.log_event(self._event, self._initiator, self._target)
@@ -48,3 +48,7 @@ class ICardModel(IGameModel):
     @abstractproperty
     def is_target_needed(self):
         return True
+
+    @abstractmethod
+    def get_candidate(self, is_target):
+        pass

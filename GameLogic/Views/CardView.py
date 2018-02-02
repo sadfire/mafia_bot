@@ -41,9 +41,9 @@ class CardView(IGameView):
         self._model.init_target(number)
         self._end_action_callback(bot, update)
 
-    def get_alive_players_keyboard(self, callback):
+    def get_alive_players_keyboard(self, callback, is_target=False):
         kb = kbf.empty()
-        for number in self.game.get_alive_players:
+        for number in self._model.get_candidate(is_target):
             kb += kbf.button(self.game[number].get_num_str, callback, number)
         return kb
 

@@ -22,6 +22,9 @@ class SwapRoleModel(ICardModel):
     def get_name(self):
         return super().get_name + 'Смена Роли'
 
+    def get_candidate(self, is_target):
+        return self.game.get_alive_players
+
     @property
     def is_target_needed(self):
         return True
