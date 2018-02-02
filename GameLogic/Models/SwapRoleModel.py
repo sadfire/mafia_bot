@@ -30,7 +30,10 @@ class SwapRoleModel(ICardModel):
         return True
 
     def end(self):
-        self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] =\
-            self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]
+        if self._initiator is not None and self._target is not None:
+            self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] =\
+                self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]
+            super().end()
+            return "Игроки сменили ролью"
+        return None
 
-        super().end()

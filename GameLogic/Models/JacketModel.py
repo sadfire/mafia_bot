@@ -9,17 +9,25 @@ class JacketModel(HealModel):
     def __init__(self, game) -> None:
         super().__init__(game)
         self._event = Event.JacketSave
-        self.init_initiator(self.game.gonna_die)
         self.init_target(self.game.gonna_die)
 
     @property
     def is_initiator_needed(self):
         return False
-    
+
     @property
     def get_card(self):
         return Cards.FlakJacket
 
     @property
     def get_name(self):
-        return emojize(':flower_playing_cards:') + " Бронижелет"
+        return emojize(':flower_playing_cards:') + " Бронежилет"
+
+    def end(self) -> str:
+        if self._initiator is None and self.initiator_ask == False:
+            self.game.kill()
+            return "Игрок {} умер"
+
+        super().end()
+        self.game.gonna_die = None
+        return "Игрок выжил"

@@ -6,6 +6,7 @@ from GameLogic.Models.Models import ICardModel
 class HealModel(ICardModel):
     def __init__(self, game) -> None:
         super().__init__(game)
+        self._target = game.gonna_die
         self._event = Event.Heal
 
     def get_candidate(self, is_target):
@@ -13,6 +14,10 @@ class HealModel(ICardModel):
         if not is_target:
             candidate.remove(self.game.gonna_die)
         return candidate
+
+    @property
+    def target(self):
+        return self._target
 
     @property
     def get_card(self):
@@ -26,13 +31,20 @@ class HealModel(ICardModel):
     def is_target_needed(self):
         return False
 
+    @property
+    def messages(self):
+        return "Игрок {} выжил", "Игрок {} погиб"
+
     def end(self):
         if self._initiator is None:
-            return
+            if Cards.FlakJacket in self.game.wasted_cards:
+                self.game.kill()
+                return "Игрок {} умер"
+            return ""
 
-        self._target = self.game.gonna_die
         super().end()
         self.game.gonna_die = None
+        return "Игрок {} выжил"
 
     @property
     def next_state(self):

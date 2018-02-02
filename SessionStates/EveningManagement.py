@@ -144,7 +144,7 @@ class EveningManagement(IState):
         if len(members) == 0:
             return kbf.empty()
 
-        return mkbf(kbf.players_with_action(members, em(":heavy_plus_sign:"),
+        return mkbf(kbf.players_with_action(members, em(":new:"),
                                             self._session.send_player_info_callback,
                                             self._add_member_callback),
                     5,

@@ -2,7 +2,7 @@ import json
 from enum import Enum
 
 from GameLogic.Member import GameInfo as GI, Member
-from GameLogic.Roles import Roles as R
+from GameLogic.Roles import Roles as R, Roles
 
 
 class Event(Enum):
@@ -15,6 +15,7 @@ class Event(Enum):
     Heal = 5,
     JacketSave = 6
     MafiaKilled = 7,
+    CivilianKilled = 8
 
 class GameMode(Enum):
     Beginner = 0,
@@ -29,6 +30,7 @@ class Game:
         self.gonna_die = None
         self.is_day = False
         self.wasted_cards = []
+        self.events = []
 
         if isinstance(host, Member):
             self._host_id = host.id
@@ -107,6 +109,7 @@ class Game:
         return self.get_commissar_number is not None
 
     def log_event(self, event: Event, initiator_players, target_player=None):
+        self.events.append(event)
         print(event._name_, str(initiator_players), str(target_player))
         if event is Event.MafiaKilled:
             self.gonna_die = target_player
@@ -121,3 +124,21 @@ class Game:
             if player[GI.Role] == R.Commissar:
                 return number
         return None
+
+    def kill(self):
+        self.players[self.gonna_die][GI.IsAlive] = False
+
+        kill_event = Event.WTF
+        role = None
+        for event in self.events[::-1]:
+            if event is Event.MafiaWantKilled:
+                kill_event = Event.MafiaKilled
+                role = Roles.Mafia
+                break
+            elif event is Event.CivilianWantKilled:
+                kill_event = Event.CivilianKilled
+                role = Roles.Civilian
+                break
+
+        self.log_event(kill_event, role, self.gonna_die)
+        self.gonna_die = None

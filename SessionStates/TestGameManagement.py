@@ -23,8 +23,8 @@ class TestGameManagement(IState):
             self._evening.add_member(member)
 
         players = members[:5]
-        for i in range(0,5):
-            players[i].number = i
+        for i in range(0, 5):
+            players[i].number = i + 1
         self._evening.games[session.t_id] = Game(session.owner, self._evening, players)
 
 

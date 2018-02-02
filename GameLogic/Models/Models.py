@@ -17,8 +17,8 @@ class IGameModel:
         return emojize(':flower_playing_cards:') + " "
 
     @abstractmethod
-    def end(self):
-        pass
+    def end(self) -> str:
+        return ""
 
 
 class ICardModel(IGameModel):
@@ -26,6 +26,11 @@ class ICardModel(IGameModel):
         super().__init__(game)
         self._initiator = None
         self._target = None
+        self.initiator_ask = False
+
+    @property
+    def target(self):
+        return self._target
 
     @property
     def is_initiator_needed(self):

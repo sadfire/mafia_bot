@@ -3,7 +3,7 @@ from GameLogic.Models.Models import IGameModel
 
 
 class Voting(IGameModel):
-    def __init__(self, game, is_mafia_vote):
+    def __init__(self, game, is_mafia_vote=False):
         super().__init__(game)
         self.is_mafia_vote = is_mafia_vote
         self._target = None

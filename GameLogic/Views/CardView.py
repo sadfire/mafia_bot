@@ -9,9 +9,14 @@ class CardView(IGameView):
         super().__init__(session, game, next_state, self._model)
 
     def _greeting(self):
-        self._message = self._session.send_message(text=f"Будет ли использована карта {self._model.get_name}",
-                                   reply_markup=kbf.confirmation(self._ask_initiator_callback,
-                                                                 self._end_action_callback))
+        text = f"Будет ли использована карта {self._model.get_name}"
+
+        if self._model.target is not None:
+            text += f", на игрока {self.game[self._model.target].get_num_str}"
+
+        self._message = self._session.send_message(text=text+"?",
+                                                   reply_markup=kbf.confirmation(self._ask_initiator_callback,
+                                                                                 self._end_action_callback))
 
     def _ask_target(self):
         if self._model.is_target_needed:
@@ -21,6 +26,7 @@ class CardView(IGameView):
             self._end_action_callback(None, None)
 
     def _ask_initiator_callback(self, bot, update):
+        self._model.initiator_ask = True
         if self._model.is_initiator_needed:
             self._session.send_message(text="Номер игрока, использующего карту:",
                                        reply_markup=self.get_alive_players_keyboard(self._init_initiator_callback))
@@ -54,8 +60,14 @@ class CardView(IGameView):
         return kb
 
     def _end_action_callback(self, bot, update):
-        self._model.end()
+        text = self._model.end()
         self._next = self._model.next_state
-        self._session.delete_message(self._message)
+
+        if text is None or text == "":
+            self._session.delete_message(self._message)
+        else:
+            if "{}" in text:
+                text = text.format(self.game[self._model.target].get_num_str)
+            self._session.edit_message(self._message, text)
 
         self._session.to_next_state()

@@ -23,7 +23,7 @@ class MafiaVotingView(IGameView):
             kb += kbf.button(f"🔪 Игрока {emn(number)}", self.kill_confirm_callback, number)
         return kb
 
-    def update_callback(self):
+    def update_callback(self, bot, update):
         self._session.edit_message(message=self._message,
                                    text="Приветствую тебя мафия. Кого будем убивать этой ночью?",
                                    reply_markup=self.vote_keyboard)
