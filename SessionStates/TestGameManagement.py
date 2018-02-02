@@ -22,7 +22,10 @@ class TestGameManagement(IState):
         for member in members:
             self._evening.add_member(member)
 
-        self._evening.games[session.t_id] = Game(session.owner, self._evening, members[:5])
+        players = members[:5]
+        for i in range(0,5):
+            players[i].number = i
+        self._evening.games[session.t_id] = Game(session.owner, self._evening, players)
 
 
     def _start(self, bot, update):
