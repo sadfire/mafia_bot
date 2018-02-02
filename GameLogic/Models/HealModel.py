@@ -31,10 +31,6 @@ class HealModel(ICardModel):
     def is_target_needed(self):
         return False
 
-    @property
-    def messages(self):
-        return "Игрок {} выжил", "Игрок {} погиб"
-
     def end(self):
         if self._initiator is None:
             if Cards.FlakJacket in self.game.wasted_cards:

@@ -1,3 +1,4 @@
+from GameLogic.Game import Event
 from GameLogic.Models.Models import IGameModel
 
 
@@ -7,5 +8,5 @@ class DayTalkModel(IGameModel):
 
     @property
     def _get_event(self):
-        pass
+        return Event.WTF
 

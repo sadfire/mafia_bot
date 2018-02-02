@@ -1,3 +1,4 @@
+from GameLogic.Game import Event
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Models.HealModel import HealModel
 from GameLogic.Roles import Roles as R
@@ -12,7 +13,12 @@ class CommissarCheck(IGameView):
         super().__init__(session, game, next_state, model)
 
     def _greeting(self):
-        self._message = self._session.send_message("Доброй ночи коммиссар 👮\nКого будет проверять этой ночью?", reply_markup=self.get_check_kb)
+        if self.game.is_commissar:
+            self._message = self._session.send_message("Доброй ночи коммиссар 👮\nКого будет проверять этой ночью?",
+                                                       reply_markup=self.get_check_kb)
+        else:
+            self._message = self._session.send_message("Коммисар мертв.",
+                                                       reply_markup=kbf.button("Разбудить город", self._end_callback))
 
     @property
     def get_check_kb(self):
@@ -31,6 +37,10 @@ class CommissarCheck(IGameView):
         else:
             check_result = self.game[number][GI.Role] == R.Mafia
 
+        self.game.log_event(Event.SuccessCommissarCheck if check_result else Event.FailedCommissarCheck,
+                            self.game.get_commissar_number,
+                            number)
+
         text = "{} - 🕵️!" if check_result else "{} это мирный житель 🤷🏼‍♂️."
         self._session.edit_message(message=self._message,
                                    text=text.format(emoji_number(number)) + "\nКоммиссар засыпает",
@@ -39,5 +49,6 @@ class CommissarCheck(IGameView):
     def _end_callback(self, bot, update):
         self.game.is_day = True
         self._next = CardView, HealModel if self.game.gonna_die != -1 else DayTalkView
+
         self._session.remove_markup(update)
         self._session.to_next_state()

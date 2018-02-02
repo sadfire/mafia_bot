@@ -24,10 +24,11 @@ class JacketModel(HealModel):
         return emojize(':flower_playing_cards:') + " Бронежилет"
 
     def end(self) -> str:
-        if self._initiator is None and self.initiator_ask == False:
+        if self._initiator is None and self.initiator_ask is False:
             self.game.kill()
             return "Игрок {} умер"
 
-        super().end()
+        self.game.log_event(self._event, self._initiator, self._target)
+        self.game.wasted_cards.append(self.get_card)
         self.game.gonna_die = None
         return "Игрок выжил"

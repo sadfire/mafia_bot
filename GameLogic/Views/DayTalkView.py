@@ -1,6 +1,7 @@
 from enum import Enum
 
 from GameLogic.Member import GameInfo as GI
+from GameLogic.Models.DayTalkModel import DayTalkModel
 from GameLogic.Views.Views import IGameView
 from KeyboardUtils import KeyboardFactory as kbf, emoji_number as emn
 
@@ -43,7 +44,7 @@ def get_actions(game, number: int, action_dict: dict) -> tuple:
 
 class DayTalkView(IGameView):
     def __init__(self, session, game, next_state, model=None):
-        super().__init__(session, game, next_state, model)
+        model = DayTalkModel
 
         self.action_dict = {
             Buttons.WarningCount: [":warning: {}", self.warning_callback],
@@ -56,8 +57,10 @@ class DayTalkView(IGameView):
             Buttons.NoClock: (":mute:", "empty")
         }
 
+        super().__init__(session, game, next_state, model)
+
     def _greeting(self):
-        self._message = self._session.send_message(text="Главное меню")
+        self._message = self._session.send_message(text="Главное меню", reply_markup=self.main_kb)
 
     @property
     def main_kb(self):
@@ -65,7 +68,7 @@ class DayTalkView(IGameView):
         for number in self.game.get_alive_players:
             name = self.game[number].get_num_str + self.game[number].get_role_str
             buttons = get_actions(self.game, number, self.action_dict)
-            kb += kbf.action_line((name, "empty"), *buttons)
+            kb += kbf.action_line((name, "empty", number), *buttons)
         return kb
 
     def warning_callback(self, bot, update):
