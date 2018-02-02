@@ -1,5 +1,6 @@
 import json
 
+import telegram
 from telegram import Message
 
 from GameLogic.Game import Game
@@ -44,14 +45,16 @@ class Session:
                 text = message.text
 
             message = message.message_id
-
-        if isinstance(reply_markup, MultiPageKeyboardFactory):
-            return self.multi_page_provider.edit(message, text, reply_markup)
-        else:
-            return self._updater.bot.edit_message_text(chat_id=self.t_id,
-                                                       message_id=message,
-                                                       text=text,
-                                                       reply_markup=reply_markup)
+        try:
+            if isinstance(reply_markup, MultiPageKeyboardFactory):
+                return self.multi_page_provider.edit(message, text, reply_markup)
+            else:
+                return self._updater.bot.edit_message_text(chat_id=self.t_id,
+                                                           message_id=message,
+                                                           text=text,
+                                                           reply_markup=reply_markup)
+        except telegram.error.BadRequest as e:
+            logging.warning(e)
 
     def delete_message(self, message):
         if isinstance(message, Message):
