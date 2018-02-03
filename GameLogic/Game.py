@@ -17,7 +17,9 @@ class Event(Enum):
     MafiaKilled = 7,
     CivilianKilled = 8,
     SuccessCommissarCheck = 9,
-    FailedCommissarCheck = 10
+    FailedCommissarCheck = 10,
+    Kick = 11,
+    Warning = 12,
 
 class GameMode(Enum):
     Beginner = 0,
@@ -76,7 +78,9 @@ class Game:
                                 GI.IsVoting: True,
                                 GI.IsImmunitet: False,
                                 GI.IsCardSpent: False,
-                                GI.IsTalked: True}
+                                GI.IsTalked: True,
+                                GI.Warnings: 0,
+                                GI.IsTimer: False}
 
         self.players = dict([(player.number, player) for player in self.players])
 

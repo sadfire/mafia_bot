@@ -20,7 +20,6 @@ USE `mafia_rate`;
 CREATE TABLE IF NOT EXISTS `Cards` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Title` varchar(10) NOT NULL,
-  `IsActive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Cards_ID_uindex` (`ID`),
   UNIQUE KEY `Cards_Title_uindex` (`Title`)

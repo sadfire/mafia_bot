@@ -2,6 +2,7 @@ from emoji import emojize
 
 from GameLogic.Cards import Cards
 from GameLogic.Game import Event
+from GameLogic.Member import GameInfo
 from GameLogic.Models.HealModel import HealModel
 
 
@@ -30,5 +31,6 @@ class JacketModel(HealModel):
 
         self.game.log_event(self._event, self._initiator, self._target)
         self.game.wasted_cards.append(self.get_card)
+        self.game[self._initiator][GameInfo.IsCardSpent] = True
         self.game.gonna_die = None
         return "Игрок выжил"

@@ -1,5 +1,6 @@
 from GameLogic.Cards import Cards
 from GameLogic.Game import Event
+from GameLogic.Member import GameInfo
 from GameLogic.Models.Models import ICardModel
 
 
@@ -40,6 +41,7 @@ class HealModel(ICardModel):
 
         super().end()
         self.game.gonna_die = None
+        self.game[self._initiator][GameInfo.IsCardSpent] = True
         return "Игрок {} выжил"
 
     @property

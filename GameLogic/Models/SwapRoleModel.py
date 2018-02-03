@@ -34,6 +34,7 @@ class SwapRoleModel(ICardModel):
             self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] =\
                 self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]
             super().end()
+            self.game[self._initiator][GI.IsCardSpent] = True
             return "Игроки сменили ролью"
         return None
 

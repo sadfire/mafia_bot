@@ -48,7 +48,8 @@ class CommissarCheck(IGameView):
 
     def _end_callback(self, bot, update):
         self.game.is_day = True
-        self._next = CardView, HealModel if self.game.gonna_die != -1 else DayTalkView
+        self._next = DayTalkView if self.game.gonna_die is None or \
+                                    self.game.gonna_die == -1 else CardView, HealModel
 
         self._session.remove_markup(update)
         self._session.to_next_state()

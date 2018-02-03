@@ -79,6 +79,7 @@ class EveningManagement(IState):
     def _remove_member_callback(self, bot, update, data):
         self._evening.remove_member(int(data))
         self._update_players_message()
+        self._update_member_list()
 
     def _send_choose_member_message(self, request_result):
         self._session.send_message(chat_id=self._session.t_id,
@@ -144,7 +145,7 @@ class EveningManagement(IState):
         if len(members) == 0:
             return kbf.empty()
 
-        return mkbf(kbf.players_with_action(members, em(":new:"),
+        return mkbf(kbf.players_with_action(members, "💁🏼‍♂️",
                                             self._session.send_player_info_callback,
                                             self._add_member_callback),
                     5,
