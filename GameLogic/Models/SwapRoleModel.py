@@ -16,7 +16,7 @@ class SwapRoleModel(ICardModel):
 
     @property
     def get_card(self):
-        return Cards.SwapRole
+        return Cards.ChangeRole
 
     @property
     def get_name(self):

@@ -1,7 +1,6 @@
 import json
 from enum import Enum
 
-from GameLogic.Roles import Roles as R
 from GameLogic.Member import GameInfo as GI, Member
 from GameLogic.Roles import Roles as R, Roles
 
@@ -48,9 +47,6 @@ class Game:
 
         self.candidates = []
 
-<<<<<<< HEAD
-
-=======
     @property
     def get_first_view(self):
         if self.mode is GameMode.Beginner:
@@ -62,7 +58,6 @@ class Game:
             from GameLogic.Views.IntroductionView import IntroductionView
 
             return IntroductionView, True
->>>>>>> main_scenario_process
 
     def decode(self):
         return json.dumps((self._host_id, [player.decode() for number, player in self.players.items()],
@@ -132,13 +127,6 @@ class Game:
         self._evening += 1
         return self._evening
 
-<<<<<<< HEAD
-    def log_event(self, event: Event, initiator_players, target_player=None):
-        db = self._evening.db
-        #db.insert_event()
-
-
-=======
     @property
     def get_commissar_number(self):
         for number, player in self.players.items():
@@ -163,4 +151,3 @@ class Game:
 
         self.log_event(kill_event, role, self.gonna_die)
         self.gonna_die = None
->>>>>>> main_scenario_process

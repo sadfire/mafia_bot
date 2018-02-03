@@ -41,11 +41,11 @@ class KeyboardFactory:
         return MafiaMarkup(None)
 
     @classmethod
-    def button(cls, text, callback_data, arguments=""):
+    def button(cls, text, callback_data, arguments="") -> MafiaMarkup:
         return MafiaMarkup([[cls.button_simple(text, callback_data, arguments)]])
 
     @classmethod
-    def button_simple(cls, text, callback_data, arguments=""):
+    def button_simple(cls, text, callback_data, arguments="") -> Button:
         if arguments != "":
             if isinstance(arguments, tuple):
                 arguments = ",".join(arguments)

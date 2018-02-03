@@ -1,3 +1,4 @@
+from GameLogic.Member import GameInfo
 from GameLogic.Models.Models import ICardModel
 from GameLogic.Views.Views import IGameView
 from KeyboardUtils import KeyboardFactory as kbf, emoji_number
@@ -29,7 +30,8 @@ class CardView(IGameView):
         self._model.initiator_ask = True
         if self._model.is_initiator_needed:
             self._session.send_message(text="Номер игрока, использующего карту:",
-                                       reply_markup=self.get_alive_players_keyboard(self._init_initiator_callback))
+                                       reply_markup=self.get_alive_players_keyboard(callback=self._init_initiator_callback,
+                                                                                    is_card_spent=False))
         else:
             self._ask_target()
 
@@ -53,10 +55,11 @@ class CardView(IGameView):
         self._model.init_target(number)
         self._end_action_callback(bot, update)
 
-    def get_alive_players_keyboard(self, callback, is_target=False):
-        kb = kbf.empty()
+    def get_alive_players_keyboard(self, callback, is_target=False, is_card_spent=True):
+        kb = kbf.button("Отменить", "empty")
         for number in self._model.get_candidate(is_target):
-            kb += kbf.button(self.game[number].get_num_str, callback, number)
+            if is_card_spent or not self.game[number][GameInfo.IsCardSpent]:
+                kb += kbf.button(self.game[number].get_num_str, callback, number)
         return kb
 
     def _end_action_callback(self, bot, update):

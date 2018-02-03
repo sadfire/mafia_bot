@@ -12,7 +12,7 @@ class DayTalkModel(IGameModel):
     def _get_event(self):
         return Event.WTF
 
-    def warning(self, number: int, _=None):
+    def warning(self, number: int):
         self.game.log_event(Event.Warning, None, number)
         self.game[number][GI.Warnings] += 1
 
@@ -27,5 +27,5 @@ class DayTalkModel(IGameModel):
     def withdraw_from_voting(self, number, _=None):
         pass
 
-    def card(self, initiator: int=None, target: int=None, card: Cards=Cards.Neutral):
+    def process_card(self, initiator: int=None, target: int=None, card_id: Cards=Cards.Neutral.value):
         pass

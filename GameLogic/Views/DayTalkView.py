@@ -1,3 +1,4 @@
+from GameLogic.Cards import Cards
 from GameLogic.Models.DayTalkModel import DayTalkModel
 from GameLogic.Views.MainMenuButtons import Buttons as B, get_actions
 from GameLogic.Views.Views import IGameView
@@ -6,7 +7,7 @@ from KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 class DayTalkView(IGameView):
     def __init__(self, session, game, next_state, model=None):
-        model = DayTalkModel
+        model = DayTalkModel(game)
 
         self.action_dict = {
             B.WarningCount: [":warning: {}", self.warning_callback],
@@ -25,7 +26,7 @@ class DayTalkView(IGameView):
     def _greeting(self):
         self._message = self._session.send_message(text="Главное меню", reply_markup=self.main_kb)
 
-    def update_message(self):
+    def update_message(self) -> None:
         self._session.edit_message(self._message, text="Главное меню", reply_markup=self.main_kb)
 
     @property
@@ -41,17 +42,18 @@ class DayTalkView(IGameView):
         self._session.send_message(text=question.format(emoji_number(number_initiator), number_target),
                                    reply_markup=kbf.confirmation(no_callback=self._session.delete_message_callback,
                                                                  yes_callback=self.to_model,
-                                                                 yes_argument=(action.__name__, number_initiator, number_target)))
+                                                                 yes_argument=(
+                                                                 action.__name__, number_initiator, number_target)))
 
     def send_ask_card(self, number):
-        cards = self._model.get_cards()
-        for card in cards:
+        kb = kbf.empty()
+        for card in self._model.get_cards():
+            kb += kbf.button(Cards.get_name(card), self.ask_target, (number, card.value))
 
-        self._session.send_message(text="",
-                                   reply_markup=)
+        self._session.send_message(text="Выберите карту.", reply_markup=kb)
 
     def warning_callback(self, bot, update, number):
-        self._model.warning(number)
+        self._model.warning(number=int(number))
         self.update_message()
 
     def ban_callback(self, bot, update, number):
@@ -75,3 +77,21 @@ class DayTalkView(IGameView):
             self.update_message()
         except:
             print("Error in DayTalkView")
+
+    def ask_target(self, bot, update, number, card_id):
+        if self._model.is_target_needed(card_id):
+            kb = kbf.empty()
+            for target in self.game.get_alive_players:
+                kb += kbf.button(self.game[target].get_num_str(), self.card_process, (number, target, card_id))
+
+            self._session.send_message(text="На кого применяется карта?", reply_markup=kb)
+        else:
+            self._model.process_card(initiator=number, card_id=card_id)
+            self.update_message()
+
+    def card_process(self, bot, update, initiator, target, card_id):
+        self._model.process_card(initiator=initiator,
+                                 target=target,
+                                 card_id=card_id)
+
+        self.update_message()

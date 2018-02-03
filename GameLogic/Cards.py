@@ -5,7 +5,7 @@ class Cards(Enum):
     Neutral = 1
     Alibi = 2
     Banzai = 3
-    Vestibule = 4
+    FlakJacket = 4
     Waru = 5
     Recruitment = 6
     Zen = 7
