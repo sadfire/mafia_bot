@@ -13,7 +13,7 @@ class Cards(Enum):
     Keiko = 9
     Kitsune = 10
     Theft = 11
-    Mole = 12
+    Heal = 12
     Rat = 13
     Treatment = 14
     Leader = 15

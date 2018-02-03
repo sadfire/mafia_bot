@@ -69,7 +69,7 @@ class Member:
         elif self.game_info[GameInfo.Role] is Roles.Mafia:
             return '🕵🏼'
         elif self.game_info[GameInfo.Role] is Roles.Commissar:
-            return emojize(':cop:')
+            return '👮'
         return ""
 
     def __str__(self):

@@ -27,5 +27,8 @@ class DayTalkModel(IGameModel):
     def withdraw_from_voting(self, number, _=None):
         pass
 
-    def process_card(self, initiator: int=None, target: int=None, card_id: Cards=Cards.Neutral.value):
+    def process_card(self, initiator: int = None, target: int = None, card_id: Cards = Cards.Neutral.value):
         pass
+
+    def timer_on(self, number):
+        self.game[number][GI.IsTimer] = True

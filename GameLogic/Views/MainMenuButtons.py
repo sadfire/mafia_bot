@@ -16,11 +16,11 @@ class Buttons(Enum):
     ActiveTime = 10
 
 
-def get_actions(game, number: int, action_dict: dict) -> tuple:
+def get_actions(game, number: int, action_dict: dict, timer_deque) -> tuple:
     if game[number][GI.Warnings] == 3:
         warning_button = action_dict[Buttons.WarningBan]
     else:
-        warning_button = action_dict[Buttons.WarningCount]
+        warning_button = list(action_dict[Buttons.WarningCount])
         warning_button[0] = warning_button[0].format(game[number][GI.Warnings])
 
     if number in game.candidates:
@@ -39,6 +39,10 @@ def get_actions(game, number: int, action_dict: dict) -> tuple:
         talk_button = action_dict[Buttons.NoClock]
 
     if game[number][GI.IsTimer]:
-        timer
+        timer_button = action_dict[Buttons.ActiveTime]
+        count = timer_deque.index(number)
+        timer_button[0] = timer_button[0].formate(count)
+    else:
+        timer_button = action_dict[Buttons.Timer]
 
-    return warning_button, vote_button, card_button, talk_button
+    return warning_button, vote_button, card_button, timer_button, talk_button

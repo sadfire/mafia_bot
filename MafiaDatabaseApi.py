@@ -3,8 +3,9 @@ from enum import Enum
 import MySQLdb
 import _mysql_exceptions
 import time
-from emoji import emojize as em
 import logging
+
+from emoji import emojize
 
 from GameLogic.Evening import Evening
 from GameLogic.Member import Member
@@ -65,7 +66,7 @@ class Database:
         return self._get_member("ID", id)
 
     def _get_member(self, field, value):
-        result = self.__execute('SELECT * FROM `Members` WHERE {} = {}'.format(field, value))
+        result = self.__execute('SELECT ID, Name, IsHost, Telephone, IdTelegram, NameTelegram FROM `Members` WHERE {} = {}'.format(field, value))
         if len(result) != 1:
             return None
 
@@ -73,7 +74,12 @@ class Database:
 
     @staticmethod
     def init_member(member_raw):
-        return Member(member_raw[0], member_raw[1], member_raw[2] == 1, member_raw[3], member_raw[4])
+        return Member(id=member_raw[0],
+                      name=member_raw[1],
+                      is_host=member_raw[2] == 1,
+                      phone_number=member_raw[3],
+                      t_id=member_raw[4],
+                      t_name=member_raw[5])
 
     def get_member_statistic(self, t_id):
         results = self.__execute(
@@ -104,11 +110,11 @@ class Database:
 
     def get_member_statistic_format(self, t_id):
         result = ""
-        emoji = {Statistic.Date: em(":date:"),
-                 Statistic.Location: em(":round_pushpin:"),
+        emoji = {Statistic.Date: emojize(":date:"),
+                 Statistic.Location: emojize(":round_pushpin:"),
                  Statistic.Role: '🎭',
-                 Statistic.Card: em(":black_joker:"),
-                 Statistic.Result: em(":dart:")}
+                 Statistic.Card: emojize(":black_joker:"),
+                 Statistic.Result: emojize(":dart:")}
         for game in self.get_member_statistic(t_id):
             for stat in Statistic:
                 if stat == Statistic.Date:
@@ -172,7 +178,7 @@ class Database:
         id = self._cursor.lastrowid
         return Evening(id, host_id, self)
 
-    #TODO: Check and finalize for event without init or target players
+    # TODO: Check and finalize for event without init or target players
     def insert_event(self, game_id, event_id, event_number, init_player_id=0, target_player_id=0):
 
         self.__execute("""INSERT INTO GameEvents (ID_Games, ID_Events, ID_Init_Players, ID_Target_Players, Event_Number)

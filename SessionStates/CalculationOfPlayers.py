@@ -75,7 +75,7 @@ class CalculationOfPlayers(IState):
         message_text = "👁 🔛 👤{}".format(self._session.owner.name) + '\n\n'
 
         if len(self.players) > 10:
-            self.players = self.players[:10]
+            self.players = dict(list(self.players.items())[:10])
 
         for number, player in self.players.items():
             player.number = number
