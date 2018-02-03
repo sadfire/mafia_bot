@@ -22,8 +22,12 @@ class MafiaMarkup(InlineKeyboardMarkup):
         pass
 
     def __add__(self, other):
+
         if self.inline_keyboard is None:
             return other
+
+        if other is None or other.inline_keyboard is None:
+            return self
 
         return MafiaMarkup(self.inline_keyboard + other.inline_keyboard)
 
@@ -68,10 +72,13 @@ class KeyboardFactory:
 
     @classmethod
     def main(cls, start_evening_callback, statistick_menu_callback, players_menu_callback,
-             evening_message="Начать вечер"):
+             evening_message="Начать вечер", test_game_callback=None):
         return cls.button(f"{em(':hourglass:')} {evening_message}", callback_data=start_evening_callback.__name__) + \
                cls.button(f"{em(':bar_chart:')} Меню рейтинга", callback_data=statistick_menu_callback.__name__) + \
-               cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__)
+               cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__) + \
+               (cls.button(f"{em(':paperclip:')} Начало Тестовой игры", callback_data=test_game_callback.__name__) \
+            if test_game_callback is not None else None)
+
 
     @classmethod
     def action_line(cls, *buttons):
@@ -105,8 +112,15 @@ class KeyboardFactory:
         return kb
 
     @classmethod
-    def confirmation(cls, yes_callback, no_callback):
-        return MafiaMarkup([[cls.button_simple("✅ Да", yes_callback), cls.button_simple("❌ Нет", no_callback)]])
+    def confirmation(cls, yes_callback, no_callback, yes_message=None, no_message=None, yes_argument=""):
+        if yes_message is None:
+            yes_message = "✅ Да"
+
+        if no_message is None:
+            no_message = "❌ Нет"
+
+        return MafiaMarkup(
+            [[cls.button_simple(yes_message, yes_callback, yes_argument), cls.button_simple(no_message, no_callback)]])
 
     @classmethod
     def close_button(cls):

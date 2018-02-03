@@ -3,7 +3,7 @@ from GameLogic.Models.Models import IGameModel
 
 
 class Voting(IGameModel):
-    def __init__(self, game, is_mafia_vote):
+    def __init__(self, game, is_mafia_vote=False):
         super().__init__(game)
         self.is_mafia_vote = is_mafia_vote
         self._target = None
@@ -13,7 +13,7 @@ class Voting(IGameModel):
         if not is_mafia_vote:
             self.voters = self.game.get_alive_players(True)
         else:
-            self.votes = self.game.get_mafia
+            self.voters = self.game.get_mafia_numbers
 
     @property
     def get_candidate(self):
@@ -23,11 +23,12 @@ class Voting(IGameModel):
         pass
 
     def init_target(self, target):
-        self._target = target
+        self._target = int(target)
 
     def end(self):
-        self.game.log(self._get_action, self.voters, self._target)
+        self.game.log_event(self._get_event, self.voters, self._target)
+        self.game.gonna_die = self._target
 
     @property
-    def _get_action(self):
-        return E.MafiaKilled if self.is_mafia_vote else E.CivilianKilled
+    def _get_event(self):
+        return E.MafiaWantKilled if self.is_mafia_vote else E.CivilianWantKilled

@@ -79,6 +79,7 @@ class EveningManagement(IState):
     def _remove_member_callback(self, bot, update, data):
         self._evening.remove_member(int(data))
         self._update_players_message()
+        self._update_member_list()
 
     def _send_choose_member_message(self, request_result):
         self._session.send_message(chat_id=self._session.t_id,
@@ -139,11 +140,12 @@ class EveningManagement(IState):
         busy = self._evening.get_busy_players_id() + list(self._evening.members.keys())
         members = [member for member in self._session.db.get_regular_members_by_host(self._session.owner.id)
                    if member.id not in busy]
+        members = sorted(members, key=lambda m: m.name)
 
         if len(members) == 0:
             return kbf.empty()
 
-        return mkbf(kbf.players_with_action(members, em(":heavy_plus_sign:"),
+        return mkbf(kbf.players_with_action(members, "💁🏼‍♂️",
                                             self._session.send_player_info_callback,
                                             self._add_member_callback),
                     5,
