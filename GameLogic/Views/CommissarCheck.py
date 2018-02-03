@@ -1,6 +1,8 @@
+from GameLogic.Cards import Cards
 from GameLogic.Game import Event
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Models.HealModel import HealModel
+from GameLogic.Models.ListenerModel import ListenerModel
 from GameLogic.Roles import Roles as R
 from GameLogic.Views.CardView import CardView
 from GameLogic.Views.DayTalkView import DayTalkView
@@ -48,8 +50,11 @@ class CommissarCheck(IGameView):
 
     def _end_callback(self, bot, update):
         self.game.is_day = True
-        self._next = DayTalkView if self.game.gonna_die is None or \
-                                    self.game.gonna_die == -1 else CardView, HealModel
+        if Cards.Retirement in self.game.wasted_cards:
+            self._next = DayTalkView if self.game.gonna_die is None or \
+                                        self.game.gonna_die == -1 else CardView, HealModel
+        else:
+            self._next = CardView, ListenerModel
 
         self._session.remove_markup(update)
         self._session.to_next_state()

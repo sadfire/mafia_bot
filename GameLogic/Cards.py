@@ -35,4 +35,4 @@ class Cards(Enum):
 
     @staticmethod
     def get_name(card) -> str:
-        pass
+        return "🎴 " + card.name

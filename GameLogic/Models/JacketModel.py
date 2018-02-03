@@ -29,6 +29,7 @@ class JacketModel(HealModel):
             self.game.kill()
             return "Игрок {} умер"
 
+        self._initiator = self._target
         self.game.log_event(self._event, self._initiator, self._target)
         self.game.wasted_cards.append(self.get_card)
         self.game[self._initiator][GameInfo.IsCardSpent] = True

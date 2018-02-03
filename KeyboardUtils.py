@@ -8,7 +8,7 @@ from telegram import InlineKeyboardMarkup
 
 def emoji_number(num=None) -> object:
     emoji = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
-    if int(num) > len(emoji) -1 :
+    if num is None or int(num) > len(emoji) - 1:
         return "🆙"
 
     return emoji if num is None else emoji[int(num)]
@@ -48,7 +48,7 @@ class KeyboardFactory:
     def button_simple(cls, text, callback_data, arguments="") -> Button:
         if arguments != "":
             if isinstance(arguments, tuple):
-                arguments = ",".join(arguments)
+                arguments = ".".join([str(argument) for argument in arguments])
             arguments = '.' + str(arguments)
 
         if not isinstance(callback_data, str):

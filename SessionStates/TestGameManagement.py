@@ -1,4 +1,6 @@
 from GameLogic.Game import Game
+from GameLogic.Member import GameInfo
+from GameLogic.Roles import Roles
 
 from KeyboardUtils import KeyboardFactory as KBF
 from telegram import InlineKeyboardButton as Button
@@ -21,11 +23,15 @@ class TestGameManagement(IState):
 
         for member in members:
             self._evening.add_member(member)
-
-        players = members[:5]
-        for i in range(0, 5):
+        size = 9
+        players = members[:size]
+        for i in range(0, size):
             players[i].number = i + 1
         self._evening.games[session.t_id] = Game(session.owner, self._evening, players)
+        self._evening.games[session.t_id][1][GameInfo.Role] = Roles.Mafia
+        self._evening.games[session.t_id][2][GameInfo.Role] = Roles.Mafia
+        self._evening.games[session.t_id][3][GameInfo.Role] = Roles.Mafia
+        self._evening.games[session.t_id][4][GameInfo.Role] = Roles.Commissar
 
 
     def _start(self, bot, update):

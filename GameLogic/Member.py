@@ -19,6 +19,7 @@ class GameInfo(Enum):
     IsCardSpent = 8
     IsTalked = 9
     IsTimer = 10
+    IsExhibited = 11
 
 class Member:
     def __init__(self, id, name, is_host=False, phone_number=0, t_id=0, t_name="") -> None:

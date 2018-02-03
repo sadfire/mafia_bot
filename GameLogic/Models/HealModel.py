@@ -35,7 +35,7 @@ class HealModel(ICardModel):
     def end(self):
         if self._initiator is None:
             if Cards.FlakJacket in self.game.wasted_cards:
-                self.game.kill()
+                self.game.kill_callback()
                 return "Игрок {} умер"
             return ""
 

@@ -1,3 +1,4 @@
+from GameLogic.Cards import Cards
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Roles import Roles as R
 from GameLogic.Views.CommissarCheck import CommissarCheck
@@ -54,7 +55,8 @@ class IntroductionView(IGameView):
 
     @property
     def is_ready(self):
-        return (self.is_mafia and self.game.mafia_count == 3) or (not self.is_mafia and self.game.is_commissar)
+        return (self.is_mafia and self.game.mafia_count == 3) or (not self.is_mafia and (self.game.is_commissar or
+                                                                                         Cards.Recruitment in self.game.wasted_cards))
 
     def _end_callback(self, bot, update):
         if not self.is_ready:

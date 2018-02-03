@@ -1,6 +1,8 @@
 import json
 from enum import Enum
+from time import time
 
+from GameLogic.Cards import Cards
 from GameLogic.Member import GameInfo as GI, Member
 from GameLogic.Roles import Roles as R, Roles
 
@@ -20,6 +22,11 @@ class Event(Enum):
     FailedCommissarCheck = 10,
     Kick = 11,
     Warning = 12,
+    ToVote = 13,
+    Recruitment = 14
+    Aliby = 15,
+    Theft = 16,
+    Undercover = 17
 
 class GameMode(Enum):
     Beginner = 0,
@@ -35,7 +42,7 @@ class Game:
         self.is_day = False
         self.wasted_cards = []
         self.events = []
-
+        self.file = open("game{}.txt".format(time()), 'x')
         if isinstance(host, Member):
             self._host_id = host.id
         elif isinstance(host, int):
@@ -46,6 +53,9 @@ class Game:
             self.__init_game_info()
 
         self.candidates = []
+
+    def __del__(self):
+        self.file.close()
 
     @property
     def get_first_view(self):
@@ -60,8 +70,7 @@ class Game:
             return IntroductionView, True
 
     def decode(self):
-        return json.dumps((self._host_id, [player.decode() for number, player in self.players.items()],
-                           [candidate.decode() for candidate in self.candidates]))
+        return ""
 
     @staticmethod
     def encode(dump, evening):
@@ -80,12 +89,14 @@ class Game:
                                 GI.IsCardSpent: False,
                                 GI.IsTalked: True,
                                 GI.Warnings: 0,
-                                GI.IsTimer: False}
+                                GI.IsTimer: False,
+                                GI.IsSilence: False,
+                                GI.IsExhibited: False}
 
         self.players = dict([(player.number, player) for player in self.players])
 
     def put_on_voting(self, number):
-        self.candidates.append(self.players[number])
+        self.candidates.append(number)
 
     def clear_candidates(self):
         self.candidates.clear()
@@ -111,6 +122,9 @@ class Game:
     def mafia_count(self):
         return len(self.get_mafia_numbers)
 
+    @property
+    def get_civilian_number(self):
+        return [number for number in self.players if self.players[number][GI.Role] in (R.Civilian, R.Commissar)]
 
     @property
     def is_commissar(self):
@@ -118,10 +132,10 @@ class Game:
 
     def log_event(self, event: Event, initiator_players, target_player=None):
         self.events.append(event)
-        print(event._name_, str(initiator_players), str(target_player))
+        print(event.name, str(initiator_players), str(target_player))
+        self.file.write("{} {} {} {}".format(time(), event.name, str(initiator_players), str(target_player)))
         if event is Event.MafiaKilled:
             self.gonna_die = target_player
-
 
     def get_next_event_number(self):
         self._evening += 1
@@ -151,3 +165,7 @@ class Game:
 
         self.log_event(kill_event, role, self.gonna_die)
         self.gonna_die = None
+
+    def alive_cards(self):
+        return [card for card in [Cards.Alibi, Cards.Theft, Cards.Undercover]
+                if card not in self.wasted_cards]

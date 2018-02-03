@@ -19,9 +19,6 @@ class Voting(IGameModel):
     def get_candidate(self):
         return self.game.candidates if not self.is_mafia_vote else self.game.get_alive_players
 
-    def vote(self, voters, target):
-        pass
-
     def init_target(self, target):
         self._target = int(target)
 
