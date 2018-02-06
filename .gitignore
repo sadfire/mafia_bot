@@ -2,4 +2,4 @@
 *.pyc
 main.py
 .idea/
-*.dump
+*.json
