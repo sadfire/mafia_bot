@@ -14,6 +14,7 @@ class MafiaVotingView(IGameView):
         super().__init__(session, game, next_state, self._model)
         self._next = CommissarCheck
         self.req_initiator = None
+
     def _greeting(self):
         self._message = self._session.send_message(text="Приветствую тебя мафия.\n"
                                                         "Кого будем убивать этой ночью?",
@@ -22,7 +23,7 @@ class MafiaVotingView(IGameView):
     @property
     def vote_keyboard(self) -> MafiaMarkup:
         kb = kbf.button("🎴 Вербовка", self.ask_recruitment_callback) + kbf.button("🔪 Никого", self.kill_callback, -1)
-        for number  in self._model.get_candidate:
+        for number in self._model.get_candidate:
             kb += kbf.button(f"🔪 Игрока {emn(number)}", self.kill_confirm_callback, number)
         return kb
 
@@ -72,7 +73,6 @@ class MafiaVotingView(IGameView):
         self.game[number][GameInfo.Role] = Roles.Mafia
         self.game.log_event(Event.Recruitment, initiator_players=self.req_initiator, target_player=number)
         self._session.edit_message(self._req_message, "Завербован {}".format(emn(number)))
-
 
     def next(self):
         if not self.game.is_commissar:

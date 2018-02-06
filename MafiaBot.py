@@ -21,8 +21,8 @@ from UserHandler import UserHandler
 
 
 class Bot:
-    _evenings_dump_filename_ = "BotDump\\sessions.dump"
-    _sessions_dump_filename_ = "BotDump\\evenings.dump"
+    _evenings_dump_filename_ = "BotDump\\sessions.json"
+    _sessions_dump_filename_ = "BotDump\\evenings.json"
     _states_ = {IState.__name__: IState.__class__,
                 StartState.__name__: StartState.__class__,
                 EveningHostAdd.__name__: EveningHostAdd.__class__,

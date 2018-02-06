@@ -43,7 +43,10 @@ def get_actions(game, number: int, action_dict: dict, timer_deque) -> tuple:
 
     if game[number][GI.IsTimer]:
         timer_button = list(action_dict[Buttons.ActiveTime])
-        count = timer_deque.index(number) + 1
+        if number in timer_deque:
+            count = timer_deque.index(number) + 1
+        else:
+            count = 0
         timer_button[0] = timer_button[0].format(count)
     else:
         timer_button = action_dict[Buttons.Timer]

@@ -27,7 +27,7 @@ class CardView(IGameView):
             self._end_action_callback(None, None)
 
     def _ask_initiator_callback(self, bot, update):
-        self._model.initiator_ask = True
+        self._model.initiator_ask = Trueh
         if self._model.is_initiator_needed:
             self._session.send_message(text="Номер игрока, использующего карту:",
                                        reply_markup=self.get_alive_players_keyboard(callback=self._init_initiator_callback,
