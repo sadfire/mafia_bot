@@ -1,20 +1,19 @@
-import json
+import logging
 
 import telegram
 from telegram import Message
 
 from GameLogic.Game import Game
-from KeyboardUtils import MultiPageKeyboardFactory, KeyboardFactory
-from MafiaDatabaseApi import Database
-from MultiPageProvider import Provider as MultiPageProvider
 from SessionStates.StartState import StartState
-import logging
+from Utils.KeyboardUtils import MultiPageKeyboardFactory, KeyboardFactory
+from Utils.MafiaDatabaseApi import Database
+from Utils.MultiPageProvider import Provider as MultiPageProvider
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 class Session:
-    def __init__(self, updater, t_id, all_evenings, save_callback, database_class=Database):
+    def __init__(self, updater, t_id, all_evenings, database_class=Database):
         self.t_id = t_id
         self._updater = updater
 
@@ -29,7 +28,6 @@ class Session:
                                                      self._updater.bot.edit_message_text)
 
         self.state = StartState(self)
-        self.save_callback = save_callback
 
         self._handlers = []
 
@@ -72,8 +70,7 @@ class Session:
             self._handlers.remove(handler)
 
     def to_next_state(self):
-        self.save_callback()
-        self.state = self.state.next()
+       self.state = self.state.next()
 
     def get_evening(self, host_id=None):
         if host_id is None:

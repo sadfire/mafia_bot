@@ -1,12 +1,13 @@
+from GameLogic.GameView.CommissarCheck import CommissarCheck
+
 from GameLogic.Cards import Cards
 from GameLogic.Game import Game
 from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo
 from GameLogic.Models.Voting import Voting
 from GameLogic.Roles import Roles
-from GameLogic.Views.CommissarCheck import CommissarCheck
-from GameLogic.Views.Views import IGameView
-from KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf, emoji_number as emn
+from GameView.Views import IGameView
+from Utils.KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf, emoji_number as emn
 
 
 class MafiaVotingView(IGameView):
@@ -77,7 +78,7 @@ class MafiaVotingView(IGameView):
 
     def next(self):
         if not self.game.is_commissar:
-            from GameLogic.Views.IntroductionView import IntroductionView
+            from GameView.IntroductionView import IntroductionView
             return IntroductionView(self._session, self.game, None, False)
         else:
             return CommissarCheck(self._session, self.game, None, None)

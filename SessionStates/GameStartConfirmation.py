@@ -1,7 +1,5 @@
-from GameLogic.Views.IntroductionView import IntroductionView
-from GameLogic.Views.Views import IGameView
-from KeyboardUtils import KeyboardFactory as kbf
 from SessionStates.IStates import IState
+from Utils.KeyboardUtils import KeyboardFactory as kbf
 
 
 class GameStartConfirmation(IState):

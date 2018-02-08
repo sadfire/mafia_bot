@@ -1,10 +1,8 @@
 import json
 from enum import Enum
 
-from emoji import emojize
-
 from GameLogic.Roles import Roles
-from KeyboardUtils import emoji_number
+from Utils.KeyboardUtils import emoji_number
 
 
 class GameInfo(Enum):
@@ -32,32 +30,6 @@ class Member:
         self.game_info = None
         self.number = None
         self.t_name = t_name
-
-    def decode(self):
-        gi = None
-        if self.game_info is not None:
-            gi = {}
-            for info in self.game_info:
-                gi[info.name] = self.game_info[info] if info != GameInfo.Role else self.game_info[info]._name_
-
-        return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id, gi))
-
-    @classmethod
-    def encode(cls, raw):
-        raw = json.loads(raw)
-        member = Member(raw[0], raw[1], raw[2], raw[3], raw[4])
-        if raw[5] is not None:
-            member.game_info = {}
-
-            for raw_key, raw_info in raw[5].items():
-
-                type = getattr(GameInfo, raw_key, None)
-                if type is GameInfo.Role:
-                    raw_info = getattr(Roles, raw_info, None)
-
-                member.game_info[type] = raw_info
-
-        return member
 
     @property
     def get_num_str(self):

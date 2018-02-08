@@ -13,22 +13,6 @@ class Evening:
         self.hosts = [host_id]
         self.games = {}
 
-    def decode(self):
-        member_raw = [member.decode() for _, member in self.members.items()]
-        game_raw = dict([(host_id, game.decode()) for host_id, game in self.games.items()])
-        return json.dumps((self.id, member_raw, self.hosts, game_raw))
-
-    @staticmethod
-    def encode(dump, db):
-        tmp = json.loads(dump)
-        id = tmp[0]
-        evening = Evening(id, tmp[1][0])
-        evening.hosts = tmp[1]
-        evening.games = dict([(h_id, Game.encode(raw, evening)) for h_id, raw in tmp[2]])
-        evening.members = dict([(member.id, member) for member in [Member.encode(raw) for raw in tmp[0]]])
-
-        return evening
-
     def add_member(self, member):
         if not isinstance(member, Member) or member.id in self.members.keys():
             return False
@@ -60,7 +44,7 @@ class Evening:
         self.members.pop(member)
 
     def is_ready(self):
-        return len(self.members) > 2  # TODO More checks # TODO 2 only for debug
+        return len(self.members) > 8  # TODO More checks # TODO 2 only for debug
 
     def get_hosts_ids(self):
         return self.hosts

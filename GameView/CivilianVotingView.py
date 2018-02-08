@@ -1,4 +1,4 @@
-from GameLogic.Views.Views import IGameView
+from GameView.Views import IGameView
 
 
 class CivilianVotingView(IGameView):

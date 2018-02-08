@@ -1,7 +1,7 @@
 from GameLogic.Member import GameInfo
 from GameLogic.Models.Models import ICardModel
-from GameLogic.Views.Views import IGameView
-from KeyboardUtils import KeyboardFactory as kbf, emoji_number
+from GameView.Views import IGameView
+from Utils.KeyboardUtils import KeyboardFactory as kbf
 
 
 class CardView(IGameView):

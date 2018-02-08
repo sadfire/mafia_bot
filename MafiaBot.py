@@ -1,13 +1,10 @@
 import json
-
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from threading import Lock
 
-import CallbackProvider
-from GameLogic.Evening import Evening
-from KeyboardUtils import KeyboardFactory as kbf
-from Session import Session
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
+from GameLogic.Evening import Evening
+from Session import Session
 from SessionStates.CalculationOfPlayers import CalculationOfPlayers
 from SessionStates.EveningHostAdd import EveningHostAdd
 from SessionStates.EveningManagement import EveningManagement
@@ -16,8 +13,9 @@ from SessionStates.IStates import IState
 from SessionStates.OpenStatistic import OpenStatistic
 from SessionStates.PlayerManagement import PlayerManagement
 from SessionStates.StartState import StartState
-
 from UserHandler import UserHandler
+from Utils import CallbackProvider
+from Utils.KeyboardUtils import KeyboardFactory as kbf
 
 
 class Bot:
@@ -43,46 +41,6 @@ class Bot:
         self._wait_text = None
         self._db = database
         self._users_handler = UserHandler(self._db, self._updater)
-
-    def decode(self):
-        self._mutex.acquire()
-
-        sessions_states = {}
-        for key, session in self._sessions.items():
-            sessions_states[key] = session.state.__class__.__name__
-        evenings_decoded = []
-
-        for evening in self._evenings:
-            evenings_decoded.append(evening.decode())
-        with open(self._sessions_dump_filename_, 'w') as file:
-            json.dump(sessions_states, file)
-
-        with open(self._evenings_dump_filename_, 'w') as file:
-            json.dump(evenings_decoded, file)
-
-        self._mutex.release()
-
-    def encode(self):
-        self._mutex.acquire()
-
-        with open(self._evenings_dump_filename_, 'r') as evenings_file:
-            evenings_raw = json.loads(evenings_file.read())
-            for evening in evenings_raw:
-                self._evenings.append(Evening.encode(evening))
-
-        with open(self._sessions_dump_filename_, 'r') as session_file:
-            sessions_raw = json.load(session_file.read())
-            for t_id, raw_state in sessions_raw:
-                self._sessions[t_id] = Session(self._updater, t_id, self._evenings, self._db.__class__)
-
-                for evening in self._evenings:
-                    if t_id not in evening.hosts:
-                        self._sessions[t_id].evening = evening
-                        break
-
-                self._sessions[t_id].state = self._states_[raw_state](self._sessions[t_id])
-
-        self._mutex.release()
 
     def start(self):
         self._add_base_handlers()

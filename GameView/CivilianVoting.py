@@ -1,7 +1,7 @@
 from GameLogic.Game import Game
 from GameLogic.Models.Voting import Voting
-from GameLogic.Views.Views import IGameView
-from KeyboardUtils import KeyboardFactory as kbf, MafiaMarkup, emoji_number
+from GameView.Views import IGameView
+from Utils.KeyboardUtils import KeyboardFactory as kbf, MafiaMarkup, emoji_number
 
 
 class CivilianVoting(IGameView):

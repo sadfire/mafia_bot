@@ -13,12 +13,6 @@ class IState:
         self._greeting()
         self._next = None
 
-    def decode(self):
-        return pickle.dumps((self.__class__, self._messages.message_id, self._previous.__class__, self._next.__class__))
-
-    def encode(self):
-        return pickle.loads()
-
     def _greeting(self) -> None:
         pass
 

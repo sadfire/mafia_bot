@@ -38,16 +38,6 @@ class Game:
     def __setitem__(self, key, value):
         self.players[key] = value
 
-    def decode(self):
-        return self._host_id
-
-    @staticmethod
-    def encode(dump, evening):
-        tmp = json.loads(dump)
-        game = Game(tmp[0], evening, dict([(game_info, Member.encode(player_raw)) for game_info, player_raw in tmp[1]]))
-        game.candidates = [Member.encode(candidate) for candidate in tmp[2]]
-        return game
-
     def __init_game_info(self):
         for player in self.players:
             for info in GI:

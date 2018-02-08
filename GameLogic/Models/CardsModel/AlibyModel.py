@@ -1,5 +1,5 @@
 from GameLogic.Models.Models import ICardModel
-from GameLogic.Views.DayTalkView import DayTalkView
+from GameView.DayTalkView import DayTalkView
 
 
 class AlibyModel(ICardModel):

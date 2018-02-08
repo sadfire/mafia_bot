@@ -1,12 +1,10 @@
 import sys
-from random import random
 
 from emoji import emojize as em
 from telegram.ext import Updater, CallbackQueryHandler
 
-from CallbackProvider import Provider
-
-from KeyboardUtils import KeyboardFactory as kbf, MultiPagekbf, emoji_number
+from Utils.CallbackProvider import Provider
+from Utils.KeyboardUtils import KeyboardFactory as kbf, MultiPagekbf, emoji_number
 
 
 class KeyboardTests:

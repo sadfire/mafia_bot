@@ -1,8 +1,8 @@
 from emoji import emojize as em
 
-from KeyboardUtils import KeyboardFactory, MultiPageKeyboardFactory
 from SessionStates.CalculationOfPlayers import CalculationOfPlayers
 from SessionStates.IStates import IState
+from Utils.KeyboardUtils import KeyboardFactory, MultiPageKeyboardFactory
 
 
 class EveningHostAdd(IState):

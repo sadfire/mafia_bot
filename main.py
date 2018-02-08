@@ -1,10 +1,10 @@
 import logging
+import sys
 
 from _mysql_exceptions import OperationalError
 
 from MafiaBot import Bot
-import sys
-from MafiaDatabaseApi import Database as db
+from Utils.MafiaDatabaseApi import Database as db
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 

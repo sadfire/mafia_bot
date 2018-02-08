@@ -11,7 +11,7 @@ class SwapRoleModel(ICardModel):
 
     @property
     def next_state(self):
-        from GameLogic.Views.IntroductionView import IntroductionView
+        from GameView.IntroductionView import IntroductionView
         return IntroductionView, True
 
     @property

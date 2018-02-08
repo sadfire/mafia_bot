@@ -1,8 +1,8 @@
 from random import shuffle
 
-from KeyboardUtils import KeyboardFactory as kbf, emoji_number
-from SessionStates.IStates import IState
 from SessionStates.GameStartConfirmation import GameStartConfirmation
+from SessionStates.IStates import IState
+from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 
 class CalculationOfPlayers(IState):

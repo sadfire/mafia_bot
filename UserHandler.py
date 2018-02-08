@@ -1,8 +1,7 @@
 from emoji import emojize as em
 from telegram.ext import MessageHandler, Filters
 
-from KeyboardUtils import KeyboardFactory as KBF
-from SessionStates.IStates import get_query_text
+from Utils.KeyboardUtils import KeyboardFactory as KBF
 
 
 class UserHandler:

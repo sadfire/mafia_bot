@@ -1,10 +1,11 @@
+from GameLogic.GameView.CommissarCheck import CommissarCheck
+from GameLogic.GameView.Views import IGameView
+
 from GameLogic.Cards import Cards
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Roles import Roles as R
-from GameLogic.Views.CommissarCheck import CommissarCheck
-from GameLogic.Views.MafiaVotingView import MafiaVotingView
-from GameLogic.Views.Views import IGameView
-from KeyboardUtils import KeyboardFactory as kbf, emoji_number
+from GameView.MafiaVotingView import MafiaVotingView
+from Utils.KeyboardUtils import KeyboardFactory as kbf
 
 
 class IntroductionView(IGameView):

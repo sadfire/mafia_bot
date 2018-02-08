@@ -1,6 +1,6 @@
 import time
 
-from GameLogic.Views.Timer import Timer
+from GameView.Timer import Timer
 
 
 def timer_test():

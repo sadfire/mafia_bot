@@ -1,11 +1,9 @@
 from GameLogic.Game import Game
 from GameLogic.Member import GameInfo
 from GameLogic.Roles import Roles
-
-from KeyboardUtils import KeyboardFactory as KBF
-from telegram import InlineKeyboardButton as Button
 from SessionStates.GameStartConfirmation import GameStartConfirmation
 from SessionStates.IStates import IState
+from Utils.KeyboardUtils import KeyboardFactory as KBF
 
 
 class TestGameManagement(IState):
