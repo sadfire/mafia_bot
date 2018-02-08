@@ -7,14 +7,14 @@ def get_query_text(update):
 
 class IState:
     def __init__(self, session, previous=None):
-        self._message = None
+        self._messages = None
         self._session = session
         self._previous = previous
         self._greeting()
         self._next = None
 
     def decode(self):
-        return pickle.dumps((self.__class__, self._message.message_id, self._previous.__class__, self._next.__class__))
+        return pickle.dumps((self.__class__, self._messages.message_id, self._previous.__class__, self._next.__class__))
 
     def encode(self):
         return pickle.loads()

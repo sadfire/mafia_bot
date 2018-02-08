@@ -1,5 +1,6 @@
 from GameLogic.Cards import Cards
-from GameLogic.Game import Game, Event
+from GameLogic.Game import Game
+from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo
 from GameLogic.Models.Voting import Voting
 from GameLogic.Roles import Roles

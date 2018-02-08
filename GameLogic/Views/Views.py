@@ -17,8 +17,7 @@ class IGameView(IState):
         next_state = self._next
 
         if isinstance(next_state, tuple):
-            model = next_state[1]
-            self._next = next_state[0]
+            self._next, model = next_state
 
         return self._next(session=self._session,
                           game=self.game,

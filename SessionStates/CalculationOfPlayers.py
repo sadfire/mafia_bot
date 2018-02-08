@@ -6,7 +6,6 @@ from SessionStates.GameStartConfirmation import GameStartConfirmation
 
 
 class CalculationOfPlayers(IState):
-
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
         self._next = GameStartConfirmation

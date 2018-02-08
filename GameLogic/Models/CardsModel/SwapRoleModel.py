@@ -1,5 +1,5 @@
 from GameLogic.Cards import Cards
-from GameLogic.Game import Event
+from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Models.Models import ICardModel
 

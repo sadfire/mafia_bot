@@ -13,15 +13,15 @@ class Cards(Enum):
     Keiko = 9
     Kitsune = 10
     Theft = 11
-    Heal = 12
+    Mole = 12
     Rat = 13
-    Treatment = 14
+    Heal = 14
     Leader = 15
     Mina = 16
     Retirement = 17
     Demoman = 18
     Ghost = 19
-    Playback = 20
+    Listener = 20
     Sensei = 21
     ChangeRole = 22
     Shuriken = 23
@@ -36,3 +36,9 @@ class Cards(Enum):
     @staticmethod
     def get_name(card) -> str:
         return "🎴 " + card.name
+
+    @staticmethod
+    def is_day_card(card) -> bool:
+        if isinstance(card, int):
+            card = Cards(card)
+        return card in [Cards.Alibi, Cards.Theft, Cards.Recruitment, Cards.Undercover]

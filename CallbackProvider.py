@@ -18,8 +18,12 @@ class Provider:
         return None
 
     @classmethod
-    def get_arguments(cls, query):
+    def get_arguments(cls, query: str):
         query, *arguments = query.split('.')
+
+        for index in enumerate(arguments):
+            if arguments[index].isdigit():
+                arguments[index] = int(arguments[index])
 
         if len(arguments) == 1:
             arguments = arguments[0]

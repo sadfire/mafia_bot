@@ -1,9 +1,9 @@
 from emoji import emojize
 
 from GameLogic.Cards import Cards
-from GameLogic.Game import Event
+from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo
-from GameLogic.Models.HealModel import HealModel
+from GameLogic.Models.CardsModel.HealModel import HealModel
 
 
 class JacketModel(HealModel):
@@ -26,7 +26,7 @@ class JacketModel(HealModel):
 
     def end(self) -> str:
         if self._initiator is None and self.initiator_ask is False:
-            self.game.kill()
+            self.game.try_kill()
             return "Игрок {} умер"
 
         self._initiator = self._target

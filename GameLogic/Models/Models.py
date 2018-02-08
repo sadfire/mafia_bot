@@ -3,7 +3,7 @@ from abc import abstractmethod, abstractproperty
 from emoji import emojize
 
 from GameLogic.Cards import Cards
-from GameLogic.Game import Event
+from GameLogic.GameEvents import Event
 
 
 class IGameModel:

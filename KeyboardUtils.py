@@ -18,9 +18,6 @@ class MafiaMarkup(InlineKeyboardMarkup):
     def __init__(self, inline_keyboard, **kwargs):
         super().__init__(inline_keyboard, **kwargs)
 
-    def _to_page(self, page_num):
-        pass
-
     def __add__(self, other):
 
         if self.inline_keyboard is None:

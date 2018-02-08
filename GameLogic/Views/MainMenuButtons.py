@@ -17,6 +17,14 @@ class Buttons(Enum):
     Immunitet = 11
 
 
+class Messages(Enum):
+    Main = 0,
+    Timer = 1,
+    Vote = 2,
+    Question = 3
+    Card = 4
+
+
 def get_actions(game, number: int, action_dict: dict, timer_deque) -> tuple:
     if game[number][GI.Warnings] == 3:
         warning_button = action_dict[Buttons.WarningBan]

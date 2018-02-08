@@ -1,8 +1,9 @@
-from GameLogic.Cards import Cards
-from GameLogic.Game import Event
-from GameLogic.Member import GameInfo as GI
 from GameLogic.Models.HealModel import HealModel
-from GameLogic.Models.ListenerModel import ListenerModel
+
+from GameLogic.Cards import Cards
+from GameLogic.GameEvents import Event
+from GameLogic.Member import GameInfo as GI
+from GameLogic.Models.CardsModel.ListenerModel import ListenerModel
 from GameLogic.Roles import Roles as R
 from GameLogic.Views.CardView import CardView
 from GameLogic.Views.DayTalkView import DayTalkView

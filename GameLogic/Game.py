@@ -1,48 +1,26 @@
 import json
-from enum import Enum
-from time import time
 
-from GameLogic.Cards import Cards
+from GameLogic.Cards import Cards as C
+from GameLogic.CardsProvider import CardsProvider
+from GameLogic.GameEvents import Event
+from GameLogic.GameModes import GameMode as GM, GameModeCards
 from GameLogic.Member import GameInfo as GI, Member
 from GameLogic.Roles import Roles as R, Roles
 
 
-class Event(Enum):
-    WTF = -1
-    SuccessListen = 0,
-    FailedListen = 1,
-    SwapRole = 2,
-    MafiaWantKilled = 3,
-    CivilianWantKilled = 4,
-    Heal = 5,
-    JacketSave = 6
-    MafiaKilled = 7,
-    CivilianKilled = 8,
-    SuccessCommissarCheck = 9,
-    FailedCommissarCheck = 10,
-    Kick = 11,
-    Warning = 12,
-    ToVote = 13,
-    Recruitment = 14
-    Aliby = 15,
-    Theft = 16,
-    Undercover = 17
-
-class GameMode(Enum):
-    Beginner = 0,
-    Standard = 1,
-
-
 class Game:
-    def __init__(self, host, evening, players, mode=GameMode.Beginner) -> None:
-        self._event_number = 0
+    def __init__(self, host, evening, players, mode=GM.Beginner) -> None:
         self._evening = evening
+
         self.mode = mode
+
         self.gonna_die = None
-        self.is_day = False
-        self.wasted_cards = []
+
+        self.cards = dict([(card, True) for card in GameModeCards[mode]])
+        self.cards_provider = CardsProvider(self)
+
         self.events = []
-        self.file = open("game{}.txt".format(time()), 'x')
+        self.current_player = None
         if isinstance(host, Member):
             self._host_id = host.id
         elif isinstance(host, int):
@@ -54,23 +32,14 @@ class Game:
 
         self.candidates = []
 
-    def __del__(self):
-        self.file.close()
+    def __getitem__(self, key: int):
+        return self.players.get(key, None)
 
-    @property
-    def get_first_view(self):
-        if self.mode is GameMode.Beginner:
-            from GameLogic.Views.CardView import CardView
-            from GameLogic.Models.SwapRoleModel import SwapRoleModel
-
-            return CardView, SwapRoleModel
-        elif self.mode is GameMode.Standard:
-            from GameLogic.Views.IntroductionView import IntroductionView
-
-            return IntroductionView, True
+    def __setitem__(self, key, value):
+        self.players[key] = value
 
     def decode(self):
-        return ""
+        return self._host_id
 
     @staticmethod
     def encode(dump, evening):
@@ -81,17 +50,12 @@ class Game:
 
     def __init_game_info(self):
         for player in self.players:
-            player.game_info = {GI.IsAlive: True,
-                                GI.Card: None,
-                                GI.Role: R.Civilian,
-                                GI.IsVoting: True,
-                                GI.IsImmunitet: False,
-                                GI.IsCardSpent: False,
-                                GI.IsTalked: True,
-                                GI.Warnings: 0,
-                                GI.IsTimer: False,
-                                GI.IsSilence: False,
-                                GI.IsExhibited: False}
+            for info in GI:
+                player[info] = True
+
+            player[GI.Card] = None
+            player[GI.Role] = R.Civilian
+            player[GI.Warnings] = 0
 
         self.players = dict([(player.number, player) for player in self.players])
 
@@ -101,71 +65,28 @@ class Game:
     def clear_candidates(self):
         self.candidates.clear()
 
-    def __getitem__(self, key: int):
-        return self.players.get(key, None)
-
-    def __setitem__(self, key, value):
-        self.players[key] = value
+    def get_alive(self, role: Roles = None) -> list:
+        return [number for number, player in self.players.items() if
+                player[GI.IsAlive] and (role is None or player[GI.Role] is role)]
 
     @property
-    def get_alive_players(self, is_vote_mode=False) -> list:
-        return [number for number, player in self.players.items()
-                if player[GI.IsAlive] and
-                (True if not is_vote_mode else player[GI.IsVoting])]
+    def is_commissar(self) -> bool:
+        return len(self.get_alive(Roles.Commissar)) != 0
 
-    @property
-    def get_mafia_numbers(self):
-        return [number for number in self.players if
-                self.players[number][GI.Role] is R.Mafia and self.players[number][GI.IsAlive]]
+    def remove_from_vote(self, number):
+        pass
 
-    @property
-    def mafia_count(self):
-        return len(self.get_mafia_numbers)
+    def process_card(self, card, initiator, target) -> bool:
+        if isinstance(card, int):
+            card = C(card)
+        if card not in self.cards.keys():
+            return False
 
-    @property
-    def get_civilian_number(self):
-        return [number for number in self.players if self.players[number][GI.Role] in (R.Civilian, R.Commissar)]
+        self[initiator][GI.Card] = card
 
-    @property
-    def is_commissar(self):
-        return self.get_commissar_number is not None
+        if self.cards_provider(card, initiator, target) is not False:
+            self.log_event(card, initiator, target)
+            self.cards[card] = True
 
-    def log_event(self, event: Event, initiator_players, target_player=None):
-        self.events.append(event)
-        print(event.name, str(initiator_players), str(target_player))
-        self.file.write("{} {} {} {}".format(time(), event.name, str(initiator_players), str(target_player)))
-        if event is Event.MafiaKilled:
-            self.gonna_die = target_player
-
-    def get_next_event_number(self):
-        self._evening += 1
-        return self._evening
-
-    @property
-    def get_commissar_number(self):
-        for number, player in self.players.items():
-            if player[GI.Role] == R.Commissar:
-                return number
-        return None
-
-    def kill(self):
-        self.players[self.gonna_die][GI.IsAlive] = False
-
-        kill_event = Event.WTF
-        role = None
-        for event in self.events[::-1]:
-            if event is Event.MafiaWantKilled:
-                kill_event = Event.MafiaKilled
-                role = Roles.Mafia
-                break
-            elif event is Event.CivilianWantKilled:
-                kill_event = Event.CivilianKilled
-                role = Roles.Civilian
-                break
-
-        self.log_event(kill_event, role, self.gonna_die)
-        self.gonna_die = None
-
-    def alive_cards(self):
-        return [card for card in [Cards.Alibi, Cards.Theft, Cards.Undercover]
-                if card not in self.wasted_cards]
+    def log_event(self, event, initiator_players: int, target_player: int = None):
+        pass

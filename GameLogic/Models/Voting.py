@@ -1,4 +1,4 @@
-from GameLogic.Game import Event as E
+from GameLogic.GameEvents import Event as E
 from GameLogic.Models.Models import IGameModel
 
 

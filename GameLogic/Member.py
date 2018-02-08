@@ -10,16 +10,16 @@ from KeyboardUtils import emoji_number
 class GameInfo(Enum):
     Role = 0
     Card = 1
-    IsAlive = 2
     Number = 3
-    IsVoting = 4
-    IsSilence = 5
-    IsImmunitet = 6
-    Warnings = 7
-    IsCardSpent = 8
-    IsTalked = 9
-    IsTimer = 10
-    IsExhibited = 11
+    Warnings = 4
+
+    IsAlive = 5
+    IsTalked = 6
+    IsSilence = 7
+    IsOnVote = 8
+    IsImmunity = 9
+    IsHidden = 10
+
 
 class Member:
     def __init__(self, id, name, is_host=False, phone_number=0, t_id=0, t_name="") -> None:
@@ -38,7 +38,7 @@ class Member:
         if self.game_info is not None:
             gi = {}
             for info in self.game_info:
-                gi[info._name_] = self.game_info[info] if info != GameInfo.Role else self.game_info[info]._name_
+                gi[info.name] = self.game_info[info] if info != GameInfo.Role else self.game_info[info]._name_
 
         return json.dumps((self.id, self.name, self.is_host, self.phone_number, self.t_id, gi))
 
