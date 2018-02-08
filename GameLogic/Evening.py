@@ -15,7 +15,7 @@ class Evening:
 
     def decode(self):
         member_raw = [member.decode() for _, member in self.members.items()]
-        game_raw = dict([(host_id, game.decode()) for host_id, game in self.games])
+        game_raw = dict([(host_id, game.decode()) for host_id, game in self.games.items()])
         return json.dumps((self.id, member_raw, self.hosts, game_raw))
 
     @staticmethod
@@ -44,14 +44,14 @@ class Evening:
         return busy
 
     def get_game(self, host):
-        return self.games.get(host.id, None)
+        return self.games.get(host.t_id, None)
 
     def add_host(self, host):
         if isinstance(host, int):
             self.hosts.append(host)
 
         if isinstance(host, Member) and host.is_host:
-            self.hosts.append(host.id)
+            self.hosts.append(host.t_id)
 
     def remove_member(self, member):
         if isinstance(member, Member):

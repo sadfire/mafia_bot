@@ -5,13 +5,22 @@ class IGameView(IState):
     def _greeting(self):
         pass
 
-    def __init__(self, session, game, next_state, previous=None):
-        super(IGameView, self).__init__(session, previous)
+    def __init__(self, session, game, next_state, model=None):
         self.game = game
         self._next = next_state
         self._target = None
+        self._model = model
+        super(IGameView, self).__init__(session, None)
 
     def next(self):
-        if self._next is None:
-            return self
-        return self._next(self._session, self.game, None, self.__class__)
+        model = None
+        next_state = self._next
+
+        if isinstance(next_state, tuple):
+            model = next_state[1]
+            self._next = next_state[0]
+
+        return self._next(session=self._session,
+                          game=self.game,
+                          model=model,
+                          next_state=None)

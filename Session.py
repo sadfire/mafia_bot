@@ -1,7 +1,9 @@
 import json
 
+import telegram
 from telegram import Message
 
+from GameLogic.Game import Game
 from KeyboardUtils import MultiPageKeyboardFactory, KeyboardFactory
 from MafiaDatabaseApi import Database
 from MultiPageProvider import Provider as MultiPageProvider
@@ -39,18 +41,20 @@ class Session:
 
     def edit_message(self, message, text="", reply_markup=None):
         if isinstance(message, Message):
-            if text == "":
+            if text == "" or text is None:
                 text = message.text
 
             message = message.message_id
-
-        if isinstance(reply_markup, MultiPageKeyboardFactory):
-            return self.multi_page_provider.edit(message, text, reply_markup)
-        else:
-            return self._updater.bot.edit_message_text(chat_id=self.t_id,
-                                                       message_id=message,
-                                                       text=text,
-                                                       reply_markup=reply_markup)
+        try:
+            if isinstance(reply_markup, MultiPageKeyboardFactory):
+                return self.multi_page_provider.edit(message, text, reply_markup)
+            else:
+                return self._updater.bot.edit_message_text(chat_id=self.t_id,
+                                                           message_id=message,
+                                                           text=text,
+                                                           reply_markup=reply_markup)
+        except telegram.error.BadRequest as e:
+            logging.warning(e)
 
     def delete_message(self, message):
         if isinstance(message, Message):
@@ -78,6 +82,7 @@ class Session:
         for evening in self.all_evenings:
             if host_id in evening.hosts:
                 self.evening = evening
+                break
         else:
             self.evening = self.db.insert_evening(host_id)
             self.all_evenings.append(self.evening)
@@ -86,6 +91,9 @@ class Session:
 
     def close_evening(self):
         self.all_evenings.remove(self.evening)
+
+    def start_game(self, players):
+        self.evening.games[self.t_id] = Game(self.owner, self.evening, players)
 
     @staticmethod
     def remove_markup(update):

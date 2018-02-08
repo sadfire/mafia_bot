@@ -7,9 +7,9 @@ from telegram import InlineKeyboardMarkup
 
 
 def emoji_number(num=None) -> object:
-    emoji = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "0️⃣"]
-    if int(num) > len(emoji):
-        return em(":detective:")
+    emoji = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+    if num is None or int(num) > len(emoji) - 1:
+        return "🆙"
 
     return emoji if num is None else emoji[int(num)]
 
@@ -22,8 +22,12 @@ class MafiaMarkup(InlineKeyboardMarkup):
         pass
 
     def __add__(self, other):
+
         if self.inline_keyboard is None:
             return other
+
+        if other is None or other.inline_keyboard is None:
+            return self
 
         return MafiaMarkup(self.inline_keyboard + other.inline_keyboard)
 
@@ -37,14 +41,14 @@ class KeyboardFactory:
         return MafiaMarkup(None)
 
     @classmethod
-    def button(cls, text, callback_data, arguments=""):
+    def button(cls, text, callback_data, arguments="") -> MafiaMarkup:
         return MafiaMarkup([[cls.button_simple(text, callback_data, arguments)]])
 
     @classmethod
-    def button_simple(cls, text, callback_data, arguments=""):
+    def button_simple(cls, text, callback_data, arguments="") -> Button:
         if arguments != "":
             if isinstance(arguments, tuple):
-                arguments = ",".join(arguments)
+                arguments = ".".join([str(argument) for argument in arguments])
             arguments = '.' + str(arguments)
 
         if not isinstance(callback_data, str):
@@ -68,10 +72,13 @@ class KeyboardFactory:
 
     @classmethod
     def main(cls, start_evening_callback, statistick_menu_callback, players_menu_callback,
-             evening_message="Начать вечер"):
+             evening_message="Начать вечер", test_game_callback=None):
         return cls.button(f"{em(':hourglass:')} {evening_message}", callback_data=start_evening_callback.__name__) + \
                cls.button(f"{em(':bar_chart:')} Меню рейтинга", callback_data=statistick_menu_callback.__name__) + \
-               cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__)
+               cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__) + \
+               (cls.button(f"{em(':paperclip:')} Начало Тестовой игры", callback_data=test_game_callback.__name__) \
+            if test_game_callback is not None else None)
+
 
     @classmethod
     def action_line(cls, *buttons):
@@ -105,8 +112,15 @@ class KeyboardFactory:
         return kb
 
     @classmethod
-    def confirmation(cls, yes_callback, no_callback):
-        return MafiaMarkup([[cls.button_simple("✅ Да", yes_callback), cls.button_simple("❌ Нет", no_callback)]])
+    def confirmation(cls, yes_callback, no_callback, yes_message=None, no_message=None, yes_argument=""):
+        if yes_message is None:
+            yes_message = "✅ Да"
+
+        if no_message is None:
+            no_message = "❌ Нет"
+
+        return MafiaMarkup(
+            [[cls.button_simple(yes_message, yes_callback, yes_argument), cls.button_simple(no_message, no_callback)]])
 
     @classmethod
     def close_button(cls):

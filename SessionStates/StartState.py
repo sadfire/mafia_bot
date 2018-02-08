@@ -3,6 +3,7 @@ from SessionStates.IStates import IState
 from SessionStates.PlayerManagement import PlayerManagement
 from SessionStates.EveningManagement import EveningManagement
 from SessionStates.OpenStatistic import OpenStatistic
+from SessionStates.TestGameManagement import TestGameManagement
 
 
 class StartState(IState):
@@ -10,7 +11,7 @@ class StartState(IState):
         self._evening_connect_mode = False
         super().__init__(session, previous)
         for evening in self._session.all_evenings:
-            if self._session.owner in evening.hosts:
+            if self._session.owner.id in evening.hosts:
                 self._evening_connect_mode = True
                 self._session.evening = evening
                 break
@@ -22,7 +23,7 @@ class StartState(IState):
                                    reply_markup=KBF.main(self._evening_manager_callback,
                                                          self._open_statistic_callback,
                                                          self._player_manager_callback,
-                                                         "Меню вечера"))
+                                                         "Меню вечера", self._test_game_callback))
 
     def process_state(self, next_state, update):
         self._next = next_state
@@ -37,3 +38,6 @@ class StartState(IState):
 
     def _player_manager_callback(self, bot, update):
         self.process_state(PlayerManagement, update)
+
+    def _test_game_callback(self, bot, update):
+        self.process_state(TestGameManagement, update)

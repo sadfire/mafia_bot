@@ -2,25 +2,25 @@ from GameLogic.Cards import Cards
 from GameLogic.Game import Event
 from GameLogic.Member import GameInfo as GI
 from GameLogic.Models.Models import ICardModel
+from GameLogic.Views.DayTalkView import DayTalkView
 
 
-class SwapRoleModel(ICardModel):
+class ListenerModel(ICardModel):
     def __init__(self, game) -> None:
         super().__init__(game)
-        self._event = Event.SwapRole
+        self._event = Event.SuccessListen, Event.FailedListen
 
     @property
     def next_state(self):
-        from GameLogic.Views.IntroductionView import IntroductionView
-        return IntroductionView, True
+        return DayTalkView
 
     @property
     def get_card(self):
-        return Cards.ChangeRole
+        return Cards.Retirement
 
     @property
     def get_name(self):
-        return super().get_name + 'Смена Роли'
+        return super().get_name + 'Прослушка'
 
     def get_candidate(self, is_target):
         return self.game.get_alive_players
@@ -30,11 +30,10 @@ class SwapRoleModel(ICardModel):
         return True
 
     def end(self):
-        if self._initiator is not None and self._target is not None:
-            self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] =\
-                self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]
-            super().end()
+        if self._target is not None:
             self.game[self._initiator][GI.IsCardSpent] = True
-            return "Игроки сменили ролью"
+            self.game.wasted_cards.append(Cards.Retirement)
+            
+            return "Игрок услышал " + self.game[self._target].get_role_str
         return None
 

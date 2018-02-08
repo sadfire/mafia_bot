@@ -1,14 +1,38 @@
 from enum import Enum
 
 
-class CardsBeginner(Enum):
-    ChangeRole = 0,
-    Bugger = 1,
-    Alibi = 2,
-    FlakJacket = 3,
-    Recruitment = 4,
-    Theft = 5,
-    Heal = 6,
-    Leader = 7,
-    Undercover = 8,
-    Neutral = 9
+class Cards(Enum):
+    Neutral = 1
+    Alibi = 2
+    Banzai = 3
+    FlakJacket = 4
+    Waru = 5
+    Recruitment = 6
+    Zen = 7
+    YinYang = 8
+    Keiko = 9
+    Kitsune = 10
+    Theft = 11
+    Heal = 12
+    Rat = 13
+    Treatment = 14
+    Leader = 15
+    Mina = 16
+    Retirement = 17
+    Demoman = 18
+    Ghost = 19
+    Playback = 20
+    Sensei = 21
+    ChangeRole = 22
+    Shuriken = 23
+    Fugue = 24
+    Harakiri = 25
+    Yakuza = 26
+    Undercover = 28
+    TheLastShot = 29
+    Exposure = 30
+    DeadlyShot = 31
+
+    @staticmethod
+    def get_name(card) -> str:
+        return "🎴 " + card.name
