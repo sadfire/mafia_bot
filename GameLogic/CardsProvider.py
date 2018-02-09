@@ -1,7 +1,7 @@
 from GameLogic import Cards as C, GameInfo as GI, Roles
 
 
-class CardsProvider1:
+class CardsProvider:
     def __init__(self, game):
         self.game = game
         self.callbacks = {}

@@ -1,5 +1,5 @@
 from GameLogic import Cards as C, \
-    CardsProvider1, \
+    CardsProvider, \
     GameMode as GM, \
     GameModeCards, \
     GameInfo as GI, \
@@ -16,7 +16,7 @@ class Game:
         self.gonna_die = None
 
         self.cards = dict([(card, True) for card in GameModeCards[mode]])
-        self.cards_provider = CardsProvider1(self)
+        self.cards_provider = CardsProvider(self)
 
         self.events = []
         self.current_player = None
@@ -92,9 +92,6 @@ class Game:
 
         return CardView, UndercoverModel
 
-    def log_event(self, event, initiator_players: int, target_player: int = None):
-        pass
-
     def is_player_card_closed(self, number):
         card = self[number][GI.Card]
         if card is None:
@@ -104,3 +101,6 @@ class Game:
     @property
     def get_available_cards(self):
         return [card for card, available in self.cards.items() if available]
+
+    def log_event(self, event, initiator_players: int, target_player: int = None, result: bool = True):
+        print(event.name, initiator_players, target_player, result)

@@ -32,7 +32,7 @@ class ICardModel(IGameModel):
         self._target = int(number)
 
     def end(self):
-        if (self.is_initiator_needed and self._initiator is None) or self._target is None:
+        if (self.is_initiator_needed and self._initiator is None) or (self.is_target_needed and self._target is None):
             return
 
         self.game.log_event(self._event, self._initiator, self._target)
