@@ -3,11 +3,9 @@ import logging
 import telegram
 from telegram import Message
 
-from GameLogic.Game import Game
-from SessionStates.StartState import StartState
-from Utils.KeyboardUtils import MultiPageKeyboardFactory, KeyboardFactory
-from Utils.MafiaDatabaseApi import Database
-from Utils.MultiPageProvider import Provider as MultiPageProvider
+from GameLogic import Game
+from SessionStates import StartState
+from Utils import MPProvider, KeyboardFactory, Database, Provider as MultiPageProvider
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -23,16 +21,16 @@ class Session:
         self.all_evenings = all_evenings
         self.evening = None
 
-        self.multi_page_provider = MultiPageProvider(self.t_id,
-                                                     self._updater.bot.send_message,
-                                                     self._updater.bot.edit_message_text)
+        self.multi_page_provider = MPProvider(self.t_id,
+                                              self._updater.bot.send_message,
+                                              self._updater.bot.edit_message_text)
 
         self.state = StartState(self)
 
         self._handlers = []
 
     def send_message(self, text, reply_markup=None):
-        if isinstance(reply_markup, MultiPageKeyboardFactory):
+        if isinstance(reply_markup, MPProvider):
             return self.multi_page_provider.send(text, reply_markup)
         else:
             return self._updater.bot.send_message(chat_id=self.t_id, text=text, reply_markup=reply_markup)
@@ -44,7 +42,7 @@ class Session:
 
             message = message.message_id
         try:
-            if isinstance(reply_markup, MultiPageKeyboardFactory):
+            if isinstance(reply_markup, MPProvider):
                 return self.multi_page_provider.edit(message, text, reply_markup)
             else:
                 return self._updater.bot.edit_message_text(chat_id=self.t_id,
@@ -70,7 +68,7 @@ class Session:
             self._handlers.remove(handler)
 
     def to_next_state(self):
-       self.state = self.state.next()
+        self.state = self.state.next()
 
     def get_evening(self, host_id=None):
         if host_id is None:

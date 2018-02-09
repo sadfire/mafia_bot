@@ -1,8 +1,7 @@
-from GameLogic.Game import Game
-from GameLogic.Member import GameInfo
-from GameLogic.Roles import Roles
-from SessionStates.GameStartConfirmation import GameStartConfirmation
-from SessionStates.IStates import IState
+from GameLogic import Game, GameInfo, Roles
+
+from SessionStates import IState, GameStartConfirmation
+
 from Utils.KeyboardUtils import KeyboardFactory as KBF
 
 

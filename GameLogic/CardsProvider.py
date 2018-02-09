@@ -1,6 +1,4 @@
-from GameLogic.Cards import Cards as C
-from GameLogic.Member import GameInfo as GI
-from GameLogic.Roles import Roles
+from GameLogic import Cards as C, GameInfo as GI, Roles
 
 
 class CardsProvider:

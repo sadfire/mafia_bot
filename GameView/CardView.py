@@ -1,7 +1,7 @@
-from GameLogic.Member import GameInfo
-from GameLogic.Models.Models import ICardModel
-from GameView.Views import IGameView
-from Utils.KeyboardUtils import KeyboardFactory as kbf
+from GameLogic.Models import ICardModel
+
+from GameView import IGameView
+from Utils import kbf
 
 
 class CardView(IGameView):

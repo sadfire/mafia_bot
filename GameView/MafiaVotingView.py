@@ -1,12 +1,8 @@
-from GameLogic.GameView.CommissarCheck import CommissarCheck
+from GameLogic import Cards, Game, Event, GameInfo, Roles
+from GameView import IGameView
 
-from GameLogic.Cards import Cards
-from GameLogic.Game import Game
-from GameLogic.GameEvents import Event
-from GameLogic.Member import GameInfo
-from GameLogic.Models.Voting import Voting
-from GameLogic.Roles import Roles
-from GameView.Views import IGameView
+from GameLogic.Models import Voting
+
 from Utils.KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf, emoji_number as emn
 
 

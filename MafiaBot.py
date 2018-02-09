@@ -1,35 +1,13 @@
-import json
 from threading import Lock
 
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
-from GameLogic.Evening import Evening
 from Session import Session
-from SessionStates.CalculationOfPlayers import CalculationOfPlayers
-from SessionStates.EveningHostAdd import EveningHostAdd
-from SessionStates.EveningManagement import EveningManagement
-from SessionStates.GameStartConfirmation import GameStartConfirmation
-from SessionStates.IStates import IState
-from SessionStates.OpenStatistic import OpenStatistic
-from SessionStates.PlayerManagement import PlayerManagement
-from SessionStates.StartState import StartState
 from UserHandler import UserHandler
-from Utils import CallbackProvider
-from Utils.KeyboardUtils import KeyboardFactory as kbf
+from Utils import CallbackProvider, KeyboardFactory as kbf
 
 
 class Bot:
-    _evenings_dump_filename_ = "BotDump\\sessions.json"
-    _sessions_dump_filename_ = "BotDump\\evenings.json"
-    _states_ = {IState.__name__: IState.__class__,
-                StartState.__name__: StartState.__class__,
-                EveningHostAdd.__name__: EveningHostAdd.__class__,
-                GameStartConfirmation.__name__: GameStartConfirmation.__class__,
-                CalculationOfPlayers.__name__: CalculationOfPlayers.__class__,
-                EveningManagement.__name__: EveningManagement.__class__,
-                OpenStatistic.__name__: OpenStatistic.__class__,
-                PlayerManagement.__name__: PlayerManagement.__class__}
-
     def __init__(self, bot_key, database):
         super(Bot, self).__init__()
         self._token = bot_key

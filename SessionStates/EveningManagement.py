@@ -4,10 +4,9 @@ from emoji import emojize as em
 from telegram.error import BadRequest
 from telegram.ext import MessageHandler, Filters
 
-from SessionStates.EveningHostAdd import EveningHostAdd
-from SessionStates.IStates import IState
-from Utils.KeyboardUtils import KeyboardFactory as kbf
-from Utils.KeyboardUtils import MultiPageKeyboardFactory as mkbf
+from SessionStates import EveningHostAdd, IState
+
+from Utils.KeyboardUtils import KeyboardFactory as kbf, MultiPageKeyboardFactory as mkbf
 
 
 class EveningManagement(IState):

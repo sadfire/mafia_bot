@@ -1,5 +1,5 @@
 from GameView.CommissarCheck import CommissarCheck
-from GameView.Views import IGameView
+from GameView.IGameView import IGameView
 
 from GameLogic.Cards import Cards
 from GameLogic.Member import GameInfo as GI

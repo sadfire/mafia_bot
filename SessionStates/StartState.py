@@ -1,8 +1,5 @@
-from SessionStates.EveningManagement import EveningManagement
-from SessionStates.IStates import IState
-from SessionStates.OpenStatistic import OpenStatistic
-from SessionStates.PlayerManagement import PlayerManagement
-from SessionStates.TestGameManagement import TestGameManagement
+from SessionStates import IState, EveningManagement, OpenStatistic, PlayerManagement, TestGameManagement
+
 from Utils.KeyboardUtils import KeyboardFactory as KBF
 
 

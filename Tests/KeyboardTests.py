@@ -3,8 +3,8 @@ import sys
 from emoji import emojize as em
 from telegram.ext import Updater, CallbackQueryHandler
 
-from Utils.CallbackProvider import Provider
-from Utils.KeyboardUtils import KeyboardFactory as kbf, MultiPagekbf, emoji_number
+from Utils import Provider
+from Utils import kbf, mkbf, emoji_number
 
 
 class KeyboardTests:
@@ -31,7 +31,7 @@ class KeyboardTests:
                   kbf.double_button("Button5", "Button", "Button5", "Button") + \
                   kbf.button(text="Button6", callback_data="Button")
 
-        self.kb = MultiPagekbf(self.kb, 2, kbf.button("Закончить", "end"))
+        self.kb = mkbf(self.kb, 2, kbf.button("Закончить", "end"))
 
         self.updater.bot.send_message(chat_id=self.t_id, text="Test", reply_markup=self.kb.to_markup(0))
 

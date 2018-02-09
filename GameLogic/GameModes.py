@@ -1,7 +1,6 @@
 from enum import Enum
 
-from GameLogic.Cards import Cards as C
-from GameView.CardView import CardView
+from GameLogic import Cards as C
 
 
 class GameMode(Enum):

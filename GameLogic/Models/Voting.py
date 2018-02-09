@@ -1,5 +1,5 @@
 from GameLogic.GameEvents import Event as E
-from GameLogic.Models.Models import IGameModel
+from GameLogic.Models import IGameModel
 
 
 class Voting(IGameModel):

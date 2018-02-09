@@ -1,7 +1,7 @@
 from GameLogic.Cards import Cards
 from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo as GI
-from GameLogic.Models.Models import IGameModel
+from GameLogic.Models.IGameModel import IGameModel
 
 
 class DayTalkModel(IGameModel):

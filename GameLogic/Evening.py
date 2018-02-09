@@ -1,8 +1,4 @@
-import copy
-import json
-
-from GameLogic.Game import Game
-from GameLogic.Member import Member
+from GameLogic import Member
 
 
 class Evening:

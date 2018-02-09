@@ -1,17 +1,12 @@
-from GameLogic.Cards import Cards
-from GameLogic.GameEvents import Event
-from GameLogic.Member import GameInfo as GI
+from GameLogic import Cards, Event, GameInfo as GI
 
-from GameLogic.Models.CardsModels.HealModel import HealModel
-from GameLogic.Models.CardsModels.ListenerModel import ListenerModel
+from GameLogic.Models.Cards import ListenerModel
 
-from GameLogic.Roles import Roles as R
+from GameLogic import Roles as R
 
-from GameView.CardView import CardView
-from GameView.DayTalkView import DayTalkView
-from GameView.Views import IGameView
+from GameView import CardView, IGameView
 
-from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
+from Utils import kbf, emoji_number
 
 
 class CommissarCheck(IGameView):

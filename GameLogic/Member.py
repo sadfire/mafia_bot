@@ -1,7 +1,6 @@
-import json
 from enum import Enum
 
-from GameLogic.Roles import Roles
+from GameLogic import Roles
 from Utils.KeyboardUtils import emoji_number
 
 

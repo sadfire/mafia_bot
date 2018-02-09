@@ -1,7 +1,7 @@
 from GameLogic.Cards import Cards
 from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo
-from GameLogic.Models.Models import ICardModel
+from GameLogic.Models.ICardModel import ICardModel
 
 
 class HealModel(ICardModel):
@@ -49,12 +49,12 @@ class HealModel(ICardModel):
         from GameView.CardView import CardView
 
         if self.game.gonna_die is not None:
-            from GameLogic.Models.CardsModels.JacketModel import JacketModel
+            from GameLogic.Models.Cards.JacketModel import JacketModel
             return CardView, JacketModel
 
         if self.game.is_day:
             from GameView.DayTalkView import DayTalkView
             return DayTalkView
         else:
-            from GameLogic.Models.CardsModels.UndercoverModel import UndercoverModel
+            from GameLogic.Models.Cards.UndercoverModel import UndercoverModel
             return CardView, UndercoverModel

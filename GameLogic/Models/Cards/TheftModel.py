@@ -1,15 +1,18 @@
-from GameLogic.Models.Models import ICardModel
+from GameLogic.Models.ICardModel import ICardModel
 from GameView.DayTalkView import DayTalkView
 
 
-class AlibyModel(ICardModel):
+class TheftModel(ICardModel):
     def get_candidate(self, is_target):
-        return self.game.get_alive()
+        candidate = self.game.get_alive()
+        if is_target:
+            candidate.remove(self._initiator)
+        return candidate
 
     @property
     def get_card(self):
         from GameLogic.Cards import Cards
-        return Cards.Alibi
+        return Cards.Theft
 
     @property
     def is_target_needed(self):
