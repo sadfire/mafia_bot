@@ -1,5 +1,5 @@
-from GameLogic.Models.ICardModel import ICardModel
-from GameView.DayTalkView import DayTalkView
+from GameLogic.Models import ICardModel
+from GameView import DayTalkView
 
 
 class TheftModel(ICardModel):

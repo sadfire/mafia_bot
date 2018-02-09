@@ -1,8 +1,7 @@
 from GameLogic import Cards as C, \
-    CardsProvider, \
+    CardsProvider1, \
     GameMode as GM, \
     GameModeCards, \
-    GameModeScenario, \
     GameInfo as GI, \
     Member, \
     Roles as R
@@ -17,7 +16,7 @@ class Game:
         self.gonna_die = None
 
         self.cards = dict([(card, True) for card in GameModeCards[mode]])
-        self.cards_provider = CardsProvider(self)
+        self.cards_provider = CardsProvider1(self)
 
         self.events = []
         self.current_player = None
@@ -88,7 +87,20 @@ class Game:
             self.cards[card] = True
 
     def get_state(self, current):
-        return GameModeScenario.__call__(self.mode, current)
+        from GameView import CardView
+        from GameLogic.Models.Cards import UndercoverModel
+
+        return CardView, UndercoverModel
 
     def log_event(self, event, initiator_players: int, target_player: int = None):
         pass
+
+    def is_player_card_closed(self, number):
+        card = self[number][GI.Card]
+        if card is None:
+            return True
+        return self.cards[card]
+
+    @property
+    def get_available_cards(self):
+        return [card for card, available in self.cards.items() if available]

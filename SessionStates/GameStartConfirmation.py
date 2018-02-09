@@ -1,5 +1,5 @@
-from SessionStates.IStates import IState
-from Utils.KeyboardUtils import KeyboardFactory as kbf
+from SessionStates import IState
+from Utils import kbf
 
 
 class GameStartConfirmation(IState):
@@ -16,6 +16,7 @@ class GameStartConfirmation(IState):
         game = self._session.evening.get_game(self._session.owner)
         next_state = game.get_state(None)
         model = None
+
         if isinstance(next_state, tuple):
             model = next_state[1]
             next_state = next_state[0]

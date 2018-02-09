@@ -1,4 +1,4 @@
-from GameLogic.GameEvents import Event as E
+from GameLogic import Roles, Event as E, Cards
 from GameLogic.Models import IGameModel
 
 
@@ -13,11 +13,19 @@ class Voting(IGameModel):
         if not is_mafia_vote:
             self.voters = self.game.get_alive_players(True)
         else:
-            self.voters = self.game.get_mafia_numbers
+            self.voters = self.game.get_alive(Roles.Mafia)
+
+    @property
+    def available_cards(self):
+        cards = self.game.get_available_cards
+        if self.is_mafia_vote:
+            cards = [card for card in cards
+                     if card in [Cards.Recruitment, Cards.Mole, Cards.Rat, Cards.Kitsune, Cards.DeadlyShot]]
+        return cards
 
     @property
     def get_candidate(self):
-        return self.game.candidates if not self.is_mafia_vote else self.game.get_alive_players
+        return self.game.candidates if not self.is_mafia_vote else self.game.get_alive()
 
     def init_target(self, target):
         self._target = int(target)

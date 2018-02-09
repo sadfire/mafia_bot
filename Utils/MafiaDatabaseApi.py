@@ -7,9 +7,6 @@ import logging
 
 from emoji import emojize
 
-from GameLogic.Evening import Evening
-from GameLogic.Member import Member
-
 
 class Statistic(Enum):
     Date = 0,
@@ -75,7 +72,9 @@ class Database(metaclass=Singleton):
         return self._get_member("ID", id)
 
     def _get_member(self, field, value):
-        result = self.__execute('SELECT ID, Name, IsHost, Telephone, IdTelegram, NameTelegram FROM `Members` WHERE {} = {}'.format(field, value))
+        result = self.__execute(
+            'SELECT ID, Name, IsHost, Telephone, IdTelegram, NameTelegram FROM `Members` WHERE {} = {}'.format(field,
+                                                                                                               value))
         if len(result) != 1:
             return None
 
@@ -83,6 +82,8 @@ class Database(metaclass=Singleton):
 
     @staticmethod
     def init_member(member_raw):
+        from GameLogic import Member
+
         return Member(id=member_raw[0],
                       name=member_raw[1],
                       is_host=member_raw[2] == 1,
@@ -143,6 +144,8 @@ class Database(metaclass=Singleton):
         else:
             result = self.__execute(find_request + 'WHERE Members.Name = "{}"'.format(request))  # ToDo Нечеткий поиск
 
+        from GameLogic.Member import Member
+
         result = [Member(member[0], member[1], member[2] == 1, member[3], member[4]) for member in result]
         if len(result) != 1:
             return result
@@ -150,6 +153,9 @@ class Database(metaclass=Singleton):
         return result[0]
 
     def get_regular_members_by_host(self, id):  # TODO Regular id add
+
+        from GameLogic.Member import Member
+
         return [Member(member[0], member[1], member[2] == 1, member[3], member[4]) for member in
                 self.__execute("SELECT * FROM Members")]
 
@@ -185,6 +191,8 @@ class Database(metaclass=Singleton):
         self.__execute("""INSERT INTO Evenings (Date, ID_Location, ID_Initiator) VALUES ('{}', 1, 1)""".format(now))
         self._db.commit()
         id = self._cursor.lastrowid
+        from GameLogic import Evening
+
         return Evening(id, host_id)
 
     # TODO: Check and finalize for event without init or target players
@@ -192,3 +200,11 @@ class Database(metaclass=Singleton):
 
         self.__execute("""INSERT INTO GameEvents (ID_Games, ID_Events, ID_Init_Players, ID_Target_Players, Event_Number)
         VALUES (%s, %s, %s, %s, %s)""", (game_id, event_id, init_player_id, target_player_id, event_number))
+
+    def get_card_name(self, id):
+        result = self.__execute("SELECT Title from Cards WHERE ID = {}".format(id))
+        try:
+            result = result[0][0]
+        except IndexError:
+            result = ""
+        return result

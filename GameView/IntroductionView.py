@@ -1,30 +1,30 @@
-from GameView.CommissarCheck import CommissarCheck
-from GameView.IGameView import IGameView
+from GameView import IGameView
 
-from GameLogic.Cards import Cards
-from GameLogic.Member import GameInfo as GI
-from GameLogic.Roles import Roles as R
-from GameView.MafiaVotingView import MafiaVotingView
-from Utils.KeyboardUtils import KeyboardFactory as kbf
+from GameLogic import Cards, GameInfo as GI, Roles as R
+from Utils import KeyboardFactory as kbf
 
 
 class IntroductionView(IGameView):
     def __init__(self, session, game, next_state, model=False):
         self.is_mafia = model
+        self.is_pseudo = False
 
         if self.is_mafia:
+            from GameView import MafiaVotingView
             self._next = MafiaVotingView
         else:
+            from GameView import CommissarCheck
             self._next = CommissarCheck
 
-        if (self.is_mafia and len(game.get_players(R.Mafia)) == 3) or\
-                (not self.is_mafia and game.is_commissar):
-            self._session.to_next_state()
-            return
+        if (self.is_mafia and len(game.get_players(R.Mafia)) == 3) or (not self.is_mafia and game.is_commissar):
+            self.is_pseudo = True
 
-        super().__init__(session, game, next_state, None)
+        super().__init__(session, game, self._next, None)
 
     def _greeting(self):
+        if self.is_pseudo:
+            return
+
         role = "мафия" if self.is_mafia else "коммисар"
         self._message = self._session.send_message(text="Город засыпает, а просыпается {0}\n\n"
                                                         "Отметье, кто из игроков {0}.".format(role),

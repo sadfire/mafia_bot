@@ -5,7 +5,7 @@ from telegram import Message
 
 from GameLogic import Game
 from SessionStates import StartState
-from Utils import MPProvider, KeyboardFactory, Database, Provider as MultiPageProvider
+from Utils import MPProvider, KeyboardFactory, Database, mkbf
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -30,7 +30,7 @@ class Session:
         self._handlers = []
 
     def send_message(self, text, reply_markup=None):
-        if isinstance(reply_markup, MPProvider):
+        if isinstance(reply_markup, mkbf):
             return self.multi_page_provider.send(text, reply_markup)
         else:
             return self._updater.bot.send_message(chat_id=self.t_id, text=text, reply_markup=reply_markup)
@@ -42,7 +42,7 @@ class Session:
 
             message = message.message_id
         try:
-            if isinstance(reply_markup, MPProvider):
+            if isinstance(reply_markup, mkbf):
                 return self.multi_page_provider.edit(message, text, reply_markup)
             else:
                 return self._updater.bot.edit_message_text(chat_id=self.t_id,

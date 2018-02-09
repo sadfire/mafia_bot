@@ -35,7 +35,8 @@ class Cards(Enum):
 
     @staticmethod
     def get_name(card) -> str:
-        return "🎴 " + card.name
+        from Utils import Database
+        return "{0} {1} {0}".format("🎴", Database().get_card_name(card.value))
 
     @staticmethod
     def is_day_card(card) -> bool:

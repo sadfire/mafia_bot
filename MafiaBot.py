@@ -4,7 +4,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
 from Session import Session
 from UserHandler import UserHandler
-from Utils import CallbackProvider, KeyboardFactory as kbf
+from Utils import CB_Provider, kbf
 
 
 class Bot:
@@ -41,7 +41,7 @@ class Bot:
         else:
             providers = self, self._sessions[t_id], self._sessions[t_id].state
 
-        return CallbackProvider.Provider.process(bot, update, providers)
+        return CB_Provider.process(bot, update, providers)
 
     def _start_callback(self, bot, update):
         t_id = update.effective_chat.id

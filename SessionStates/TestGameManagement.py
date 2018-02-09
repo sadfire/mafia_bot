@@ -2,12 +2,12 @@ from GameLogic import Game, GameInfo, Roles
 
 from SessionStates import IState, GameStartConfirmation
 
-from Utils.KeyboardUtils import KeyboardFactory as KBF
+from Utils import kbf
 
 
 class TestGameManagement(IState):
     def _greeting(self):
-        self._session.send_message(text="Проверка функционала игры \n", reply_markup=KBF.button("start", self._start))
+        self._session.send_message(text="Проверка функционала игры \n", reply_markup=kbf.button("Начать", self._start))
 
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
@@ -20,7 +20,7 @@ class TestGameManagement(IState):
 
         for member in members:
             self._evening.add_member(member)
-        size = 9
+        size = 10
         players = members[:size]
         for i in range(0, size):
             players[i].number = i + 1
@@ -29,7 +29,6 @@ class TestGameManagement(IState):
         self._evening.games[session.t_id][2][GameInfo.Role] = Roles.Mafia
         self._evening.games[session.t_id][3][GameInfo.Role] = Roles.Mafia
         self._evening.games[session.t_id][4][GameInfo.Role] = Roles.Commissar
-
 
     def _start(self, bot, update):
         self._next = GameStartConfirmation

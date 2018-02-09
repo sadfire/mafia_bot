@@ -50,16 +50,3 @@ GameModeCards = {GameMode.Beginner:
                  GameMode.LetsTalk: (),
                  GameMode.Macedonia: (),
                  GameMode.Yakudza: ()}
-
-class GameModeScenario:
-    @classmethod
-    def __call__(cls, mode, card):
-        return getattr(cls, mode.name, card)
-
-    @classmethod
-    def Beginner(cls, current_state=None):
-        pass
-
-    @classmethod
-    def Standard(cls):
-        pass

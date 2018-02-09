@@ -1,5 +1,7 @@
 from abc import abstractproperty, abstractmethod
 
+from emoji import emojize
+
 from GameLogic.Cards import Cards
 from GameLogic.Models.IGameModel import IGameModel
 
@@ -20,7 +22,7 @@ class ICardModel(IGameModel):
         return self._target
 
     @property
-    def is_initiator_needed(self):
+    def is_initiator_needed(self) -> bool:
         return True
 
     def init_initiator(self, number):
@@ -30,21 +32,32 @@ class ICardModel(IGameModel):
         self._target = int(number)
 
     def end(self):
-        self.game.log_event(self._event, self._initiator, self._target)
-        self.game.wasted_cards.append(self.get_card)
+        if (self.is_initiator_needed and self._initiator is None) or self._target is None:
+            return
 
-    @abstractproperty
-    def get_card(self):
+        self.game.log_event(self._event, self._initiator, self._target)
+        self.game.cards[self.get_card] = False
+
+    @property
+    @abstractmethod
+    def get_card(self) -> Cards:
         return Cards.Neutral
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def next_state(self):
         pass
 
-    @abstractproperty
-    def is_target_needed(self):
+    @property
+    @abstractmethod
+    def is_target_needed(self) -> bool:
         return True
 
     @abstractmethod
-    def get_candidate(self, is_target):
+    def get_candidate(self, is_target) -> list:
         pass
+
+    @property
+    def get_name(self) -> str:
+        return Cards.get_name(self.get_card)
+

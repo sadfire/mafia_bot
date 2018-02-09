@@ -49,12 +49,12 @@ class HealModel(ICardModel):
         from GameView.CardView import CardView
 
         if self.game.gonna_die is not None:
-            from GameLogic.Models.Cards.JacketModel import JacketModel
+            from GameLogic.Models.Cards.Jacket import JacketModel
             return CardView, JacketModel
 
         if self.game.is_day:
             from GameView.DayTalkView import DayTalkView
             return DayTalkView
         else:
-            from GameLogic.Models.Cards.UndercoverModel import UndercoverModel
+            from GameLogic.Models.Cards.Undercover import UndercoverModel
             return CardView, UndercoverModel

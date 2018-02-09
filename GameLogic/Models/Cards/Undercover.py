@@ -1,7 +1,4 @@
 from GameLogic.Models.ICardModel import ICardModel
-from GameView.DayTalkView import DayTalkView
-from GameView.IntroductionView import IntroductionView
-
 
 class UndercoverModel(ICardModel):
     def get_candidate(self, is_target):
@@ -18,5 +15,6 @@ class UndercoverModel(ICardModel):
 
     @property
     def next_state(self):
+        from GameView.IntroductionView import IntroductionView
         return IntroductionView, True
 

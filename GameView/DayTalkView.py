@@ -2,9 +2,6 @@ from enum import Enum
 
 from GameLogic import Cards
 
-from GameLogic.Models.Cards import HealModel
-from GameLogic.Models.Cards import TheftModel
-from GameLogic.Models.Cards import UndercoverModel
 from GameLogic.Models import DayTalkModel
 
 from GameView import CivilianVotingView, Buttons as B, get_actions, Messages as M, Timer, IGameView, CardView
@@ -21,7 +18,7 @@ class TalkState(Enum):
 class DayTalkView(IGameView):
     def __init__(self, session, game, next_state, model=None):
         model = DayTalkModel(game)
-        self.messages = {M.Main: None,
+        self._messages = {M.Main: None,
                          M.Timer: None,
                          M.Vote: None,
                          M.Card: None}
@@ -112,10 +109,13 @@ class DayTalkView(IGameView):
         self.game.current_player = number_initiator
 
         if card is Cards.Alibi:
+            from GameLogic.Models.Cards import AlibyModel
             self._next = AlibyModel
         elif card is Cards.Theft:
+            from GameLogic.Models.Cards import TheftModel
             self._next = TheftModel
         elif card is Cards.Undercover:
+            from GameLogic.Models.Cards import UndercoverModel
             self._next = UndercoverModel
 
         self._next = CardView, self._next
@@ -142,6 +142,7 @@ class DayTalkView(IGameView):
     def end_for_vote_callback(self, bot, update):
         if len(self.game.candidates) == 0:
             self._session.edit_message(self._messages[M.Main], "Никто не выставлен")
+            from GameLogic.Models.Cards import UndercoverModel
             self._next = CardView, UndercoverModel
         else:
             self._session.edit_message(self._messages[M.Main], "Выставлены:\n\n".format("\n".join(self.game.candidates)))
@@ -152,6 +153,8 @@ class DayTalkView(IGameView):
     def kill_callback(self, bot, update, number):
         number = int(number)
         self._model.try_kill(number)
+
+        from GameLogic.Models.Cards import HealModel
 
         self._next = CardView, HealModel
         self._session.to_next_state()

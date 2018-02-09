@@ -1,7 +1,7 @@
 from enum import Enum
 
 from GameLogic import Roles
-from Utils.KeyboardUtils import emoji_number
+from Utils import emoji_number
 
 
 class GameInfo(Enum):

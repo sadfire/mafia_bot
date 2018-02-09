@@ -7,11 +7,16 @@ def get_query_text(update):
 
 class IState:
     def __init__(self, session, previous=None):
+        if getattr(self, "is_pseudo", None) is None:
+            self.is_pseudo = False
+
         self._message = None
         self._session = session
         self._previous = previous
         self._greeting()
-        self._next = None
+
+        if getattr(self, "_next", None) is None:
+            self._next = None
 
     def _greeting(self) -> None:
         pass
@@ -38,6 +43,8 @@ class IState:
         return self._next(self._session, self.__class__)
 
     def back_callback(self, bot, update):
+        self._session.delete_message_callback(bot, update)
+
         if self._previous is None:
             return self
         return self._previous(self._session, None)

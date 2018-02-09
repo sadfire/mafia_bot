@@ -4,7 +4,8 @@ from GameLogic.Models.Cards import ListenerModel
 
 from GameLogic import Roles as R
 
-from GameView import CardView, IGameView
+from GameView.CardView import CardView
+from GameView.IGameView import IGameView
 
 from Utils import kbf, emoji_number
 

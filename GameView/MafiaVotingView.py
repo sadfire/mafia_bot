@@ -23,9 +23,15 @@ class MafiaVotingView(IGameView):
 
     @property
     def vote_keyboard(self) -> MafiaMarkup:
-        kb = kbf.button("🎴 Вербовка", self.ask_recruitment_callback) + kbf.button("🔪 Никого", self.kill_callback, -1)
+        kb = kbf.empty()
+        for card in self._model.available_cards:
+            kb += kbf.button(Cards.get_name(card), self.ask_mafia_card, card.value)
+
+        kb += kbf.button("🔪 Никого", self.kill_callback, -1)
+
         for number in self._model.get_candidate:
             kb += kbf.button(f"🔪 Игрока {emn(number)}", self.kill_confirm_callback, number)
+
         return kb
 
     def update_callback(self, bot, update):
@@ -52,11 +58,16 @@ class MafiaVotingView(IGameView):
         self._model.end()
         self._session.to_next_state()
 
-    def ask_recruitment_callback(self, bot, update):
-        kb = kbf.empty()
-        for number in self.game.get_mafia_numbers:
-            kb += kbf.button(emn(number), self.recruitment_callback, number)
-        self._req_message = self._session.send_message("Кто вербует?", reply_markup=kb)
+    def ask_mafia_card(self, bot, update, card_id):
+        self._session.delete_message_callback(bot, update)
+
+        card = Cards(card_id)
+        if card is Cards.Recruitment:
+            from GameView import CardView
+            from GameLogic.Models.Cards import RecruitmentModel
+            self._next = CardView, RecruitmentModel
+            self._session.to_next_state()
+        #  TODO Add other night cards
 
     def recruitment_callback(self, bot, update, mafia_number):
         mafia_number = int(mafia_number)

@@ -13,7 +13,7 @@ class IGameModel:
 
     @property
     def get_name(self):
-        return emojize(':flower_playing_cards:') + " "
+        return ""
 
     @abstractmethod
     def end(self) -> str:

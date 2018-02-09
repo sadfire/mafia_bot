@@ -1,6 +1,8 @@
 from emoji import emojize as em
 
-from SessionStates import CalculationOfPlayers, IState
+from SessionStates import IState
+from SessionStates.CalculationOfPlayers import CalculationOfPlayers
+
 from Utils.KeyboardUtils import KeyboardFactory, MultiPageKeyboardFactory
 
 

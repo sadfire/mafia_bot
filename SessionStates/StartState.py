@@ -1,6 +1,6 @@
 from SessionStates import IState, EveningManagement, OpenStatistic, PlayerManagement, TestGameManagement
 
-from Utils.KeyboardUtils import KeyboardFactory as KBF
+from Utils import kbf
 
 
 class StartState(IState):
@@ -17,7 +17,7 @@ class StartState(IState):
         appeal = self._session.owner.name if self._session.owner.name != "" else "Ведущий"
         self._session.send_message(text="Приветствую {}. \n "
                                         "Я бот учета статистики игры мафия {}".format(appeal, '🕵'),
-                                   reply_markup=KBF.main(self._evening_manager_callback,
+                                   reply_markup=kbf.main(self._evening_manager_callback,
                                                          self._open_statistic_callback,
                                                          self._player_manager_callback,
                                                          "Меню вечера", self._test_game_callback))
