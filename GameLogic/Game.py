@@ -3,7 +3,7 @@ import json
 from GameLogic.Cards import Cards as C
 from GameLogic.CardsProvider import CardsProvider
 from GameLogic.GameEvents import Event
-from GameLogic.GameModes import GameMode as GM, GameModeCards
+from GameLogic.GameModes import GameMode as GM, GameModeCards, GameModeScenario
 from GameLogic.Member import GameInfo as GI, Member
 from GameLogic.Roles import Roles as R, Roles
 
@@ -40,6 +40,7 @@ class Game:
 
     def __init_game_info(self):
         for player in self.players:
+            player.game_info = {}
             for info in GI:
                 player[info] = True
 
@@ -59,9 +60,17 @@ class Game:
         return [number for number, player in self.players.items() if
                 player[GI.IsAlive] and (role is None or player[GI.Role] is role)]
 
+    def get_players(self, role: Roles = None) -> list:
+        return [number for number, players in self.players.items() if (role is None or players[GI.Role] is role)]
+
     @property
     def is_commissar(self) -> bool:
         return len(self.get_alive(Roles.Commissar)) != 0
+
+    @property
+    def commissar_cards(self):
+        if C.Retirement in self.cards.keys():
+            return [C.Retirement]
 
     def remove_from_vote(self, number):
         pass
@@ -77,6 +86,9 @@ class Game:
         if self.cards_provider(card, initiator, target) is not False:
             self.log_event(card, initiator, target)
             self.cards[card] = True
+
+    def get_state(self, current):
+        return GameModeScenario.__call__(self.mode, current)
 
     def log_event(self, event, initiator_players: int, target_player: int = None):
         pass

@@ -21,9 +21,9 @@ class Provider:
     def get_arguments(cls, query: str):
         query, *arguments = query.split('.')
 
-        for index in enumerate(arguments):
-            if arguments[index].isdigit():
-                arguments[index] = int(arguments[index])
+        for index, argument in enumerate(arguments):
+            if argument .isdigit():
+                arguments[index] = int(argument)
 
         if len(arguments) == 1:
             arguments = arguments[0]

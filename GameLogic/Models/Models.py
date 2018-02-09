@@ -29,6 +29,10 @@ class ICardModel(IGameModel):
         self.initiator_ask = False
 
     @property
+    def is_wasted(self):
+        return not self.game.cards[self.get_card]
+
+    @property
     def target(self):
         return self._target
 

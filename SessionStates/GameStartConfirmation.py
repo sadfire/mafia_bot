@@ -14,7 +14,7 @@ class GameStartConfirmation(IState):
 
     def next(self):
         game = self._session.evening.get_game(self._session.owner)
-        next_state = game.get_first_view
+        next_state = game.get_state(None)
         model = None
         if isinstance(next_state, tuple):
             model = next_state[1]

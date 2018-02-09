@@ -46,14 +46,15 @@ class HealModel(ICardModel):
 
     @property
     def next_state(self):
+        from GameView.CardView import CardView
+
         if self.game.gonna_die is not None:
-            from GameView.CardView import CardView
-            from GameLogic.Models.CardsModel.JacketModel import JacketModel
+            from GameLogic.Models.CardsModels.JacketModel import JacketModel
             return CardView, JacketModel
 
         if self.game.is_day:
             from GameView.DayTalkView import DayTalkView
             return DayTalkView
         else:
-            from GameView.MafiaVotingView import MafiaVotingView
-            return MafiaVotingView
+            from GameLogic.Models.CardsModels.UndercoverModel import UndercoverModel
+            return CardView, UndercoverModel

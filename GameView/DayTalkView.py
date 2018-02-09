@@ -1,17 +1,16 @@
 from enum import Enum
 
-from GameLogic.GameView.CardView import CardView
-from GameLogic.GameView.CivilianVotingView import CivilianVotingView
-from GameLogic.GameView.MainMenuButtons import Buttons as B, get_actions, Messages as M
-from GameLogic.GameView.Views import IGameView
-from GameLogic.Models.HealModel import HealModel
-from GameLogic.Models.TheftModel import TheftModel
-
 from GameLogic.Cards import Cards
-from GameLogic.Models.CardsModel.AlibyModel import AlibyModel
-from GameLogic.Models.CardsModel.UndercoverModel import UndercoverModel
+from GameLogic.Models.CardsModels.AlibyModel import AlibyModel
+from GameLogic.Models.CardsModels.HealModel import HealModel
+from GameLogic.Models.CardsModels.TheftModel import TheftModel
+from GameLogic.Models.CardsModels.UndercoverModel import UndercoverModel
 from GameLogic.Models.DayTalkModel import DayTalkModel
+from GameView.CardView import CardView
+from GameView.CivilianVotingView import CivilianVotingView
+from GameView.MainMenuButtons import Buttons as B, get_actions, Messages as M
 from GameView.Timer import Timer
+from GameView.Views import IGameView
 from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 

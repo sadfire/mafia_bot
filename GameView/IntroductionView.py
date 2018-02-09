@@ -1,5 +1,5 @@
-from GameLogic.GameView.CommissarCheck import CommissarCheck
-from GameLogic.GameView.Views import IGameView
+from GameView.CommissarCheck import CommissarCheck
+from GameView.Views import IGameView
 
 from GameLogic.Cards import Cards
 from GameLogic.Member import GameInfo as GI
@@ -11,11 +11,18 @@ from Utils.KeyboardUtils import KeyboardFactory as kbf
 class IntroductionView(IGameView):
     def __init__(self, session, game, next_state, model=False):
         self.is_mafia = model
-        super().__init__(session, game, next_state, None)
+
         if self.is_mafia:
             self._next = MafiaVotingView
         else:
             self._next = CommissarCheck
+
+        if (self.is_mafia and len(game.get_players(R.Mafia)) == 3) or\
+                (not self.is_mafia and game.is_commissar):
+            self._session.to_next_state()
+            return
+
+        super().__init__(session, game, next_state, None)
 
     def _greeting(self):
         role = "мафия" if self.is_mafia else "коммисар"

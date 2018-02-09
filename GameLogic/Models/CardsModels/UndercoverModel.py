@@ -1,5 +1,6 @@
 from GameLogic.Models.Models import ICardModel
 from GameView.DayTalkView import DayTalkView
+from GameView.IntroductionView import IntroductionView
 
 
 class UndercoverModel(ICardModel):
@@ -17,5 +18,5 @@ class UndercoverModel(ICardModel):
 
     @property
     def next_state(self):
-        return DayTalkView
+        return IntroductionView, True
 

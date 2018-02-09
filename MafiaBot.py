@@ -85,8 +85,7 @@ class Bot:
     def _init_session(self, bot, update):
         self._sessions[update.effective_chat.id] = Session(updater=self._updater,
                                                            t_id=update.effective_chat.id,
-                                                           all_evenings=self._evenings,
-                                                           save_callback=self.decode)
+                                                           all_evenings=self._evenings)
 
     def check_evening(self, host_id):
         for evening in self._evenings:

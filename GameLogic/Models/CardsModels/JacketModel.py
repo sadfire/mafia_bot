@@ -3,7 +3,7 @@ from emoji import emojize
 from GameLogic.Cards import Cards
 from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo
-from GameLogic.Models.CardsModel.HealModel import HealModel
+from GameLogic.Models.CardsModels.HealModel import HealModel
 
 
 class JacketModel(HealModel):

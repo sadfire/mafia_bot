@@ -24,7 +24,6 @@ class EveningManagement(IState):
         self._handler = self._session.add_handler(MessageHandler(Filters.text, self._add_member_handler))
         self._evening = self._session.evening
         self._members_message = None
-
         # TODO Evening manager connect mode
 
         if self._evening is None:

@@ -14,7 +14,10 @@ class MafiaVotingView(IGameView):
     def __init__(self, session, game: Game, next_state, model):
         self._model = Voting(game, True)
         super().__init__(session, game, next_state, self._model)
-        self._next = CommissarCheck
+
+        from GameView.IntroductionView import IntroductionView
+        self._next = IntroductionView, False
+
         self.req_initiator = None
 
     def _greeting(self):
@@ -75,10 +78,3 @@ class MafiaVotingView(IGameView):
         self.game[number][GameInfo.Role] = Roles.Mafia
         self.game.log_event(Event.Recruitment, initiator_players=self.req_initiator, target_player=number)
         self._session.edit_message(self._req_message, "Завербован {}".format(emn(number)))
-
-    def next(self):
-        if not self.game.is_commissar:
-            from GameView.IntroductionView import IntroductionView
-            return IntroductionView(self._session, self.game, None, False)
-        else:
-            return CommissarCheck(self._session, self.game, None, None)

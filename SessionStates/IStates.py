@@ -7,7 +7,7 @@ def get_query_text(update):
 
 class IState:
     def __init__(self, session, previous=None):
-        self._messages = None
+        self._message = None
         self._session = session
         self._previous = previous
         self._greeting()

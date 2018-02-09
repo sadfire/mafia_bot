@@ -7,6 +7,12 @@ from Utils.KeyboardUtils import KeyboardFactory as kbf
 class CardView(IGameView):
     def __init__(self, session, game, next_state, model: ICardModel.__class__):
         self._model = model(game)
+        self._next = self._model.next_state
+
+        if self._model.is_wasted:
+            self._session.to_next_state()
+            return
+
         super().__init__(session, game, next_state, self._model)
 
     def _greeting(self):
@@ -27,7 +33,7 @@ class CardView(IGameView):
             self._end_action_callback(None, None)
 
     def _ask_initiator_callback(self, bot, update):
-        self._model.initiator_ask = Trueh
+        self._model.initiator_ask = True
         if self._model.is_initiator_needed:
             self._session.send_message(text="Номер игрока, использующего карту:",
                                        reply_markup=self.get_alive_players_keyboard(callback=self._init_initiator_callback,
@@ -64,7 +70,6 @@ class CardView(IGameView):
 
     def _end_action_callback(self, bot, update):
         text = self._model.end()
-        self._next = self._model.next_state
 
         if text is None or text == "":
             self._session.delete_message(self._message)
