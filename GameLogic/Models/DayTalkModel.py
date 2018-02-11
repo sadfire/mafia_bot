@@ -31,8 +31,8 @@ class DayTalkModel(IGameModel):
             return "{} Выставлен".format(self.game[target].get_num_str)
         return "Вы уже выставляли игрока"
 
-    def process_card(self, initiator: int = None, target: int = None, card_id: Cards = Cards.Neutral):
-        self.game.process_card(card_id, initiator, target)
+    def process_card(self, initiator: int = None, target: int = None, card: Cards = Cards.Neutral, result: bool=True):
+        self.game.process_card(card=card, initiator=initiator, target=target, result=result)
 
     def is_can_talk(self, number: int):
         return self.game[number][GI.IsTalked] and not self.game[number][GI.IsSilence]

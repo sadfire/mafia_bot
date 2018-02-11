@@ -27,13 +27,15 @@ class CommissarCheck(IGameView):
 
     @property
     def get_commissar_kb(self):
-        players = list(self.game.get_alive_players)
-        players.remove(self.game.get_commissar_number)
+        players = list(self.game.get_alive())
+        if self.game.is_commissar:
+            commissar = self.game.get_alive(R.Commissar)[0]
+            players.remove(commissar)
 
         kb = kbf.empty()
 
         cards = self.game.commissar_cards
-        if len(cards) != 0:
+        if cards is not None and len(cards) != 0:
             for card in cards:
                 kb += kbf.button(Cards.get_name(card), self.card_callback, card.value)
 
@@ -46,13 +48,13 @@ class CommissarCheck(IGameView):
 
     def check_callback(self, bot, update, number):
         number = int(number)
-        if self.game[number][GI.IsImmunitet]:
+        if self.game[number][GI.IsImmunity]:
             check_result = False
         else:
             check_result = self.game[number][GI.Role] == R.Mafia
 
         self.game.log_event(Event.SuccessCommissarCheck if check_result else Event.FailedCommissarCheck,
-                            self.game.get_commissar_number,
+                            self.game.get_commissar,
                             number)
 
         text = "{} - 🕵️!" if check_result else "{} это мирный житель 🤷🏼‍♂️."

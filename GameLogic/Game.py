@@ -55,9 +55,16 @@ class Game:
     def clear_candidates(self):
         self.candidates.clear()
 
-    def get_alive(self, role: R = None) -> list:
+    def get_alive(self, role: R = None):
         return [number for number, player in self.players.items() if
                 player[GI.IsAlive] and (role is None or player[GI.Role] is role)]
+
+    @property
+    def get_commissar(self):
+        commisars = self.get_alive(R.Commissar)
+        if len(commisars) is None:
+            return None
+        return commisars[0]
 
     def get_players(self, role: R = None) -> list:
         return [number for number, players in self.players.items() if (role is None or players[GI.Role] is role)]
@@ -74,7 +81,7 @@ class Game:
     def remove_from_vote(self, number):
         pass
 
-    def process_card(self, card, initiator, target) -> bool:
+    def process_card(self, card, initiator, target, result) -> bool:
         if isinstance(card, int):
             card = C(card)
         if card not in self.cards.keys():
@@ -83,7 +90,7 @@ class Game:
         self[initiator][GI.Card] = card
 
         if self.cards_provider(card, initiator, target) is not False:
-            self.log_event(card, initiator, target)
+            self.log_event(card, initiator, target, result)
             self.cards[card] = True
 
     def get_state(self, current):
