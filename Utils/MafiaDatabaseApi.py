@@ -57,6 +57,13 @@ class Database(metaclass=Singleton):
 
         return self._cursor.fetchall()
 
+    def check_permission(self, *, t_name=None, t_id=None):
+        if t_id is not None:
+            return self.check_permission_by_telegram_id(t_id)
+        if t_name is not None:
+            return self.check_permission_by_telegram_name(t_name)
+        return None
+
     def check_permission_by_telegram_id(self, t_id):
         result = self.__execute('SELECT * FROM `Members` WHERE IdTelegram = {0} AND IsHost = TRUE'.format(t_id))
         return len(result) == 1

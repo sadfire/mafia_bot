@@ -3,7 +3,7 @@ import sys
 
 from _mysql_exceptions import OperationalError
 
-from MafiaBot import Bot
+from mafia_bot import Bot
 from Utils.MafiaDatabaseApi import Database as db
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
