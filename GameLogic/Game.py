@@ -1,10 +1,4 @@
-from GameLogic import Cards as C, \
-    CardsProvider, \
-    GameMode as GM, \
-    GameModeCards, \
-    GameInfo as GI, \
-    Member, \
-    Roles as R
+from GameLogic import Cards as C, CardsProvider, GameMode as GM, GameModeCards, GameInfo as GI, Member, Roles as R
 
 
 class Game:
@@ -20,6 +14,7 @@ class Game:
 
         self.events = []
         self.current_player = None
+
         if isinstance(host, Member):
             self._host_id = host.id
         elif isinstance(host, int):
