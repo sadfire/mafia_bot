@@ -4,6 +4,7 @@ from GameLogic import Cards as C
 
 
 class GameMode(Enum):
+    SUPER = -1,
     Beginner = 0,
     Standard = 1,
     Killer = 2,
@@ -12,7 +13,8 @@ class GameMode(Enum):
     Yakudza = 5
 
 
-GameModeCards = {GameMode.Beginner:
+GameModeCards = {GameMode.SUPER: tuple(C),
+                 GameMode.Beginner:
                      (C.Neutral,
                       C.Alibi,
                       C.FlakJacket,
