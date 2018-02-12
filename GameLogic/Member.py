@@ -11,8 +11,8 @@ class GameInfo(Enum):
     Warnings = 4
 
     IsAlive = 5
-    IsTalked = 6
-    IsSilence = 7
+    IsNotTalked = 6
+    IsNotSilence = 7
     IsOnVote = 8
     IsNotImmunity = 9
     IsNotHidden = 10

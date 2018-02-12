@@ -4,7 +4,8 @@ from GameLogic import Cards
 
 from GameLogic.Models import DayTalkModel
 
-from GameView import CivilianVotingView, Buttons as B, get_actions, Messages as M, Timer, IGameView, CardView
+from GameView import CivilianVotingView, Buttons as B, get_actions, Messages as M, IGameView, CardView
+from GameView.Timer import Timer
 
 from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
@@ -62,7 +63,7 @@ class DayTalkView(IGameView):
             name = self.game[number].get_num_str + self.game[number].get_role_str
             buttons = get_actions(self.game, number, self.action_dict, self._model.additional_time)
 
-            kb += kbf.action_line((name, self._session.send_player_info_callback, self.game[number].id), *buttons)
+            kb += kbf.action_line((name, self._session.send_player_info_callback, number), *buttons)
 
         if self._model.is_day_can_end:
             kb += kbf.button("Перейти к голосованию", self.end_for_vote_callback)
@@ -170,16 +171,18 @@ class DayTalkView(IGameView):
 
         if self._model.is_can_talk(number):
             self.timer = Timer(60, self.update_timer, self.stop_timer_callback, self.switch_timer_callback)
-            self.messages[M.Timer] = self._session.send_message("Минута игрока")
+            self._messages[M.Timer] = self._session.send_message("Минута игрока")
             self.update_timer()
         else:
             self._session.send_message("Нельзя начать минуту этого игрока.", reply_markup=kbf.close_button())
 
     def update_timer(self):
-        kb = kbf.action_line(("⏸" if self.timer.is_active else "▶", self.switch_timer_callback), ("⏹", self.stop_timer_callback))
+        kb = kbf.action_line(("⏸" if self.timer.is_active else "▶", self.switch_timer_callback, self.current_player), ("⏹", self.stop_timer_callback))
         self._session.edit_message(self._messages[M.Timer], "Минута игрока {}".format(self.game[self.current_player].get_num_str), kb)
 
-    def switch_timer_callback(self, bot=None, update=None):
+    def switch_timer_callback(self, bot=None, update=None, number=None):
+        if number != self.current_player:
+            return
         self.timer.is_active = not self.timer.is_active
 
     def stop_timer_callback(self, bot=None, update=None):

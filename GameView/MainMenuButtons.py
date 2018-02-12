@@ -58,7 +58,7 @@ def get_timer_button(action_dict, number, timer_deque):
 
 
 def get_clock_button(action_dict, game, number):
-    if game[number][GI.IsTalked]:
+    if game[number][GI.IsNotTalked]:
         talk_button = action_dict[Buttons.Clock]
     else:
         talk_button = action_dict[Buttons.NoClock]

@@ -39,7 +39,8 @@ class DayTalkModel(IGameModel):
         self.game.process_card(card=card, initiator=initiator, target=target, result=result)
 
     def is_can_talk(self, number: int):
-        return self.game[number][GI.IsTalked] and not self.game[number][GI.IsSilence]
+        player = self.game[number]
+        return player[GI.IsNotTalked] and player[GI.IsNotSilence]
 
     @property
     def get_possible_cards(self, is_day=True):
@@ -48,7 +49,7 @@ class DayTalkModel(IGameModel):
     @property
     def is_day_can_end(self):
         for number in self.game.get_alive():
-            if self.game[number][GI.IsTalked]:
+            if not self.game[number][GI.IsNotTalked]:
                 return False
         return True
 

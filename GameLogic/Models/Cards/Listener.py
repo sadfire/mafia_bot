@@ -34,6 +34,7 @@ class ListenerModel(ICardModel):
             return [number for number in self.game.get_alive() if number != self._initiator]
 
         return [number for number in self.game.get_alive(Roles.Commissar, is_card_closed=True, is_role_reverse=True)]
+
     @property
     def is_target_needed(self):
         return True
