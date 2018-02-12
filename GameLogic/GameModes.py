@@ -4,7 +4,8 @@ from GameLogic import Cards as C
 
 
 class GameMode(Enum):
-    SUPER = 1
+    Low = 0
+    Super = 1
     Beginner = 2
     Standard = 3
     Macedonia = 4
@@ -18,7 +19,8 @@ class GameMode(Enum):
         return "{0} {1} {0}".format("🍷", Database().get_game_mode_name(mode.value))
 
 
-GameModeCards = {GameMode.SUPER: tuple(C),
+GameModeCards = {GameMode.Low: (),
+                 GameMode.Super: tuple(C),
                  GameMode.Beginner:
                      (C.Neutral,
                       C.Alibi,

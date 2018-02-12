@@ -1,8 +1,14 @@
+from GameView import IGameView
 from SessionStates import IState
 from Utils import kbf
 
 
-class GameStartConfirmation(IState):
+class GameStartConfirmation(IGameView):
+    def __init__(self, session, previous=None, is_greeting=True):
+        game = session.evening.get_game(session.owner)
+        super().__init__(session, game, None, None, is_greeting)
+        self._next = game.get_state(None)
+
     def _greeting(self) -> None:
         self._session.send_message(text="Вы готовы начать игру?",
                                    reply_markup=kbf.confirmation(self.start_game_callback,
@@ -11,18 +17,3 @@ class GameStartConfirmation(IState):
     def start_game_callback(self, _, update):
         self._session.remove_markup(update)
         self._session.to_next_state()
-
-    def next(self):
-        game = self._session.evening.get_game(self._session.owner)
-        next_state = game.get_state(None)
-        model = None
-
-        if isinstance(next_state, tuple):
-            model = next_state[1]
-            next_state = next_state[0]
-
-        self._next = next_state
-        return self._next(session=self._session,
-                          game=game,
-                          model=model,
-                          next_state=None)

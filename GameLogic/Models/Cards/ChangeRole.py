@@ -8,7 +8,7 @@ class ChangeRoleModel(ICardModel):
 
     @property
     def is_wasted(self):
-        return self.game.course_count != 0
+        return super().is_wasted or self.game.course_count != 0
 
     @property
     def next_state(self):

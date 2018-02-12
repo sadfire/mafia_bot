@@ -3,7 +3,7 @@ from Utils.MafiaDatabaseApi import Database as db
 
 
 class Game:
-    def __init__(self, host, evening, players, mode=GM.SUPER) -> None:
+    def __init__(self, host, evening, players, mode=GM.Low) -> None:
         self.course_count = 0
         self._evening = evening
 

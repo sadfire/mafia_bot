@@ -19,10 +19,7 @@ class HealModel(ICardModel):
 
     @property
     def is_wasted(self):
-        if super().is_wasted:
-            return True
-
-        return self.game.gonna_die is None
+        return super().is_wasted or self.game.gonna_die is None
 
     @property
     def target(self):
