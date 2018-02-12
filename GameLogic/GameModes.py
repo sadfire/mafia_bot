@@ -4,13 +4,18 @@ from GameLogic import Cards as C
 
 
 class GameMode(Enum):
-    SUPER = -1,
-    Beginner = 0,
-    Standard = 1,
-    Killer = 2,
-    LetsTalk = 3,
+    SUPER = 1
+    Beginner = 2
+    Standard = 3
     Macedonia = 4
-    Yakudza = 5
+    Killer = 5
+    LetsTalk = 6
+    Yakudza = 7
+
+    @staticmethod
+    def get_name(mode) -> str:
+        from Utils import Database
+        return "{0} {1} {0}".format("🍷", Database().get_game_mode_name(mode.value))
 
 
 GameModeCards = {GameMode.SUPER: tuple(C),

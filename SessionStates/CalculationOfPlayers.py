@@ -1,14 +1,14 @@
 from random import shuffle
 
-from SessionStates import GameStartConfirmation, IState
-
+from SessionStates import IState
+from SessionStates.ChooseGameMode import ChooseGameMode
 from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 
 class CalculationOfPlayers(IState):
     def __init__(self, session, previous=None):
         super().__init__(session, previous)
-        self._next = GameStartConfirmation
+        self._next = ChooseGameMode
         self._active_number = None
         self._active_id = None
 
