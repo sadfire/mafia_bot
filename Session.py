@@ -1,7 +1,7 @@
 import logging
 
 import telegram
-from telegram import Message
+from telegram import Message, Update
 
 from GameLogic import Game
 from SessionStates import StartState
@@ -41,6 +41,9 @@ class Session:
                 text = message.text
 
             message = message.message_id
+        elif isinstance(message, Update):
+            message = message.effective_message.message_id
+
         try:
             if isinstance(reply_markup, mkbf):
                 return self.multi_page_provider.edit(message, text, reply_markup)
