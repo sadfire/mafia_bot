@@ -17,13 +17,11 @@ class TalkState(Enum):
 
 class DayTalkView(IGameView):
     def __init__(self, session, game, next_state, model=None):
-        model = DayTalkModel(game)
         self._messages = {M.Main: None,
                          M.Timer: None,
                          M.Vote: None,
                          M.Card: None}
 
-        self.timer_deque = []
         self.timer = None
         self.action_dict = \
             {
@@ -41,7 +39,7 @@ class DayTalkView(IGameView):
             }
 
         self.current_player = None
-        super().__init__(session, game, next_state, model)
+        super().__init__(session, game, next_state, DayTalkModel(game))
 
     def _greeting(self):
         self._messages[M.Main] = self._session.send_message(text="Главное меню")
@@ -56,9 +54,9 @@ class DayTalkView(IGameView):
     def main_kb(self):
         kb = kbf.empty()
 
-        for number in self.game.get_alive_players:
+        for number in self.game.get_alive():
             name = self.game[number].get_num_str + self.game[number].get_role_str
-            buttons = get_actions(self.game, number, self.action_dict, self.timer_deque)
+            buttons = get_actions(self.game, number, self.action_dict, self._model.additional_time)
 
             kb += kbf.action_line((name, self._session.send_player_info_callback, self.game[number].id), *buttons)
 
@@ -123,7 +121,7 @@ class DayTalkView(IGameView):
 
     def timer_callback(self, bot, update, number):
         number = int(number)
-        self.timer_deque.append(number)
+        self._model.additional_time.append(number)
         self._model.timer_on(number)
         self.update_message()
 

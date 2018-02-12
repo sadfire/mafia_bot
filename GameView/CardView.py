@@ -19,7 +19,7 @@ class CardView(IGameView):
                          model=self._model)
 
     def _greeting(self):
-        text = f"Будет ли использована карта {self._model.get_name}"
+        text = f"Будет ли использована {self._model.get_name}"
 
         if self._model.target is not None:
             text += f", на игрока {self.game[self._model.target].get_num_str}"
@@ -69,7 +69,7 @@ class CardView(IGameView):
     def get_alive_players_keyboard(self, callback, is_target):
         kb = kbf.button("Отменить", "empty")
         for number in self._model.get_candidate(is_target):
-            if self.game.is_player_card_closed(number):
+            if is_target or self.game.is_player_card_closed(number):
                 kb += kbf.button(self.game[number].get_num_str, callback, number)
 
         return kb

@@ -18,7 +18,7 @@ class CardsProvider:
         pass
 
     def Alibi(self, _, target=None):
-        self.game[target][GI.IsImmunity] = True
+        self.game[target][GI.IsNotImmunity] = True
         self.game.remove_from_vote(target)
 
     def Banzai(self, initiator, target):
@@ -100,8 +100,8 @@ class CardsProvider:
         pass
 
     def Undercover(self, initiator, target):
-        self.game[initiator][GI.IsImmunity] = True
-        self.game[initiator][GI.IsHidden] = True
+        self.game[initiator][GI.IsNotImmunity] = True
+        self.game[initiator][GI.IsNotHidden] = True
 
     def TheLastShot(self, initiator, target):
         pass

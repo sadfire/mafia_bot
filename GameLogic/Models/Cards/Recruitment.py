@@ -1,4 +1,4 @@
-from GameLogic import Cards, Roles
+from GameLogic import Cards, Roles as R, GameInfo as GI
 from GameLogic.Models import ICardModel
 
 
@@ -17,4 +17,6 @@ class RecruitmentModel(ICardModel):
         return Cards.Recruitment
 
     def get_candidate(self, is_target) -> list:
-        return self.game.get_alive(Roles.Civilian if is_target else Roles.Mafia)
+        if is_target:
+            return [number for number in self.game.get_alive() if self.game[number][GI.Role] is not R.Mafia]
+        return self.game.get_alive(R.Mafia)

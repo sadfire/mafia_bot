@@ -9,6 +9,7 @@ from GameLogic import Cards as C, \
 
 class Game:
     def __init__(self, host, evening, players, mode=GM.Beginner) -> None:
+        self.day_count = 0
         self._evening = evening
 
         self.mode = mode
@@ -20,6 +21,7 @@ class Game:
 
         self.events = []
         self.current_player = None
+
         if isinstance(host, Member):
             self._host_id = host.id
         elif isinstance(host, int):
@@ -55,9 +57,11 @@ class Game:
     def clear_candidates(self):
         self.candidates.clear()
 
-    def get_alive(self, role: R = None):
+    def get_alive(self, role: R = None, *, is_card_closed=None):
         return [number for number, player in self.players.items() if
-                player[GI.IsAlive] and (role is None or player[GI.Role] is role)]
+                player[GI.IsAlive] and
+                (role is None or player[GI.Role] is role) and
+                (is_card_closed is None or player[GI.Card] is None)]
 
     @property
     def get_commissar(self):

@@ -9,9 +9,9 @@ class IGameView(IState):
 
     def __init__(self, session, game, next_state, model=None):
         self.game = game
+        self._model = model
         self._next = next_state
         self._target = None
-        self._model = model
         super(IGameView, self).__init__(session, None)
 
     def next(self):

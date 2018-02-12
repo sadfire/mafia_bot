@@ -5,6 +5,10 @@ from GameLogic.Models.IGameModel import IGameModel
 
 
 class DayTalkModel(IGameModel):
+    def __init__(self, game):
+        super().__init__(game)
+        self.additional_time = []
+
     def end(self):
         pass
 

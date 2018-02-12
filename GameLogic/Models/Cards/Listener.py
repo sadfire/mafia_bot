@@ -16,14 +16,13 @@ class ListenerModel(ICardModel):
 
     @property
     def get_card(self):
-        return Cards.Retirement
-
-    @property
-    def get_name(self):
-        return super().get_name + 'Прослушка'
+        return Cards.Listener
 
     def get_candidate(self, is_target):
-        return self.game.get_alive_players
+        if not is_target:
+            return self.game.get_alive(is_card_closed=True)
+
+        return self.game.get_alive()
 
     @property
     def is_target_needed(self):
@@ -31,9 +30,8 @@ class ListenerModel(ICardModel):
 
     def end(self):
         if self._target is not None:
-            self.game[self._initiator][GI.IsCardSpent] = True
-            self.game.wasted_cards.append(Cards.Retirement)
-            
+            super().end()
             return "Игрок услышал " + self.game[self._target].get_role_str
+
         return None
 
