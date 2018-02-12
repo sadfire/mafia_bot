@@ -36,6 +36,9 @@ class Member:
 
     @property
     def get_role_str(self):
+        if self.game_info is None:
+            return ""
+
         if self.game_info[GameInfo.Role] is Roles.Civilian:
             return '👨🏼‍💼'
         elif self.game_info[GameInfo.Role] is Roles.Mafia:
@@ -45,7 +48,7 @@ class Member:
         return ""
 
     def __str__(self):
-        return self.name
+        return self.name + self.get_role_str
 
     def __eq__(self, other):
         return self.id == other.id

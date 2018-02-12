@@ -27,13 +27,5 @@ class ChangeRoleModel(ICardModel):
         return True
 
     def end(self):
-        if self._initiator is not None and self._target is not None:
-            self._role_swap()
-            super().end()
-            return "Обмен ролями состоялся"
+        return "Обмен ролями состоялся" if super().end() else None
 
-        return None
-
-    def _role_swap(self):
-        self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] = \
-            self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]

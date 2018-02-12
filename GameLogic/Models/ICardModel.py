@@ -38,7 +38,7 @@ class ICardModel(IGameModel):
 
     def end(self):
         if (self.is_initiator_needed and self._initiator is None) or (self.is_target_needed and self._target is None):
-            return
+            return False
 
         self.game.process_card(card=self.get_card,
                                initiator=self._initiator,
@@ -46,6 +46,7 @@ class ICardModel(IGameModel):
                                result=self.get_result)
 
         self.game.cards[self.get_card] = False
+        return True
 
     @property
     @abstractmethod

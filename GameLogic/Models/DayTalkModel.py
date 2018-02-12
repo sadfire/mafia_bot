@@ -47,7 +47,7 @@ class DayTalkModel(IGameModel):
 
     @property
     def is_day_can_end(self):
-        for number in self.game.get_alive_players:
+        for number in self.game.get_alive():
             if self.game[number][GI.IsTalked]:
                 return False
         return True
