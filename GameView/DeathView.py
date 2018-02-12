@@ -7,19 +7,18 @@ from Utils import kbf
 
 class DeathView(IGameView):
     def __init__(self, session, game, next_state, model=None):
-        super().__init__(session, game, next_state, model)
+        super().__init__(session, game, next_state, DeathModel(game))
 
         self._init_next()
-        self._model = DeathModel(self.game)
 
-        if self.game.gonna_die is None:
+        if self._model.is_pseudo:
             if self._message is not None:
                 self._session.delete_message(self._message)
 
             self.is_pseudo = True
             return
 
-        if len(self.cards_keyboard) == 0:
+        if len(self._model.get_cards) == 0:
             self._session.edit_message(self._message, self._model.end(),
                                        reply_markup=kbf.button("Закончить посмертные 10 секунд.", self.end_callback))
             return
