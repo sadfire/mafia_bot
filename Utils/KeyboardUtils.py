@@ -73,9 +73,8 @@ class KeyboardFactory:
         return cls.button(f"{em(':hourglass:')} {evening_message}", callback_data=start_evening_callback.__name__) + \
                cls.button(f"{em(':bar_chart:')} Меню рейтинга", callback_data=statistick_menu_callback.__name__) + \
                cls.button(f"{em(':paperclip:')} Меню игроков", callback_data=players_menu_callback.__name__) + \
-               (cls.button(f"{em(':paperclip:')} Начало Тестовой игры", callback_data=test_game_callback.__name__) \
-            if test_game_callback is not None else None)
-
+               (cls.button(f"{em(':paperclip:')} Начало Тестовой игры", callback_data=test_game_callback.__name__)
+                if test_game_callback is not None else None)
 
     @classmethod
     def action_line(cls, *buttons):
