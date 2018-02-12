@@ -1,8 +1,10 @@
 from GameLogic import Cards as C, CardsProvider, GameMode as GM, GameModeCards, GameInfo as GI, Member, Roles as R
+from Utils.MafiaDatabaseApi import Database as db
 
 
 class Game:
     def __init__(self, host, evening, players, mode=GM.Beginner) -> None:
+        self.day_count = 0
         self._evening = evening
 
         self.mode = mode
@@ -25,6 +27,8 @@ class Game:
             self.__init_game_info()
 
         self.candidates = []
+
+        self.id = db().insert_game(host.id, evening.id)
 
     def __getitem__(self, key: int):
         return self.players.get(key, None)
@@ -50,9 +54,18 @@ class Game:
     def clear_candidates(self):
         self.candidates.clear()
 
-    def get_alive(self, role: R = None) -> list:
+    def get_alive(self, role: R = None, *, is_card_closed=None):
         return [number for number, player in self.players.items() if
-                player[GI.IsAlive] and (role is None or player[GI.Role] is role)]
+                player[GI.IsAlive] and
+                (role is None or player[GI.Role] is role) and
+                (is_card_closed is None or player[GI.Card] is None)]
+
+    @property
+    def get_commissar(self):
+        commisars = self.get_alive(R.Commissar)
+        if len(commisars) is None:
+            return None
+        return commisars[0]
 
     def get_players(self, role: R = None) -> list:
         return [number for number, players in self.players.items() if (role is None or players[GI.Role] is role)]
@@ -69,7 +82,7 @@ class Game:
     def remove_from_vote(self, number):
         pass
 
-    def process_card(self, card, initiator, target) -> bool:
+    def process_card(self, card, initiator, target, result) -> bool:
         if isinstance(card, int):
             card = C(card)
         if card not in self.cards.keys():
@@ -78,7 +91,7 @@ class Game:
         self[initiator][GI.Card] = card
 
         if self.cards_provider(card, initiator, target) is not False:
-            self.log_event(card, initiator, target)
+            self.log_event(card, initiator, target, result)
             self.cards[card] = True
 
     def get_state(self, current):

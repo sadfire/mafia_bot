@@ -5,7 +5,10 @@ from GameLogic.Models.ICardModel import ICardModel
 class ChangeRoleModel(ICardModel):
     def __init__(self, game) -> None:
         super().__init__(game)
-        self._event = Event.SwapRole
+
+    @property
+    def is_wasted(self):
+        return self.game.day_count != 0
 
     @property
     def next_state(self):
@@ -16,12 +19,8 @@ class ChangeRoleModel(ICardModel):
     def get_card(self):
         return Cards.ChangeRole
 
-    @property
-    def get_name(self):
-        return super().get_name + 'Смена Роли'
-
     def get_candidate(self, is_target):
-        return self.game.get_alive_players
+        return self.game.get_alive()
 
     @property
     def is_target_needed(self):
@@ -29,10 +28,12 @@ class ChangeRoleModel(ICardModel):
 
     def end(self):
         if self._initiator is not None and self._target is not None:
-            self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] =\
-                self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]
+            self._role_swap()
             super().end()
-            self.game[self._initiator][GI.IsCardSpent] = True
-            return "Игроки сменили ролью"
+            return "Обмен ролями состоялся"
+
         return None
 
+    def _role_swap(self):
+        self.game[self._initiator][GI.Role], self.game[self._target][GI.Role] = \
+            self.game[self._target][GI.Role], self.game[self._initiator][GI.Role]

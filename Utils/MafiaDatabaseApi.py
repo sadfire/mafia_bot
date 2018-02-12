@@ -57,6 +57,13 @@ class Database(metaclass=Singleton):
 
         return self._cursor.fetchall()
 
+    def check_permission(self, *, t_name=None, t_id=None):
+        if t_id is not None:
+            return self.check_permission_by_telegram_id(t_id)
+        if t_name is not None:
+            return self.check_permission_by_telegram_name(t_name)
+        return None
+
     def check_permission_by_telegram_id(self, t_id):
         result = self.__execute('SELECT * FROM `Members` WHERE IdTelegram = {0} AND IsHost = TRUE'.format(t_id))
         return len(result) == 1
@@ -170,6 +177,11 @@ class Database(metaclass=Singleton):
 
     def get_games(self, t_id, game, host):
         pass
+
+    def insert_game(self, host_id, evening_id ):
+        self.__execute("""INSERT INTO Games (IdHost, IdEvening) VALUES (%s,%s)""", (host_id, evening_id))
+        self._db.commit()
+        return self._cursor.lastrowid
 
     def get_hosts(self):
         return [self.init_member(raw) for raw in self.__execute("SELECT * FROM Members WHERE IsHost = 1")]

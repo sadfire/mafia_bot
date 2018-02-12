@@ -10,8 +10,7 @@ class Event(Enum):
     JacketSave = 6
     MafiaKilled = 7,
     CivilianKilled = 8,
-    SuccessCommissarCheck = 9,
-    FailedCommissarCheck = 10,
+    CommissarCheck = 9,
     Kick = 11,
     Warning = 12,
     ToVote = 13

@@ -32,14 +32,15 @@ def get_actions(game, number: int, action_dict: dict, timer_deque) -> tuple:
         warning_button = list(action_dict[Buttons.WarningCount])
         warning_button[0] = warning_button[0].format(game[number][GI.Warnings])
 
-    if game[number][GI.IsImmunitet]:
+    if game[number][GI.IsNotImmunity]:
         vote_button = action_dict[Buttons.Immunitet]
     elif number in game.candidates:
         vote_button = action_dict[Buttons.NoVoting]
     else:
         vote_button = action_dict[Buttons.Voting]
 
-    if game[number][GI.IsCardSpent]:
+    card = game[number][GI.Card]
+    if card is not None and game.cards[card]:
         card_button = action_dict[Buttons.NoCard]
     else:
         card_button = action_dict[Buttons.Card]
@@ -49,7 +50,7 @@ def get_actions(game, number: int, action_dict: dict, timer_deque) -> tuple:
     else:
         talk_button = action_dict[Buttons.NoClock]
 
-    if game[number][GI.IsTimer]:
+    if number in timer_deque:
         timer_button = list(action_dict[Buttons.ActiveTime])
         if number in timer_deque:
             count = timer_deque.index(number) + 1

@@ -1,4 +1,6 @@
+from GameLogic import GameInfo
 from GameLogic.Models.ICardModel import ICardModel
+
 
 class UndercoverModel(ICardModel):
     def get_candidate(self, is_target):
@@ -15,6 +17,12 @@ class UndercoverModel(ICardModel):
 
     @property
     def next_state(self):
-        from GameView.IntroductionView import IntroductionView
-        return IntroductionView, True
+        from GameView import CardView
+        from GameLogic.Models.Cards import ChangeRoleModel
 
+        return CardView, ChangeRoleModel
+
+    def end(self):
+        super().end()
+        if self._initiator is not None:
+            self.game[self._initiator][GameInfo.IsNotHidden] = False
