@@ -40,8 +40,8 @@ class IntroductionView(IGameView):
         return kb + kbf.button("Закончить", self._end_callback)
 
     def set_role_callback(self, bot, update, number):
-        number = int(number)
-        if self.is_mafia and self.game.mafia_count == 3 and number not in self.game.get_mafia_numbers:
+        mafias = self.game.get_alive(R.Mafia)
+        if self.is_mafia and len(mafias) == 3 and number not in mafias:
             self._session.send_message("Слишком много мафий", reply_markup=kbf.close_button())
             return
 
@@ -52,7 +52,7 @@ class IntroductionView(IGameView):
                 self._session.send_message("Мафия не может быть комиссаром", reply_markup=kbf.close_button())
                 return
             if self.game.is_commissar:
-                self.game[self.game.get_commissar_number][GI.Role] = R.Civilian
+                self.game[self.game.get_commissar][GI.Role] = R.Civilian
 
             self.game[number][GI.Role] = R.Commissar if self.game[number][GI.Role] is not R.Commissar else R.Civilian
 
@@ -63,7 +63,7 @@ class IntroductionView(IGameView):
 
     @property
     def is_ready(self):
-        return (self.is_mafia and self.game.mafia_count == 3) or (not self.is_mafia and (self.game.is_commissar or
+        return (self.is_mafia and self.game.get_mafia_count == 3) or (not self.is_mafia and (self.game.is_commissar or
                                                                                          Cards.Recruitment in self.game.wasted_cards))
 
     def _end_callback(self, bot, update):
