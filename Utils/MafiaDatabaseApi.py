@@ -220,3 +220,11 @@ class Database(metaclass=Singleton):
         except IndexError:
             result = ""
         return result
+
+    def get_game_mode_name(self, mode_id, ru_mode=True):
+        result = self.__execute("SELECT Title{} from GameModes WHERE ID = {}".format("" if ru_mode else "EN", mode_id))
+        try:
+            result = result[0][0]
+        except IndexError:
+            result = ""
+        return result
