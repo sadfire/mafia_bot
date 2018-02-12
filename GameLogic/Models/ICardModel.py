@@ -45,9 +45,6 @@ class ICardModel(IGameModel):
                                target=self._target,
                                result=self.get_result)
 
-        #db().insert_event(self.game.id, self._event, 1, self._initiator, self._target)
-
-        self.game.process_card(self.get_card, self._initiator, self._target, self.get_result)
         self.game.cards[self.get_card] = False
 
     @property
