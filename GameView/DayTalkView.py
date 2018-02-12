@@ -35,7 +35,11 @@ class DayTalkView(IGameView):
                 B.NoClock: ("🔇", "empty"),
                 B.Timer: ("⏲", self.timer_callback),
                 B.Immunitet: ("🤞", "empty"),
-                B.ActiveTime: ["⏲ {}", "empty"]
+                B.ActiveTime: ["⏲ {}", "empty"],
+                B.Aliby: ("👯", "empty"),
+                B.Ghost: ("👻", "empty"),
+                B.Leader: ("🤴🏼", "empty"),
+                B.Undercover: ("💂🏼", "empty")
             }
 
         self.current_player = None
