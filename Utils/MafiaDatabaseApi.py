@@ -178,6 +178,11 @@ class Database(metaclass=Singleton):
     def get_games(self, t_id, game, host):
         pass
 
+    def insert_game(self, host_id, evening_id ):
+        self.__execute("""INSERT INTO Games (IdHost, IdEvening) VALUES (%s,%s)""", (host_id, evening_id))
+        self._db.commit()
+        return self._cursor.lastrowid
+
     def get_hosts(self):
         return [self.init_member(raw) for raw in self.__execute("SELECT * FROM Members WHERE IsHost = 1")]
 
