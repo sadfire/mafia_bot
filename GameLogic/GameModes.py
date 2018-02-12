@@ -50,3 +50,5 @@ GameModeCards = {GameMode.Beginner:
                  GameMode.LetsTalk: (),
                  GameMode.Macedonia: (),
                  GameMode.Yakudza: ()}
+
+AfterDeathCards = (C.TheLastShot, C.Mina, C.Demoman, C.Exposure)

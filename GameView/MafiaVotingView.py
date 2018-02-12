@@ -1,14 +1,14 @@
 from GameLogic import Cards, Game, Event, GameInfo, Roles
 from GameView import IGameView
 
-from GameLogic.Models import Voting
+from GameLogic.Models import VotingModel
 
 from Utils.KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf, emoji_number as emn
 
 
 class MafiaVotingView(IGameView):
     def __init__(self, session, game: Game, next_state, model):
-        self._model = Voting(game, True)
+        self._model = VotingModel(game, True)
         super().__init__(session, game, next_state, self._model)
 
         from GameView.IntroductionView import IntroductionView

@@ -1,8 +1,6 @@
 from GameLogic import GameInfo as GI, Event, Cards, Roles
 from GameLogic.Models import ICardModel
 
-from GameView.DayTalkView import DayTalkView
-
 
 class ListenerModel(ICardModel):
     def __init__(self, game) -> None:
@@ -18,7 +16,10 @@ class ListenerModel(ICardModel):
 
     @property
     def next_state(self):
-        return DayTalkView
+        from GameLogic.Models.Cards import HealModel
+        from GameView import CardView
+
+        return CardView, HealModel
 
     @property
     def get_card(self):

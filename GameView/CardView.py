@@ -10,7 +10,7 @@ class CardView(IGameView):
         self._model = model(game)
 
         if self._model.is_wasted:
-            self._session.to_next_state()
+            session.to_next_state()
             return
 
         super().__init__(session=session,
@@ -55,6 +55,7 @@ class CardView(IGameView):
         if self._model.is_target_needed:
             self._ask_target()
         else:
+            self._model.init_target()
             self._end_action_callback(bot, update)
 
     def _init_target_callback(self, bot, update, number):
@@ -76,13 +77,16 @@ class CardView(IGameView):
 
     def _end_action_callback(self, bot, update):
 
-        text = self._model.end()
+        end_result = self._model.end()
 
-        if text is None or text == "":
+        if isinstance(end_result, bool):
+            end_result = "Успех" if end_result else "Провал"
+
+        if end_result is None or end_result == "":
             self._session.delete_message(self._message)
         else:
-            if "{}" in text:
-                text = text.format(self.game[self._model.target].get_num_str)
-            self._session.edit_message(self._message, text)
+            if "{}" in end_result:
+                end_result = end_result.format(self.game[self._model.target].get_num_str)
+            self._session.edit_message(self._message, end_result)
 
         self._session.to_next_state()

@@ -8,9 +8,8 @@ class Event(Enum):
     MafiaWantKilled = 3,
     CivilianWantKilled = 4,
     JacketSave = 6
-    MafiaKilled = 7,
-    CivilianKilled = 8,
     CommissarCheck = 9,
     Kick = 11,
     Warning = 12,
-    ToVote = 13
+    ToVote = 13,
+    Death = 14

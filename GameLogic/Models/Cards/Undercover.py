@@ -1,5 +1,5 @@
 from GameLogic import GameInfo
-from GameLogic.Models.ICardModel import ICardModel
+from GameLogic.Models.ICard import ICardModel
 
 
 class UndercoverModel(ICardModel):

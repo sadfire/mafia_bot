@@ -7,3 +7,4 @@ from GameView.MafiaVotingView import MafiaVotingView
 from GameView.Timer import Timer
 from GameView.CardView import CardView
 from GameView.DayTalkView import DayTalkView
+from GameView.DeathView import DeathView

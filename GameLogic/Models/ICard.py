@@ -1,10 +1,7 @@
-from abc import abstractproperty, abstractmethod
-
-from emoji import emojize
+from abc import abstractmethod
 
 from GameLogic.Cards import Cards
-from GameLogic.Models.IGameModel import IGameModel
-from Utils.MafiaDatabaseApi import Database as db
+from GameLogic.Models.IGame import IGameModel
 
 
 class ICardModel(IGameModel):
@@ -29,7 +26,9 @@ class ICardModel(IGameModel):
     def init_initiator(self, number):
         self._initiator = int(number)
 
-    def init_target(self, number):
+    def init_target(self, number=None):
+        if number is None:
+            return
         self._target = int(number)
 
     @property

@@ -1,20 +1,30 @@
+from GameLogic import Roles
 from GameLogic.Cards import Cards
 from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo
-from GameLogic.Models.ICardModel import ICardModel
+from GameLogic.Models.ICard import ICardModel
 
 
 class HealModel(ICardModel):
     def __init__(self, game) -> None:
         super().__init__(game)
         self._target = game.gonna_die
-        self._event = Event.Heal
 
     def get_candidate(self, is_target):
-        candidate = list(self.game.get_alive_players)
-        if not is_target:
-            candidate.remove(self.game.gonna_die)
+        if is_target:
+            return [self.game.gonna_die]
+
+        candidate = [number for number in self.game.get_alive(Roles.Commissar, is_role_reverse=True, is_card_closed=True)
+                     if number != self.game.gonna_die]
+
         return candidate
+
+    @property
+    def is_wasted(self):
+        if super().is_wasted:
+            return True
+
+        return self.game.gonna_die is None
 
     @property
     def target(self):
@@ -25,36 +35,14 @@ class HealModel(ICardModel):
         return Cards.Heal
 
     @property
-    def get_name(self):
-        return super().get_name + " Лечение"
-
-    @property
     def is_target_needed(self):
         return False
 
     def end(self):
-        if self._initiator is None:
-            if Cards.FlakJacket in self.game.wasted_cards:
-                self.game.kill_callback()
-                return "Игрок {} умер"
-            return ""
-
-        super().end()
-        self.game.gonna_die = None
-        self.game[self._initiator][GameInfo.IsCardSpent] = True
-        return "Игрок {} выжил"
+        return "Игрок {} выжил" if super().end() else None
 
     @property
     def next_state(self):
-        from GameView.CardView import CardView
-
-        if self.game.gonna_die is not None:
-            from GameLogic.Models.Cards.Jacket import JacketModel
-            return CardView, JacketModel
-
-        if self.game.is_day:
-            from GameView.DayTalkView import DayTalkView
-            return DayTalkView
-        else:
-            from GameLogic.Models.Cards.Undercover import UndercoverModel
-            return CardView, UndercoverModel
+        from GameView import CardView
+        from GameLogic.Models.Cards import JacketModel
+        return CardView, JacketModel

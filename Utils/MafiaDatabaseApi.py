@@ -26,7 +26,7 @@ class Singleton(type):
 
 
 class Database(metaclass=Singleton):
-    def __init__(self, t_id, pswrd) -> None:
+    def __init__(self, t_id="", pswrd="") -> None:
         super().__init__()
         self._db = None
         self.t_id = t_id

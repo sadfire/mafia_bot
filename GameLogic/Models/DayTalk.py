@@ -1,7 +1,7 @@
 from GameLogic.Cards import Cards
 from GameLogic.GameEvents import Event
 from GameLogic.Member import GameInfo as GI
-from GameLogic.Models.IGameModel import IGameModel
+from GameLogic.Models.IGame import IGameModel
 
 
 class DayTalkModel(IGameModel):
@@ -10,7 +10,7 @@ class DayTalkModel(IGameModel):
         self.additional_time = []
 
     def end(self):
-        pass
+        self.game.course_count += 1
 
     @property
     def _get_event(self):

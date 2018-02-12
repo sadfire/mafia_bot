@@ -2,7 +2,7 @@ from GameLogic import Roles, Event as E, Cards
 from GameLogic.Models import IGameModel
 
 
-class Voting(IGameModel):
+class VotingModel(IGameModel):
     def __init__(self, game, is_mafia_vote=False):
         super().__init__(game)
         self.is_mafia_vote = is_mafia_vote

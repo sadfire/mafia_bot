@@ -4,7 +4,7 @@ from Utils.MafiaDatabaseApi import Database as db
 
 class Game:
     def __init__(self, host, evening, players, mode=GM.Beginner) -> None:
-        self.day_count = 0
+        self.course_count = 0
         self._evening = evening
 
         self.mode = mode
@@ -54,10 +54,15 @@ class Game:
     def clear_candidates(self):
         self.candidates.clear()
 
-    def get_alive(self, role: R = None, *, is_card_closed=None):
+    def get_alive(self, role: R = None, *, is_card_closed=None, is_role_reverse=False):
+        roles = [role]
+        if is_role_reverse:
+            roles = list(R)
+            roles.remove(role)
+
         return [number for number, player in self.players.items() if
                 player[GI.IsAlive] and
-                (role is None or player[GI.Role] is role) and
+                (role is None or player[GI.Role] in roles) and
                 (is_card_closed is None or player[GI.Card] is None)]
 
     @property

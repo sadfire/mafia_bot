@@ -1,5 +1,5 @@
 from GameLogic import Game
-from GameLogic.Models import Voting
+from GameLogic.Models import VotingModel
 
 from GameView import IGameView
 
@@ -9,7 +9,7 @@ from Utils import kbf, MafiaMarkup, emoji_number
 class CivilianVotingView(IGameView):
     def __init__(self, session, game: Game, next_state, previous):
         super().__init__(session, game, next_state, previous)
-        self._model = Voting(self.game, False)
+        self._model = VotingModel(self.game, False)
 
     @staticmethod
     def vote_message(number):

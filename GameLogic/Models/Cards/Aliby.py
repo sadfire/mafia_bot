@@ -1,4 +1,4 @@
-from GameLogic.Models.ICardModel import ICardModel
+from GameLogic.Models.ICard import ICardModel
 from GameView.DayTalkView import DayTalkView
 
 

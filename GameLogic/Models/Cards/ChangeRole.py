@@ -1,5 +1,5 @@
 from GameLogic import Cards, Event, GameInfo as GI
-from GameLogic.Models.ICardModel import ICardModel
+from GameLogic.Models.ICard import ICardModel
 
 
 class ChangeRoleModel(ICardModel):
@@ -8,7 +8,7 @@ class ChangeRoleModel(ICardModel):
 
     @property
     def is_wasted(self):
-        return self.game.day_count != 0
+        return self.game.course_count != 0
 
     @property
     def next_state(self):
@@ -20,7 +20,12 @@ class ChangeRoleModel(ICardModel):
         return Cards.ChangeRole
 
     def get_candidate(self, is_target):
-        return self.game.get_alive()
+        if is_target:
+            candidate = self.game.get_alive()
+            candidate.remove(self._initiator)
+            return candidate
+
+        return self.game.get_alive(is_card_closed=True)
 
     @property
     def is_target_needed(self):

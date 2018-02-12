@@ -57,8 +57,9 @@ class CardsProvider:
         self.game[initiator][GI.Role] = Roles.Rat
 
     def Heal(self, initiator, target):
-        if initiator[GI.Role] == Roles.Commissar:
+        if self.game[initiator][GI.Role] is Roles.Commissar:
             return False
+
         if target == self.game.gonna_die:
             self.game.gonna_die = None
 

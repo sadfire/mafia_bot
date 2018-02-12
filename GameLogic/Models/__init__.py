@@ -1,5 +1,5 @@
-from GameLogic.Models.DayTalkModel import DayTalkModel
-from GameLogic.Models.IGameModel import IGameModel
-from GameLogic.Models.ICardModel import ICardModel
-from GameLogic.Models.Voting import Voting
-
+from GameLogic.Models.DayTalk import DayTalkModel
+from GameLogic.Models.IGame import IGameModel
+from GameLogic.Models.ICard import ICardModel
+from GameLogic.Models.Voting import VotingModel
+from GameLogic.Models.Death import DeathModel
