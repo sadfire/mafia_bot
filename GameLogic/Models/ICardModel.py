@@ -4,6 +4,7 @@ from emoji import emojize
 
 from GameLogic.Cards import Cards
 from GameLogic.Models.IGameModel import IGameModel
+from Utils.MafiaDatabaseApi import Database as db
 
 
 class ICardModel(IGameModel):
@@ -43,6 +44,10 @@ class ICardModel(IGameModel):
                                initiator=self._initiator,
                                target=self._target,
                                result=self.get_result)
+
+        #db().insert_event(self.game.id, self._event, 1, self._initiator, self._target)
+
+        self.game.process_card(self.get_card, self._initiator, self._target, self.get_result)
         self.game.cards[self.get_card] = False
 
     @property

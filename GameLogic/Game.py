@@ -5,6 +5,7 @@ from GameLogic import Cards as C, \
     GameInfo as GI, \
     Member, \
     Roles as R
+from Utils.MafiaDatabaseApi import Database as db
 
 
 class Game:
@@ -32,6 +33,8 @@ class Game:
             self.__init_game_info()
 
         self.candidates = []
+
+        self.id = db().insert_game(host.id, evening.id)
 
     def __getitem__(self, key: int):
         return self.players.get(key, None)
