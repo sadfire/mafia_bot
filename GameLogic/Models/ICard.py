@@ -13,7 +13,7 @@ class ICardModel(IGameModel):
 
     @property
     def is_wasted(self):
-        return not self.game.cards[self.get_card]
+        return self.get_card not in self.game.get_available_cards
 
     @property
     def target(self):

@@ -30,6 +30,10 @@ class Game:
 
         self.id = db().insert_game(host.id, evening.id)
 
+    def set_mode(self, mode: GM):
+        self.mode = mode
+        self.cards = dict([(card, True) for card in GameModeCards[mode]])
+
     def __getitem__(self, key: int):
         return self.players.get(key, None)
 
@@ -74,6 +78,10 @@ class Game:
 
     def get_players(self, role: R = None) -> list:
         return [number for number, players in self.players.items() if (role is None or players[GI.Role] is role)]
+
+    @property
+    def get_mafia_count(self):
+        return len(self.get_alive(R.Mafia))
 
     @property
     def is_commissar(self) -> bool:

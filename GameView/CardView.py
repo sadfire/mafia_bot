@@ -7,16 +7,15 @@ from Utils import kbf
 
 class CardView(IGameView):
     def __init__(self, session, game, next_state, model: ICardModel.__class__):
-        self._model = model(game)
 
-        if self._model.is_wasted:
-            session.to_next_state()
-            return
+        self._model = model(game)
+        self.is_pseudo = self._model.is_wasted
 
         super().__init__(session=session,
                          game=game,
                          next_state=self._model.next_state,
-                         model=self._model)
+                         model=self._model,
+                         is_greeting=not self.is_pseudo)
 
     def _greeting(self):
         text = f"Будет ли использована {self._model.get_name}"
@@ -39,7 +38,8 @@ class CardView(IGameView):
     def _ask_initiator_callback(self, bot, update):
         self._model.initiator_ask = True
         if self._model.is_initiator_needed:
-            self._session.send_message(text="Номер игрока, использующего карту:",
+            self._session.edit_message(message=update,
+                                       text="Номер игрока, использующего карту:",
                                        reply_markup=self.get_alive_players_keyboard(callback=self._init_initiator_callback,
                                                                                     is_target=False))
         else:
@@ -47,7 +47,7 @@ class CardView(IGameView):
 
     def _init_initiator_callback(self, bot, update, number):
         number = int(number)
-        self._session.edit_message(message=update.effective_message,
+        self._session.edit_message(message=update,
                                    text="Карту {} использует игрок {}"
                                    .format(self._model.get_name, self.game[number].get_num_str))
 
@@ -87,6 +87,6 @@ class CardView(IGameView):
         else:
             if "{}" in end_result:
                 end_result = end_result.format(self.game[self._model.target].get_num_str)
-            self._session.edit_message(self._message, end_result)
+            self._session.edit_message(update.effective_message.message_id, end_result)
 
         self._session.to_next_state()

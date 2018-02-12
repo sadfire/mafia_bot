@@ -159,8 +159,16 @@ class EveningManagement(IState):
         if self._evening.is_ready():
             kb += kbf.button("Закончить", self._end_added_players_callback)
         else:
-            kb += kbf.button("Отменить вечер", self.back_callback)
+            kb += kbf.button("Отменить", self._back_callback)
         return kb
+
+    def _back_callback(self, bot, update):
+        from SessionStates import StartState
+
+        self._next = StartState
+
+        self._session.delete_message_callback(bot, update)
+        self._session.to_next_state()
 
     def _end_added_players_callback(self, _, __):
         if self._evening.is_ready():

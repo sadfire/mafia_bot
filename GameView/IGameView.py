@@ -7,12 +7,12 @@ class IGameView(IState):
     def _greeting(self):
         pass
 
-    def __init__(self, session, game, next_state, model=None):
+    def __init__(self, session, game, next_state, model=None, is_greeting=True):
         self.game = game
         self._model = model
         self._next = next_state
         self._target = None
-        super(IGameView, self).__init__(session, None)
+        super(IGameView, self).__init__(session, None, is_greeting)
 
     def next(self):
         model = None

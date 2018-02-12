@@ -32,5 +32,5 @@ class ChangeRoleModel(ICardModel):
         return True
 
     def end(self):
-        return "Обмен ролями состоялся" if super().end() else None
+        return "Обмен с игроком {}  " if super().end() else None
 

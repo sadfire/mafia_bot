@@ -1,7 +1,5 @@
 from GameLogic import Roles
 from GameLogic.Cards import Cards
-from GameLogic.GameEvents import Event
-from GameLogic.Member import GameInfo
 from GameLogic.Models.ICard import ICardModel
 
 

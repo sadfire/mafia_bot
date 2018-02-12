@@ -4,7 +4,7 @@ from GameLogic.Models.ICard import ICardModel
 
 class UndercoverModel(ICardModel):
     def get_candidate(self, is_target):
-        return self.game.get_alive()
+        return self.game.get_alive(is_card_closed=True)
 
     @property
     def is_target_needed(self):
@@ -23,6 +23,5 @@ class UndercoverModel(ICardModel):
         return CardView, ChangeRoleModel
 
     def end(self):
-        super().end()
-        if self._initiator is not None:
-            self.game[self._initiator][GameInfo.IsNotHidden] = False
+        self._target = self._initiator
+        return "Игрок {} ушел под прикрытие." if super().end() else None
