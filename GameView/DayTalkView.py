@@ -6,6 +6,7 @@ from GameLogic.Models import DayTalkModel
 
 from GameView import CivilianVotingView, Buttons as B, get_actions, Messages as M, IGameView, CardView
 from GameView.Timer import Timer
+from GameView.TimerMessageHandler import TimerMessageHandler
 
 from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
@@ -19,9 +20,9 @@ class TalkState(Enum):
 class DayTalkView(IGameView):
     def __init__(self, session, game, next_state, model=None):
         self._messages = {M.Main: None,
-                         M.Timer: None,
-                         M.Vote: None,
-                         M.Card: None}
+                          M.Timer: None,
+                          M.Vote: None,
+                          M.Card: None}
 
         self.timer = None
         self.action_dict = \
@@ -32,7 +33,7 @@ class DayTalkView(IGameView):
                 B.NoVoting: (":red_circle:", "empty"),
                 B.Card: (':flower_playing_cards:', self.card_button_callback),
                 B.NoCard: ('🚬', "empty"),
-                B.Clock: ("🔉", self.start_time_button_callback),
+                B.Clock: ("🔉", self.start_clock_button_callback),
                 B.NoClock: ("🔇", "empty"),
                 B.Timer: ("⏲", self.timer_callback),
                 B.Immunitet: ("🤞", "empty"),
@@ -44,6 +45,7 @@ class DayTalkView(IGameView):
             }
 
         self.current_player = None
+        self.timer_handler = None
         super().__init__(session, game, next_state, DayTalkModel(game))
 
     def _greeting(self):
@@ -148,7 +150,8 @@ class DayTalkView(IGameView):
             from GameLogic.Models.Cards import UndercoverModel
             self._next = CardView, UndercoverModel
         else:
-            self._session.edit_message(self._messages[M.Main], "Выставлены:\n\n".format("\n".join(self.game.candidates)))
+            self._session.edit_message(self._messages[M.Main],
+                                       "Выставлены:\n\n".format("\n".join(self.game.candidates)))
             self._next = CivilianVotingView
 
         return self._session.to_next_state()
@@ -162,29 +165,8 @@ class DayTalkView(IGameView):
         self._next = CardView, HealModel
         self._session.to_next_state()
 
-    def start_time_button_callback(self, bot, update, number):
-        if self.current_player is not None:
-            self._session.send_message(text="Минута другого игрока уже идет", reply_markup=kbf.close_button())
-            return
+    def start_clock_button_callback(self, bot, update, number):
+        self.timer_handler = TimerMessageHandler(self._session, self.game[number], self._player_clock_callback)
 
-        self.current_player = number
-
-        if self._model.is_can_talk(number):
-            self.timer = Timer(60, self.update_timer, self.stop_timer_callback, self.switch_timer_callback)
-            self._messages[M.Timer] = self._session.send_message("Минута игрока")
-            self.update_timer()
-        else:
-            self._session.send_message("Нельзя начать минуту этого игрока.", reply_markup=kbf.close_button())
-
-    def update_timer(self):
-        kb = kbf.action_line(("⏸" if self.timer.is_active else "▶", self.switch_timer_callback, self.current_player), ("⏹", self.stop_timer_callback))
-        self._session.edit_message(self._messages[M.Timer], "Минута игрока {}".format(self.game[self.current_player].get_num_str), kb)
-
-    def switch_timer_callback(self, bot=None, update=None, number=None):
-        if number != self.current_player:
-            return
-        self.timer.is_active = not self.timer.is_active
-
-    def stop_timer_callback(self, bot=None, update=None):
-        self.timer.stop()
-
+    def _player_clock_callback(self, bot, update, action):
+        self.timer_handler.callback(action)
