@@ -55,3 +55,6 @@ class DayTalkModel(IGameModel):
 
     def try_kill(self, number):
         self.game.gonna_die = number
+
+    def ban_talk(self, number):
+        self.game[number][GI.IsNotTalked] = False
