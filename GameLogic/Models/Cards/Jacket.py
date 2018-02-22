@@ -20,7 +20,7 @@ class JacketModel(ICardModel):
 
     @property
     def is_initiator_needed(self):
-        return False
+        return True
 
     @property
     def is_target_needed(self):

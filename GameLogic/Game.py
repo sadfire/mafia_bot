@@ -3,7 +3,7 @@ from Utils.MafiaDatabaseApi import Database as db
 
 
 class Game:
-    def __init__(self, host, evening, players, mode=GM.Low) -> None:
+    def __init__(self, host, evening, players, mode=GM.Super) -> None:
         self.course_count = 0
         self._evening = evening
 
@@ -32,7 +32,8 @@ class Game:
 
     def set_mode(self, mode: GM):
         self.mode = mode
-        self.cards = dict([(card, True) for card in GameModeCards[mode]])
+        cards = GameModeCards[self.mode]
+        self.cards = dict([(card, True) for card in cards])
 
     def __getitem__(self, key: int):
         return self.players.get(key, None)
