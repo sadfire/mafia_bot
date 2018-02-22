@@ -47,6 +47,7 @@ class Game:
                 player[info] = True
 
             player[GI.Card] = None
+            player[GI.IsOnVote] = False
             player[GI.Role] = R.Civilian
             player[GI.Warnings] = 0
 

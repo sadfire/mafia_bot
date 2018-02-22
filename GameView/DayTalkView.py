@@ -165,12 +165,16 @@ class DayTalkView(IGameView):
         self._session.to_next_state()
 
     def start_clock_button_callback(self, bot, update, number):
+        if self.current_player is None:
+            return
+        self.current_player = number
         self.timer_handler = TimerMessageHandler(self._session, self.game[number], self._player_clock_callback, self._stop_clock_callback)
 
     def _player_clock_callback(self, bot, update, action):
         self.timer_handler.callback(action)
 
     def _stop_clock_callback(self, number):
+        self.current_player = None
         self._model.ban_talk(number)
         self.timer_handler = None
         self.update_message()

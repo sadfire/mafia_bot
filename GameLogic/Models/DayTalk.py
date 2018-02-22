@@ -25,13 +25,13 @@ class DayTalkModel(IGameModel):
         self.game[number][GI.IsAlive] = False
 
     def to_vote(self, initiator: int, target: int):
-        if not self.game[initiator][GI.IsExhibited]:
-            if self.game[target][GI.IsImmunitet]:
+        if not self.game[initiator][GI.IsOnVote]:
+            if not self.game[target][GI.IsNotImmunity]:
                 return "Игрок не может быть выставлен"
 
             self.game.log_event(Event.ToVote, initiator, target)
             self.game.candidates.append(target)
-            self.game[initiator][GI.IsExhibited] = True
+            self.game[initiator][GI.IsOnVote] = True
             return "{} Выставлен".format(self.game[target].get_num_str)
         return "Вы уже выставляли игрока"
 
