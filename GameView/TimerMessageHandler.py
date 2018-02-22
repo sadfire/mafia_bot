@@ -15,34 +15,33 @@ class Timer:
 
         self._update_callback = update_callback
 
-        self._mutex = Lock()
-        self._mutex.acquire()
+        self._lock = Lock()
+        self._lock.acquire(blocking=False)
+        self.is_active = False
 
         self.timer_loop_thread = Thread(target=self._timer_loop)
         self.timer_loop_thread.start()
 
-    @property
-    def is_active(self):
-        return self._mutex.acquire(blocking=False)
-
     def play(self):
-        self._mutex.release()
+        self.is_active = True
+        self._lock.release()
 
     def pause(self):
-        self._mutex.acquire()
+        self.is_active = False
+        self._lock.acquire(blocking=False)
 
     def stop(self):
+        self.is_active = False
         self.current = 0
 
     def _timer_loop(self):
         while self.current != 0:
-            if self._mutex.acquire(blocking=False):
-                continue
-
+            self._lock.acquire()
             sleep(1)
-            self.current -= 1
             if self.current % self.step == 0:
                 self._update_callback()
+            self.current -= 1
+            self._lock.release()
 
 
 class TimerMessageHandler:
@@ -55,7 +54,10 @@ class TimerMessageHandler:
         self._message = self._session.send_message(self.get_message_string, self.get_message_kb)
 
     def update(self):
-        self._session.edit_message(self.get_message_string, self.get_message_kb)
+        if self._timer == 0:
+            self._session.edit_message(self._message, "Минута игрока {} закончилась.".format(self._current_player.get_num_str))
+        else:
+            self._session.edit_message(self._message, self.get_message_string, self.get_message_kb)
 
     def callback(self, action):
         return getattr(self._timer, action)()

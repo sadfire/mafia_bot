@@ -55,6 +55,9 @@ class Session:
         except telegram.error.BadRequest as e:
             logging.warning(e)
 
+        except TypeError as e:
+            print(reply_markup, e)
+
     def delete_message(self, message):
         if isinstance(message, Message):
             message = message.message_id
