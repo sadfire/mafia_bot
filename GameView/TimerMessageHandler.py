@@ -1,4 +1,6 @@
-from threading import Timer as timer
+from threading import Thread, Lock
+from time import sleep
+
 from Utils import kbf
 
 
@@ -10,31 +12,37 @@ class Timer:
 
         self.step = step
         self.current = seconds
+
         self._update_callback = update_callback
-        self._start_timer(False)
 
-    def _start_timer(self, is_start: bool = True):
-        self._timer = timer(self.step, self.update)
-        if is_start:
-            self._timer.start()
+        self._mutex = Lock()
+        self._mutex.acquire()
 
-    def play(self):
-        pass
+        self.timer_loop_thread = Thread(target=self._timer_loop)
+        self.timer_loop_thread.start()
 
     @property
     def is_active(self):
-        return self._timer.is_alive()
+        return self._mutex.acquire(blocking=False)
 
-    def update(self):
-        self.current -= self.step
-        if self.current == 0:
-            return self.stop
+    def play(self):
+        self._mutex.release()
 
     def pause(self):
-        pass
+        self._mutex.acquire()
 
     def stop(self):
-        pass
+        self.current = 0
+
+    def _timer_loop(self):
+        while self.current != 0:
+            if self._mutex.acquire(blocking=False):
+                continue
+
+            sleep(1)
+            self.current -= 1
+            if self.current % self.step == 0:
+                self._update_callback()
 
 
 class TimerMessageHandler:
@@ -43,12 +51,14 @@ class TimerMessageHandler:
         self._current_player = current_player
         self._callback = callback
         self._timer = Timer(seconds, self.update)
+
         self._message = self._session.send_message(self.get_message_string, self.get_message_kb)
 
     def update(self):
         self._session.edit_message(self.get_message_string, self.get_message_kb)
 
-    def callback(self, action): return getattr(self._timer, action)()
+    def callback(self, action):
+        return getattr(self._timer, action)()
 
     @property
     def get_message_string(self):
@@ -57,8 +67,8 @@ class TimerMessageHandler:
     @property
     def get_message_kb(self):
         if self._timer.is_active:
-            button = ("⏸", self._callback, self._timer.pause)
+            button = ("⏸", self._callback, self._timer.pause.__name__)
         else:
-            button = ("▶", self._callback, self._timer.play)
+            button = ("▶", self._callback, self._timer.play.__name__)
 
-        return kbf.action_line(button, ("⏹", self._callback, self._timer.stop))
+        return kbf.action_line(button, ("⏹", self._callback, self._timer.stop.__name__))

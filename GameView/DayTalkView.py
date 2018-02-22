@@ -5,7 +5,6 @@ from GameLogic import Cards
 from GameLogic.Models import DayTalkModel
 
 from GameView import CivilianVotingView, Buttons as B, get_actions, Messages as M, IGameView, CardView
-from GameView.Timer import Timer
 from GameView.TimerMessageHandler import TimerMessageHandler
 
 from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
