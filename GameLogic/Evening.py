@@ -1,4 +1,5 @@
 from GameLogic import Member
+from Utils import Database
 
 
 class Evening:
@@ -30,7 +31,7 @@ class Evening:
         if isinstance(host, int):
             self.hosts.append(host)
 
-        if isinstance(host, Member) and host.is_host:
+        elif isinstance(host, Member) and host.is_host:
             self.hosts.append(host.t_id)
 
     def remove_member(self, member):
@@ -40,7 +41,11 @@ class Evening:
         self.members.pop(member)
 
     def is_ready(self):
-        return len(self.members) > 8  # TODO More checks # TODO 2 only for debug
+        return len(self.members) > 8
 
-    def get_hosts_ids(self):
-        return self.hosts
+    @property
+    def get_hosts(self):
+        hosts = []
+        for host_t_id in self.hosts:
+            hosts.append(Database().get_member_by_telegram(host_t_id))
+        return hosts

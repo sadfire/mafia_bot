@@ -4,7 +4,7 @@ from GameLogic import Cards
 
 from GameLogic.Models import DayTalkModel
 
-from GameView import CivilianVotingView, Buttons as B, get_actions, Messages as M, IGameView, CardView
+from GameView import CivilianVotingView, Buttons as B, get_actions, Messages as M, IGameView
 from GameView.TimerMessageHandler import TimerMessageHandler
 
 from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
@@ -122,13 +122,13 @@ class DayTalkView(IGameView):
             from GameLogic.Models.Cards import UndercoverModel
             self._next = UndercoverModel
 
+        from GameView import CardView
         self._next = CardView, self._next
         self._session.to_next_state()
 
     def timer_callback(self, bot, update, number):
         number = int(number)
         self._model.additional_time.append(number)
-        self._model.timer_on(number)
         self.update_message()
 
     def transfer_to_models(self, bot, update, args):
@@ -160,7 +160,8 @@ class DayTalkView(IGameView):
         self._model.try_kill(number)
 
         from GameLogic.Models.Cards import HealModel
-
+        from GameView import CardView
+        
         self._next = CardView, HealModel
         self._session.to_next_state()
 

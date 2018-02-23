@@ -64,7 +64,7 @@ class IntroductionView(IGameView):
     @property
     def is_ready(self):
         return (self.is_mafia and self.game.get_mafia_count == 3) or (not self.is_mafia and (self.game.is_commissar or
-                                                                                         Cards.Recruitment in self.game.wasted_cards))
+                                                                                         Cards.Recruitment in self.game.get_wasted_cards))
 
     def _end_callback(self, bot, update):
         if not self.is_ready:

@@ -42,7 +42,6 @@ class DayTalkModel(IGameModel):
         player = self.game[number]
         return player[GI.IsNotTalked] and player[GI.IsNotSilence]
 
-    @property
     def get_possible_cards(self, is_day=True):
         return [card for card in self.game.cards if not is_day or Cards.is_day_card(card)]
 

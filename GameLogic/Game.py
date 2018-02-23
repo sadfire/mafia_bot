@@ -125,5 +125,9 @@ class Game:
     def get_available_cards(self):
         return [card for card, available in self.cards.items() if available]
 
+    @property
+    def get_wasted_cards(self):
+        return [card for card, available in self.cards.items() if not available]
+
     def log_event(self, event, initiator_players: int, target_player: int = None, result: bool = True):
         print(event.name, initiator_players, target_player, result)
