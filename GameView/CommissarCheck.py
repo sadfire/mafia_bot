@@ -12,12 +12,14 @@ from Utils import kbf, emoji_number
 
 class CommissarCheck(IGameView):
     def __init__(self, session, game, next_state, model=None):
+        super().__init__(session, game, (CardView, ListenerModel), model, is_greeting=False)
+
         if not game.is_commissar:
             self._message = self._session.send_message("Коммисар мертв.\n")
             self._session.to_next_state()
             return
-        super().__init__(session, game, (CardView, ListenerModel), model)
-
+        else:
+            self._greeting()
 
     def _greeting(self):
         if self.game.is_commissar:

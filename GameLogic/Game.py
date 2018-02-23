@@ -74,7 +74,7 @@ class Game:
     @property
     def get_commissar(self):
         commisars = self.get_alive(R.Commissar)
-        if len(commisars) is None:
+        if len(commisars) == 0:
             return None
         return commisars[0]
 

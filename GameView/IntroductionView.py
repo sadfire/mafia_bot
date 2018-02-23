@@ -51,7 +51,8 @@ class IntroductionView(IGameView):
             if self.game[number][GI.Role] is R.Mafia:
                 self._session.send_message("Мафия не может быть комиссаром", reply_markup=kbf.close_button())
                 return
-            if self.game.is_commissar:
+
+            if self.game.is_commissar and self.game.get_commissar != number:
                 self.game[self.game.get_commissar][GI.Role] = R.Civilian
 
             self.game[number][GI.Role] = R.Commissar if self.game[number][GI.Role] is not R.Commissar else R.Civilian
