@@ -26,7 +26,7 @@ class EveningHostAdd(IState):
         self._message = self._session.edit_message(self._message, self.host_list(), reply_markup=self.get_hosts_kb)
 
     def host_list(self):
-        return "\n".join("👁 🔛 👤{}".format(host) for host in self._evening.hosts)
+        return "\n".join("👁 🔛 👤{}".format(host) for host in self._evening.get_hosts)
 
     def _end_evening_host_manager(self, bot, update):
         self._session.edit_message(message=update.effective_message,
@@ -35,7 +35,8 @@ class EveningHostAdd(IState):
 
     @property
     def get_hosts_kb(self):
-        hosts = [host for host in self._session.db.get_hosts() if host.id not in self._evening.get_hosts_ids()]
+
+        hosts = [host for host in self._session.db.get_hosts() if host not in self._evening.get_hosts]
 
         kb = KeyboardFactory.players_with_action(hosts,
                                                  em(":heavy_plus_sign:"),
