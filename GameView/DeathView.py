@@ -55,7 +55,3 @@ class DeathView(IGameView):
     def end_callback(self, bot, update):
         self._session.remove_markup(update)
         self._session.to_next_state()
-
-    def next(self):
-        self.game.course_count += 1
-        return super().next()
