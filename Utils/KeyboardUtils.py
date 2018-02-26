@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton as Button
 from telegram import InlineKeyboardMarkup
 
 
-def emoji_number(num=None) -> object:
+def emoji_number(num=None) -> str:
     emoji = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
     if num is None or int(num) > len(emoji) - 1:
         return "🆙"
