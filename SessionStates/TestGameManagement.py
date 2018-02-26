@@ -1,4 +1,5 @@
 from GameLogic import Game, GameInfo, Roles
+from GameView import DayTalkView
 
 from SessionStates import IState, GameStartConfirmation
 
@@ -31,6 +32,12 @@ class TestGameManagement(IState):
         self._evening.games[session.t_id][4][GameInfo.Role] = Roles.Commissar
 
     def _start(self, bot, update):
-        self._next = GameStartConfirmation
         self._session.remove_markup(update)
         self._session.to_next_state()
+
+    def next(self):
+        self._evening.games[self._session.t_id].course_count += 1
+        return DayTalkView(session=self._session,
+                           game=self._evening.games[self._session.t_id],
+                           model=None,
+                           next_state=None)
