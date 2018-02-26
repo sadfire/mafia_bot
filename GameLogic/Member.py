@@ -14,8 +14,9 @@ class GameInfo(Enum):
     IsNotTalked = 6
     IsNotSilence = 7
     IsOnVote = 8
-    IsNotImmunity = 9
-    IsNotHidden = 10
+    IsHaveVote = 9
+    IsNotImmunity = 10
+    IsNotHidden = 11
 
 
 class Member:
