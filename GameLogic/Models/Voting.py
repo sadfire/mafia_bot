@@ -1,4 +1,4 @@
-from GameLogic import Roles, Event as E, Cards
+from GameLogic import Roles, Event as E, Cards, GameInfo
 from GameLogic.Models import IGameModel
 
 
@@ -11,7 +11,7 @@ class VotingModel(IGameModel):
         self.voted_out = {}
 
         if not is_mafia_vote:
-            self.voters = self.game.get_alive_players(True)
+            self.voters = self.game.get_alive(filter=lambda pl: pl[GameInfo.IsHaveVote])
         else:
             self.voters = self.game.get_alive(Roles.Mafia)
 
@@ -27,8 +27,11 @@ class VotingModel(IGameModel):
     def get_candidate(self):
         return self.game.candidates if not self.is_mafia_vote else self.game.get_alive()
 
-    def init_target(self, target):
-        self._target = int(target)
+    def init_target(self, target=None):
+        if self.is_mafia_vote:
+            self._target = int(target)
+        else:
+            self._target = max(self.voted_out.items(), key=lambda candidate, count: count)[0]
 
     def end(self):
         self.game.log_event(self._get_event, self.voters, self._target)
@@ -37,3 +40,7 @@ class VotingModel(IGameModel):
     @property
     def _get_event(self):
         return E.MafiaWantKilled if self.is_mafia_vote else E.CivilianWantKilled
+
+    @property
+    def max_voted(self):
+        return max(self.voted_out.values())

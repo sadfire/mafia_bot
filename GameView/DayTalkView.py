@@ -66,8 +66,7 @@ class DayTalkView(IGameView):
 
             kb += kbf.action_line((name, self._session.send_player_info_callback, number), *buttons)
 
-        if self._model.is_day_can_end:
-            kb += kbf.button("Перейти к голосованию", self.end_for_vote_callback)
+        kb += kbf.button("Перейти к голосованию", self.end_for_vote_callback)
 
         return kb
 
@@ -147,10 +146,12 @@ class DayTalkView(IGameView):
         if len(self.game.candidates) == 0:
             self._session.edit_message(self._messages[M.Main], "Никто не выставлен")
             from GameLogic.Models.Cards import UndercoverModel
+            from GameView import CardView
             self._next = CardView, UndercoverModel
         else:
-            self._session.edit_message(self._messages[M.Main],
-                                       "Выставлены:\n\n".format("\n".join(self.game.candidates)))
+            candidates = [emoji_number(candidate) for candidate in self.game.candidates]
+            self._session.delete_message(self._messages[M.Main])
+            self._session.send_message("Выставлены:\n\n{}".format("\n".join(candidates)))
             self._next = CivilianVotingView
 
         return self._session.to_next_state()
@@ -161,7 +162,7 @@ class DayTalkView(IGameView):
 
         from GameLogic.Models.Cards import HealModel
         from GameView import CardView
-        
+
         self._next = CardView, HealModel
         self._session.to_next_state()
 
@@ -169,12 +170,18 @@ class DayTalkView(IGameView):
         if self.current_player is not None:
             return
         self.current_player = number
-        self.timer_handler = TimerMessageHandler(self._session, self.game[number], self._player_clock_callback, self._stop_clock_callback)
+        self.timer_handler = TimerMessageHandler(session=self._session,
+                                                 current_player=self.game[number],
+                                                 callback=self._player_clock_callback,
+                                                 stop_callback=self._stop_clock_callback)
 
     def _player_clock_callback(self, bot, update, action):
         self.timer_handler.callback(action)
 
     def _stop_clock_callback(self, number):
+        if number != self.current_player:
+            return
+
         self.current_player = None
         self._model.ban_talk(number)
         self.timer_handler = None
