@@ -60,13 +60,17 @@ class Game:
     def clear_candidates(self):
         self.candidates.clear()
 
-    def get_alive(self, role: R = None, *, is_card_closed=None, is_role_reverse=False):
+    def get_alive(self, role: R = None, *, is_card_closed=None, is_role_reverse=False, filter=None):
         roles = [role]
         if is_role_reverse:
             roles = list(R)
             roles.remove(role)
 
+        if filter is None:
+            def filter(player): return True
+
         return [number for number, player in self.players.items() if
+                filter(player) and
                 player[GI.IsAlive] and
                 (role is None or player[GI.Role] in roles) and
                 (is_card_closed is None or player[GI.Card] is None)]
