@@ -1,4 +1,5 @@
-from GameLogic import Cards as C, CardsProvider, GameMode as GM, GameModeCards, GameInfo as GI, Member, Roles as R
+from GameLogic import Cards as C, CardsProvider, GameMode as GM, GameModeCards, GameInfo as GI, Member, Roles as R, \
+    Event
 from Utils.MafiaDatabaseApi import Database as db
 
 
@@ -134,4 +135,16 @@ class Game:
         return [card for card, available in self.cards.items() if not available]
 
     def log_event(self, event, initiator_players: int, target_player: int = None, result: bool = True):
+        if event is Event.Death:
+            self.players[self.gonna_die][GI.IsAlive] = False
+            self.gonna_die = None
+
         print(event.name, initiator_players, target_player, result)
+
+    def next_course(self):
+        self.course_count += 1
+        for number in self.get_alive():
+            self.players[number][GI.IsOnVote] = False
+            self.players[number][GI.IsNotTalked] = True
+            self.players[number][GI.IsHaveVote] = True
+        self.candidates.clear()

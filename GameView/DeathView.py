@@ -53,5 +53,7 @@ class DeathView(IGameView):
         raise NotImplementedError
 
     def end_callback(self, bot, update):
+        self._session.edit_message(self._message, "Игрок под номером {} умирает.\n")
+        self._model.end()
         self._session.remove_markup(update)
         self._session.to_next_state()

@@ -5,7 +5,7 @@ from GameLogic.Models.IGame import IGameModel
 class DeathModel(IGameModel):
     def __init__(self, game):
         super().__init__(game)
-        self.game.course_count += 1
+        self.game.next_course()
 
     @property
     def is_pseudo(self):
@@ -16,8 +16,9 @@ class DeathModel(IGameModel):
             return "Никто не умер"
 
         number = self.game[self.game.gonna_die].get_num_str
+
         self.game.log_event(Event.Death, None, self.game.gonna_die)
-        self.game.gonna_die = None
+
         return "Игрок {} мертв".format(number)
 
     @property
