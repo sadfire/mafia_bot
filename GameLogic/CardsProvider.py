@@ -64,7 +64,7 @@ class CardsProvider:
             self.game.gonna_die = None
 
     def Leader(self, initiator, target):
-        pass
+        self.game.gonna_die = target
 
     def Mina(self, initiator, target):
         pass
