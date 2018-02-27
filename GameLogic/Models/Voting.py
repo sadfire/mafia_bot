@@ -31,11 +31,20 @@ class VotingModel(IGameModel):
         if self.is_mafia_vote:
             self._target = int(target)
         else:
-            self._target = max(self.voted_out.items(), key=lambda candidate, count: count)[0]
+            max_vote = max(self.voted_out.items(), key=lambda candidate_count: candidate_count[1])[1]
+            candidates = [candidate for candidate, count in self.voted_out.items() if count == max_vote]
+            if len(candidates) == 1:
+                self._target = candidates[0]
+            else:
+                self._target = candidates
 
     def end(self):
         self.game.log_event(self._get_event, self.voters, self._target)
         self.game.gonna_die = self._target
+
+    @property
+    def is_one_target(self):
+        return not isinstance(self._target, list)
 
     @property
     def _get_event(self):

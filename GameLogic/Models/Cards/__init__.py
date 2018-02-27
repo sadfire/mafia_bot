@@ -6,3 +6,4 @@ from GameLogic.Models.Cards.ChangeRole import ChangeRoleModel
 from GameLogic.Models.Cards.Theft import TheftModel
 from GameLogic.Models.Cards.Undercover import UndercoverModel
 from GameLogic.Models.Cards.Recruitment import RecruitmentModel
+from GameLogic.Models.Cards.Leader import LeaderModel
