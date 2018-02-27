@@ -30,6 +30,7 @@ class TestGameManagement(IState):
         self._evening.games[session.t_id][2][GameInfo.Role] = Roles.Mafia
         self._evening.games[session.t_id][3][GameInfo.Role] = Roles.Mafia
         self._evening.games[session.t_id][4][GameInfo.Role] = Roles.Commissar
+        self._evening.games[session.t_id].candidates = [1, 2, 3, 4, 5]
 
     def _start(self, bot, update):
         self._session.remove_markup(update)
