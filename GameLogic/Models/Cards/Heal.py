@@ -34,7 +34,10 @@ class HealModel(ICardModel):
         return False
 
     def end(self):
-        return "Игрок {} выжил" if super().end() else None
+        result = super().end()
+        if result:
+            self.game.next_course()
+            return "Игрок {} выжил"
 
     @property
     def next_state(self):

@@ -20,11 +20,11 @@ class JacketModel(ICardModel):
 
     @property
     def is_initiator_needed(self):
-        return True
+        return False
 
     @property
     def is_target_needed(self):
-        return True
+        return False
 
     def init_target(self, number=None):
         if number is None:
@@ -45,4 +45,10 @@ class JacketModel(ICardModel):
         return DeathView
 
     def end(self):
-        return super().end()
+        if self.initiator_ask:
+            self.init_target()
+
+        result = super().end()
+        if result:
+            self.game.next_course()
+            return "Игрок {} выжил"
