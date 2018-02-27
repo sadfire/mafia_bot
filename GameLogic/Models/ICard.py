@@ -70,3 +70,10 @@ class ICardModel(IGameModel):
     def get_name(self) -> str:
         return Cards.get_name(self.get_card)
 
+    @property
+    def get_initiator_question(self):
+        return "Номер игрока, использующего карту:"
+
+    @property
+    def get_target_question(self):
+        return "Номер цели использования карты"

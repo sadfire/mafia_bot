@@ -29,7 +29,7 @@ class CardView(IGameView):
 
     def _ask_target(self):
         if self._model.is_target_needed:
-            self._session.send_message("Номер цели использования карты",
+            self._session.send_message(self._model.get_target_question,
                                        reply_markup=self.get_alive_players_keyboard(callback=self._init_target_callback,
                                                                                     is_target=True))
         else:
@@ -39,7 +39,7 @@ class CardView(IGameView):
         self._model.initiator_ask = True
         if self._model.is_initiator_needed:
             self._session.edit_message(message=update,
-                                       text="Номер игрока, использующего карту:",
+                                       text=self._model.get_initiator_question,
                                        reply_markup=self.get_alive_players_keyboard(callback=self._init_initiator_callback,
                                                                                     is_target=False))
         else:
@@ -76,7 +76,6 @@ class CardView(IGameView):
         return kb
 
     def _end_action_callback(self, bot, update):
-
         end_result = self._model.end()
 
         if isinstance(end_result, bool):
@@ -84,9 +83,10 @@ class CardView(IGameView):
 
         if end_result is None or end_result == "":
             self._session.delete_message(self._message)
+
         else:
             if "{}" in end_result:
                 end_result = end_result.format(self.game[self._model.target].get_num_str)
-            self._session.edit_message(update.effective_message.message_id, end_result)
+            self._session.edit_message(self._message, end_result)
 
         self._session.to_next_state()
