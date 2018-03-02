@@ -1,6 +1,6 @@
 from enum import Enum
 
-from GameLogic import Cards
+from GameLogic import Cards, GSP
 
 from GameLogic.Models import DayTalkModel
 
@@ -17,13 +17,14 @@ class TalkState(Enum):
 
 
 class DayTalkView(IGameView):
-    def __init__(self, session, game, next_state, model=None):
+    def __init__(self, session, game, model=None, is_greeting=True):
         self._messages = {M.Main: None,
                           M.Timer: None,
                           M.Vote: None,
                           M.Card: None}
 
-        self.timer = None
+        self._view, self._model, self.timer = None, None, None
+
         self.action_dict = \
             {
                 B.WarningCount: [":warning: {}", self.warning_callback],
@@ -45,7 +46,11 @@ class DayTalkView(IGameView):
 
         self.current_player = None
         self.timer_handler = None
-        super().__init__(session, game, next_state, DayTalkModel(game))
+        super().__init__(session, game, DayTalkModel(game))
+
+    @property
+    def _next(self):
+        return self._view, self._model
 
     def _greeting(self):
         self._messages[M.Main] = self._session.send_message(text="Главное меню")
@@ -106,23 +111,15 @@ class DayTalkView(IGameView):
 
     def to_card_state(self, bot, update, args):
         self._session.delete_message(self._messages[M.Main])
-        card, number_initiator = args
+        number_initiator, card = args
         card = Cards(card)
 
         self.game.current_player = number_initiator
 
-        if card is Cards.Alibi:
-            from GameLogic.Models.Cards import AlibyModel
-            self._next = AlibyModel
-        elif card is Cards.Theft:
-            from GameLogic.Models.Cards import TheftModel
-            self._next = TheftModel
-        elif card is Cards.Undercover:
-            from GameLogic.Models.Cards import UndercoverModel
-            self._next = UndercoverModel
-
         from GameView import CardView
-        self._next = CardView, self._next
+        self._view = CardView
+        self._model = GSP.Card(card)
+
         self._session.to_next_state()
 
     def timer_callback(self, bot, update, number):
@@ -145,14 +142,18 @@ class DayTalkView(IGameView):
     def end_for_vote_callback(self, bot, update):
         if len(self.game.candidates) == 0:
             self._session.edit_message(self._messages[M.Main], "Никто не выставлен")
+
             from GameLogic.Models.Cards import UndercoverModel
             from GameView import CardView
-            self._next = CardView, UndercoverModel
+            self._view = CardView
+            self._model = UndercoverModel
         else:
             candidates = [emoji_number(candidate) for candidate in self.game.candidates]
+
             self._session.delete_message(self._messages[M.Main])
             self._session.send_message("Выставлены:\n\n{}".format("\n".join(candidates)))
-            self._next = CivilianVotingView
+
+            self._view = CivilianVotingView
 
         return self._session.to_next_state()
 
@@ -163,7 +164,9 @@ class DayTalkView(IGameView):
         from GameLogic.Models.Cards import HealModel
         from GameView import CardView
 
-        self._next = CardView, HealModel
+        self._view = CardView
+        self._model = HealModel
+
         self._session.to_next_state()
 
     def start_clock_button_callback(self, bot, update, number):

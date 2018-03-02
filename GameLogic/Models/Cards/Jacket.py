@@ -39,16 +39,14 @@ class JacketModel(ICardModel):
     def get_card(self):
         return Cards.FlakJacket
 
-    @property
-    def next_state(self):
-        from GameView.DeathView import DeathView
-        return DeathView
-
-    def end(self):
+    def final(self):
         if self.initiator_ask:
             self.init_target()
+            super().final()
 
-        result = super().end()
-        if result:
-            self.game.next_course()
-            return "Игрок {} выжил"
+            from GameView import FrontierState
+            return FrontierState
+
+        else:
+            from GameView.DeathView import DeathView
+            return DeathView

@@ -15,7 +15,7 @@ class AlibyModel(ICardModel):
     def is_target_needed(self):
         return True
 
-    @property
-    def next_state(self):
+    def final(self) -> type:
+        super().final()
         return DayTalkView
 

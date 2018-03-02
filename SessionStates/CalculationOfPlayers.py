@@ -6,8 +6,8 @@ from Utils.KeyboardUtils import KeyboardFactory as kbf, emoji_number
 
 
 class CalculationOfPlayers(IState):
-    def __init__(self, session, previous=None):
-        super().__init__(session, previous)
+    def __init__(self, session):
+        super().__init__(session)
         self._next = ChooseGameMode
         self._active_number = None
         self._active_id = None

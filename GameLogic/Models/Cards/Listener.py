@@ -1,4 +1,4 @@
-from GameLogic import GameInfo as GI, Event, Cards, Roles
+from GameLogic import GameInfo as GI, Event, Cards, Roles, GSP
 from GameLogic.Models import ICardModel
 
 
@@ -19,13 +19,6 @@ class ListenerModel(ICardModel):
             raise ValueError("Commissar can't use Listener card")
 
     @property
-    def next_state(self):
-        from GameLogic.Models.Cards import HealModel
-        from GameView import CardView
-
-        return CardView, HealModel
-
-    @property
     def get_card(self):
         return Cards.Listener
 
@@ -39,8 +32,8 @@ class ListenerModel(ICardModel):
     def is_target_needed(self):
         return True
 
-    def end(self):
-        if super().end():
-            return "Игрок услышал {}" + self.game[self._target].get_role_str
+    def final(self):
+        if super().final():
+            self.end_message = "Игрок услышал {}" + self.game[self._target].get_role_str
 
-        return None
+        return GSP.Morning

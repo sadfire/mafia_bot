@@ -5,8 +5,8 @@ from Utils import kbf
 
 
 class ChooseGameMode(IState):
-    def __init__(self, session, previous=None):
-        super().__init__(session, previous)
+    def __init__(self, session):
+        super().__init__(session)
         self._next = GameStartConfirmation
 
     def _greeting(self) -> None:

@@ -7,8 +7,8 @@ from Utils.KeyboardUtils import KeyboardFactory, MultiPageKeyboardFactory
 
 
 class EveningHostAdd(IState):
-    def __init__(self, session, previous=None):
-        super().__init__(session, previous)
+    def __init__(self, session):
+        super().__init__(session)
         self._next = CalculationOfPlayers
         self._evening = self._session.get_evening()
 

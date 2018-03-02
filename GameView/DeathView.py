@@ -6,8 +6,8 @@ from Utils import kbf
 
 
 class DeathView(IGameView):
-    def __init__(self, session, game, next_state, model=None):
-        super().__init__(session, game, next_state, DeathModel(game))
+    def __init__(self, session, game, model=None, is_greeting=True):
+        super().__init__(session, game, DeathModel)
 
         self._init_next()
 
@@ -19,7 +19,7 @@ class DeathView(IGameView):
             return
 
         if len(self._model.get_cards) == 0:
-            self._session.edit_message(self._message, self._model.end(),
+            self._session.edit_message(self._message, self._model.final(),
                                        reply_markup=kbf.button("Закончить посмертные 10 секунд.", self.end_callback))
             return
 
@@ -54,6 +54,6 @@ class DeathView(IGameView):
 
     def end_callback(self, bot, update):
         self._session.edit_message(self._message, "Игрок под номером {} умирает.\n")
-        self._model.end()
+        self._model.final()
         self._session.remove_markup(update)
         self._session.to_next_state()

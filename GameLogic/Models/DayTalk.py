@@ -9,7 +9,7 @@ class DayTalkModel(IGameModel):
         super().__init__(game)
         self.additional_time = []
 
-    def end(self):
+    def final(self):
         self.game.course_count += 1
 
     @property

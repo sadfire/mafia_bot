@@ -6,16 +6,16 @@ from Utils import kbf
 
 
 class CardView(IGameView):
-    def __init__(self, session, game, next_state, model: ICardModel.__class__):
+    def __init__(self, session, game, model=None, is_greeting=True):
 
         self._model = model(game)
         self.is_pseudo = self._model.is_wasted
 
-        super().__init__(session=session,
-                         game=game,
-                         next_state=self._model.next_state,
-                         model=self._model,
-                         is_greeting=not self.is_pseudo)
+        super().__init__(session=session, game=game, model=self._model, is_greeting=not self.is_pseudo)
+
+    @property
+    def _next(self):
+        return self._model.next_state
 
     def _greeting(self):
         text = f"Будет ли использована {self._model.get_name}"
@@ -76,10 +76,7 @@ class CardView(IGameView):
         return kb
 
     def _end_action_callback(self, bot, update):
-        end_result = self._model.end()
-
-        if isinstance(end_result, bool):
-            end_result = "Успех" if end_result else "Провал"
+        end_result = self._model.final()
 
         if end_result is None or end_result == "":
             self._session.delete_message(self._message)

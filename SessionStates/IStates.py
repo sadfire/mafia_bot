@@ -7,18 +7,18 @@ def get_query_text(update):
 
 
 class IState:
-    def __init__(self, session, previous=None, is_greeting=True):
+    def __init__(self, session, is_greeting=True):
         if getattr(self, "is_pseudo", None) is None:
             self.is_pseudo = False
 
         self._message = None
         self._session = session
-        self._previous = previous
         if is_greeting:
             self._greeting()
 
-        if getattr(self, "_next", None) is None:
-            self._next = None
+    @property
+    def _next(self):
+        return None
 
     @abstractmethod
     def _greeting(self) -> None:
@@ -31,4 +31,4 @@ class IState:
     def next(self):
         if self._next is None:
             return self
-        return self._next(self._session, self.__class__)
+        return self._next(self._session)

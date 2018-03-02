@@ -11,15 +11,8 @@ from Utils import kbf, mkbf
 
 
 class EveningManagement(IState):
-    def _greeting(self):
-        self._session.send_message(text="Начнем вечер!\n"
-                                        "Добавьте игроков. \n"
-                                        "Вы можете открыть список игроков")
-
-    def __init__(self, session, previous=None):
-        super().__init__(session, previous)
-
-        self._next = EveningHostAdd
+    def __init__(self, session):
+        super().__init__(session)
 
         self._handler = self._session.add_handler(MessageHandler(Filters.text, self._add_member_handler))
         self._evening = self._session.evening
@@ -33,6 +26,14 @@ class EveningManagement(IState):
 
     def __del__(self):
         self._session.remove_handler(self._handler)
+
+    def _greeting(self):
+        self._session.send_message(text="Начнем вечер!\n"
+                                        "Добавьте игроков. \n"
+                                        "Вы можете открыть список игроков")
+
+    def _next(self):
+        return EveningHostAdd
 
     def _add_member_handler(self, bot, updater):
         txt = updater.effective_message.text
@@ -176,7 +177,8 @@ class EveningManagement(IState):
                 try:
                     self._session.delete_message(self._members_message)
                 except BadRequest:
-                    logging.warning("Cant delete message in {}.{}".format(self.__class__, "_end_added_players_callback"))
+                    logging.warning(
+                        "Cant delete message in {}.{}".format(self.__class__, "_end_added_players_callback"))
 
             self._session.delete_message(self._message)
             self._session.to_next_state()

@@ -5,9 +5,8 @@ from Utils import KeyboardFactory as kbf
 
 
 class IntroductionView(IGameView):
-    def __init__(self, session, game, next_state, model=False):
+    def __init__(self, session, game, model=False):
         self.is_mafia = model
-        self.is_pseudo = False
 
         if self.is_mafia:
             from GameView import MafiaVotingView
@@ -16,10 +15,14 @@ class IntroductionView(IGameView):
             from GameView import CommissarCheck
             self._next = CommissarCheck
 
-        if (self.is_mafia and len(game.get_players(R.Mafia)) == 3) or (not self.is_mafia and game.is_commissar):
-            self.is_pseudo = True
+        super().__init__(session=session, game=game)
 
-        super().__init__(session, game, self._next, None)
+    @property
+    def is_pseudo(self):
+        if self.is_mafia:
+            return len(self.game.get_players(R.Mafia)) == 3
+        else:
+            return self.game.is_commissar
 
     def _greeting(self):
         if self.is_pseudo:

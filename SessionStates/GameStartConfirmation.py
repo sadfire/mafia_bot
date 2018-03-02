@@ -1,12 +1,11 @@
-from GameView import IGameView
-from SessionStates import IState
+from GameView.IGameView import IGameView
 from Utils import kbf
 
 
 class GameStartConfirmation(IGameView):
-    def __init__(self, session, previous=None, is_greeting=True):
+    def __init__(self, session, game=None, model=None, is_greeting=True):
         game = session.evening.get_game(session.owner)
-        super().__init__(session, game, None, None, is_greeting)
+        super().__init__(session, game, None, is_greeting)
         self._next = game.get_state(None)
 
     def _greeting(self) -> None:

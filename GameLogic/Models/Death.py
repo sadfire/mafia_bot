@@ -11,7 +11,7 @@ class DeathModel(IGameModel):
     def is_pseudo(self):
         return self.game.gonna_die is None
 
-    def end(self) -> str:
+    def final(self) -> str:
         if self.game.gonna_die is None:
             return "Никто не умер"
 

@@ -11,11 +11,6 @@ class ChangeRoleModel(ICardModel):
         return super().is_wasted or self.game.course_count != 0
 
     @property
-    def next_state(self):
-        from GameView.IntroductionView import IntroductionView
-        return IntroductionView, True
-
-    @property
     def get_card(self):
         return Cards.ChangeRole
 
@@ -31,6 +26,11 @@ class ChangeRoleModel(ICardModel):
     def is_target_needed(self):
         return True
 
-    def end(self):
-        return "Обмен с игроком {}  " if super().end() else None
+    def final(self):
+        from GameView.IntroductionView import IntroductionView
+        if super().final():
+            self.end_message = "Обмен произошел"
+
+        return IntroductionView, True
+
 

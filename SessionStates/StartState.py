@@ -4,14 +4,15 @@ from Utils import kbf
 
 
 class StartState(IState):
-    def __init__(self, session, previous=None):
+    def __init__(self, session):
         self._evening_connect_mode = False
-        super().__init__(session, previous)
+        super().__init__(session)
         for evening in self._session.all_evenings:
             if self._session.owner.id in evening.hosts:
                 self._evening_connect_mode = True
                 self._session.evening = evening
                 break
+        self.next_state = None
 
     def _greeting(self) -> None:
         appeal = self._session.owner.name if self._session.owner.name != "" else "Ведущий"
@@ -22,8 +23,12 @@ class StartState(IState):
                                                          self._player_manager_callback,
                                                          "Меню вечера", self._test_game_callback))
 
+    @property
+    def _next(self):
+        return self.next_state
+
     def process_state(self, next_state, update):
-        self._next = next_state
+        self.next_state = next_state
         self._session.remove_markup(update)
         self._session.to_next_state()
 

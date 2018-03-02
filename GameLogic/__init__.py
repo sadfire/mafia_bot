@@ -7,3 +7,5 @@ from GameLogic.GameEvents import Event
 from GameLogic.GameModes import GameMode, GameModeCards
 from GameLogic.CardsProvider import CardsProvider
 from GameLogic.Game import Game
+from GameLogic.GameStateProviders import GameStateProviders as GSP
+from GameLogic.GameStateProviders import GameStateProviders

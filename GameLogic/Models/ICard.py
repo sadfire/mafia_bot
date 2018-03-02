@@ -10,6 +10,7 @@ class ICardModel(IGameModel):
         self._initiator = None
         self._target = None
         self.initiator_ask = False
+        self.end_message = ""
 
     @property
     def is_wasted(self):
@@ -35,7 +36,8 @@ class ICardModel(IGameModel):
     def get_result(self):
         return None
 
-    def end(self):
+    @abstractmethod
+    def final(self):
         if (self.is_initiator_needed and self._initiator is None) or (self.is_target_needed and self._target is None):
             return False
 
@@ -51,11 +53,6 @@ class ICardModel(IGameModel):
     @abstractmethod
     def get_card(self) -> Cards:
         return Cards.Neutral
-
-    @property
-    @abstractmethod
-    def next_state(self):
-        pass
 
     @property
     @abstractmethod

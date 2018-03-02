@@ -8,3 +8,4 @@ from GameView.CardView import CardView
 from GameView.DayTalkView import DayTalkView
 from GameView.DeathView import DeathView
 from GameView.TimerMessageHandler import TimerMessageHandler, Timer
+from GameView.FrontierState import FrontierState

@@ -1,4 +1,4 @@
-from GameLogic import Cards
+from GameLogic import Cards, GSP
 from GameLogic.Models import ICardModel
 
 
@@ -11,12 +11,6 @@ class LeaderModel(ICardModel):
             return self.game.gonna_die
         else:
             return self.game.get_alive(is_card_closed=True)
-
-    @property
-    def next_state(self):
-        from GameView import CardView
-        from GameLogic.Models.Cards import HealModel
-        return CardView, HealModel
 
     @property
     def is_target_needed(self) -> bool:
@@ -41,8 +35,14 @@ class LeaderModel(ICardModel):
     def get_target_question(self):
         return "Кого 👨🏽‍⚖️ лидер отправляет на казнь?"
 
-    def end(self):
-        result = super().end()
-        self.game.cards[self.get_card] = True
+    def final(self):
+        result = super().final()
+
         if result is False:
-            return "Никто не умирает"
+            self.end_message = "Никто не умирает"
+            from GameView import FrontierState
+            return FrontierState
+        else:
+            self.game.cards[self.get_card] = True
+            self.end_message = "👨🏽‍⚖️ Лидер сделал свой выбор"
+            return GSP.DeathStart

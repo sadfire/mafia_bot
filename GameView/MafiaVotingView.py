@@ -7,9 +7,8 @@ from Utils.KeyboardUtils import MafiaMarkup, KeyboardFactory as kbf, emoji_numbe
 
 
 class MafiaVotingView(IGameView):
-    def __init__(self, session, game: Game, next_state, model):
-        self._model = VotingModel(game, True)
-        super().__init__(session, game, next_state, self._model)
+    def __init__(self, session, game: Game, model=None):
+        super().__init__(session, game, VotingModel(game, True))
 
         from GameView.IntroductionView import IntroductionView
         self._next = IntroductionView, False
@@ -55,7 +54,7 @@ class MafiaVotingView(IGameView):
             self._model.init_target(number)
             self._session.edit_message(self._message, f"Игрок {emn(number)} на грани жизни и смерти.")
 
-        self._model.end()
+        self._model.final()
         self._session.to_next_state()
 
     def ask_mafia_card(self, bot, update, card_id):

@@ -22,6 +22,6 @@ class UndercoverModel(ICardModel):
 
         return CardView, ChangeRoleModel
 
-    def end(self):
+    def final(self):
         self._target = self._initiator
-        return "Игрок {} ушел под прикрытие." if super().end() else None
+        return "Игрок {} ушел под прикрытие." if super().final() else None

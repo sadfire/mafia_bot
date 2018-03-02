@@ -16,7 +16,7 @@ class IGameModel:
         return ""
 
     @abstractmethod
-    def end(self) -> str:
+    def final(self) -> str:
         return ""
 
 

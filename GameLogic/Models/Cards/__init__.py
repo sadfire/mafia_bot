@@ -7,3 +7,4 @@ from GameLogic.Models.Cards.Theft import TheftModel
 from GameLogic.Models.Cards.Undercover import UndercoverModel
 from GameLogic.Models.Cards.Recruitment import RecruitmentModel
 from GameLogic.Models.Cards.Leader import LeaderModel
+from GameLogic.Models.Cards.Harakiri import HarakiriModel

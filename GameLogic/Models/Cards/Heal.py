@@ -1,4 +1,4 @@
-from GameLogic import Roles
+from GameLogic import Roles, GSP
 from GameLogic.Cards import Cards
 from GameLogic.Models.ICard import ICardModel
 
@@ -33,14 +33,12 @@ class HealModel(ICardModel):
     def is_target_needed(self):
         return False
 
-    def end(self):
-        result = super().end()
+    def final(self):
+        result = super().final()
         if result:
-            self.game.next_course()
-            return "Игрок {} выжил"
-
-    @property
-    def next_state(self):
-        from GameView import CardView
-        from GameLogic.Models.Cards import JacketModel
-        return CardView, JacketModel
+            self.end_message = "Игрок {} выжил"
+            return GSP.DeathOut(self.game)
+        else:
+            from GameView import CardView
+            from GameLogic.Models.Cards import JacketModel
+            return CardView, JacketModel
