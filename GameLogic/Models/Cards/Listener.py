@@ -36,4 +36,8 @@ class ListenerModel(ICardModel):
         if super().final():
             self.end_message = "Игрок услышал {}" + self.game[self._target].get_role_str
 
-        return GSP.Morning
+        return GSP.Morning(self.game)
+
+    @property
+    def is_target_message_needed(self):
+        return False

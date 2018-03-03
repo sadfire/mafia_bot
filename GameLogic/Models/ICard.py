@@ -74,3 +74,7 @@ class ICardModel(IGameModel):
     @property
     def get_target_question(self):
         return "Номер цели использования карты"
+
+    @property
+    def is_target_message_needed(self):
+        return True

@@ -10,12 +10,12 @@ class IntroductionView(IGameView):
 
         if self.is_mafia:
             from GameView import MafiaVotingView
-            self._next = MafiaVotingView
+            self._next_state = MafiaVotingView
         else:
             from GameView import CommissarCheck
-            self._next = CommissarCheck
+            self._next_state = CommissarCheck
 
-        super().__init__(session=session, game=game)
+        super().__init__(session=session, game=game, is_greeting=True)
 
     @property
     def is_pseudo(self):

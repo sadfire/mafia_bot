@@ -42,4 +42,4 @@ class Cards(Enum):
     def is_day_card(card) -> bool:
         if isinstance(card, int):
             card = Cards(card)
-        return card in [Cards.Alibi, Cards.Theft, Cards.Recruitment, Cards.Undercover]
+        return card in [Cards.Alibi, Cards.Theft, Cards.Retirement]

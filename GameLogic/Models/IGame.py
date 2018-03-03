@@ -10,6 +10,7 @@ class IGameModel:
         super().__init__()
         self.game = game
         self._event = Event.WTF
+        self.end_message = ""
 
     @property
     def get_name(self):

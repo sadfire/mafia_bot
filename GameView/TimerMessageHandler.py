@@ -48,20 +48,27 @@ class Timer:
 
 class TimerMessageHandler:
     def __init__(self, session, current_player, callback, stop_callback, seconds=60):
+        if seconds is 0:
+            seconds = 60
+
         self._session = session
         self._current_player = current_player
         self._callback = callback
         self._stop_callback = stop_callback
         self._timer = Timer(seconds, self.update)
 
-        self._message = self._session.send_message(self.get_message_string, self.get_message_kb)
+        self.message = self._session.send_message(self.get_message_string, self.get_message_kb)
+
+    @property
+    def get_current_seconds(self):
+        return self._timer.current
 
     def update(self):
         if self._timer.current == 0:
-            self._session.edit_message(self._message, "Минута игрока {} закончилась.".format(self._current_player.get_num_str))
+            self._session.edit_message(self.message, "Минута игрока {} закончилась.".format(self._current_player.get_num_str))
             self._stop_callback(self._current_player.number)
         else:
-            self._session.edit_message(self._message, self.get_message_string, self.get_message_kb)
+            self._session.edit_message(self.message, self.get_message_string, self.get_message_kb)
 
     def callback(self, action):
         return getattr(self._timer, action)()

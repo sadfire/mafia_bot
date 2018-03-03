@@ -4,9 +4,6 @@ from SessionStates.IStates import IState
 
 
 class IGameView(IState):
-    def _greeting(self):
-        pass
-
     def __init__(self, session, game, model=None, is_greeting=True):
         self.game = game
 
@@ -16,7 +13,12 @@ class IGameView(IState):
             self._model = model
 
         self._target = None
+
+
         super(IGameView, self).__init__(session, is_greeting)
+
+    def _greeting(self):
+        pass
 
     def next(self):
         next_state_class = self._next
@@ -29,7 +31,7 @@ class IGameView(IState):
                                           game=self.game,
                                           model=model)
         except TypeError as e:
-            print(next_state_class.__name__, e)
+            print(next_state_class.__name__ if next_state_class is not None else "None", self.__class__, e)
             exit(0)
 
         return next_state.next() if next_state.is_pseudo else next_state

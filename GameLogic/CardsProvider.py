@@ -18,7 +18,7 @@ class CardsProvider:
         pass
 
     def Alibi(self, _, target=None):
-        self.game[target][GI.IsNotImmunity] = True
+        self.game[target][GI.IsNotImmunity] = False
         self.game.remove_from_vote(target)
 
     def Banzai(self, initiator, target):

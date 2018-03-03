@@ -9,8 +9,6 @@ class DeathView(IGameView):
     def __init__(self, session, game, model=None, is_greeting=True):
         super().__init__(session, game, DeathModel)
 
-        self._init_next()
-
         if self._model.is_pseudo:
             if self._message is not None:
                 self._session.delete_message(self._message)
@@ -19,14 +17,14 @@ class DeathView(IGameView):
             return
 
         if len(self._model.get_cards) == 0:
-            self._session.edit_message(self._message, self._model.final(),
+            self._next_state  = self._model.final()
+            self._session.edit_message(self._message, self._model.end_message,
                                        reply_markup=kbf.button("Закончить посмертные 10 секунд.", self.end_callback))
             return
 
-    def _init_next(self):
-        from GameView import CardView, DayTalkView
-        from GameLogic.Models.Cards import UndercoverModel
-        self._next = DayTalkView if self.game.course_count % 2 == 0 else (CardView, UndercoverModel)
+    @property
+    def _next(self):
+        return self._model.final()
 
     def _greeting(self):
         if self.game.gonna_die is None:
@@ -45,6 +43,7 @@ class DeathView(IGameView):
         kb = kbf.empty()
         for card in cards:
             kb += kbf.button(Cards.get_name(card), self.card_callback, card.value)
+
         kb += kbf.button("Попрощаться с игроком", self.end_callback)
         return kb
 

@@ -1,4 +1,4 @@
-from GameLogic.Models.Cards.Aliby import AlibyModel
+from GameLogic.Models.Cards.Aliby import AlibiModel
 from GameLogic.Models.Cards.Heal import HealModel
 from GameLogic.Models.Cards.Jacket import JacketModel
 from GameLogic.Models.Cards.Listener import ListenerModel

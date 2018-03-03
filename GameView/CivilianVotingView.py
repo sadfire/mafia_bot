@@ -1,4 +1,4 @@
-from GameLogic import Game
+from GameLogic import Game, GSP
 from GameLogic.Models import VotingModel
 
 from GameView import IGameView
@@ -28,18 +28,11 @@ class CivilianVotingView(IGameView):
         self._voters_count = len(self._model.voters)
         self._send_vote_message()
 
-    def _next(self):
-        return self.__next
-
     def _init_next(self):
-        from GameView import CardView
-
         if self._model.is_one_target:
-            from GameLogic.Models.Cards import HealModel
-            self.__next = CardView, HealModel
+            self._next_state = GSP.DeathStart(self.game)
         else:
-            from GameLogic.Models.Cards import LeaderModel
-            self.__next = CardView, LeaderModel
+            self._next_state = GSP.HalfOfVote(self.game)
 
     @property
     def vote_message(self):

@@ -17,6 +17,7 @@ class GameInfo(Enum):
     IsHaveVote = 9
     IsNotImmunity = 10
     IsNotHidden = 11
+    Seconds = 12
 
 
 class Member:

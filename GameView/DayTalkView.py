@@ -1,6 +1,6 @@
 from enum import Enum
 
-from GameLogic import Cards, GSP
+from GameLogic import Cards, GSP, GameInfo
 
 from GameLogic.Models import DayTalkModel
 
@@ -23,7 +23,7 @@ class DayTalkView(IGameView):
                           M.Vote: None,
                           M.Card: None}
 
-        self._view, self._model, self.timer = None, None, None
+        self.timer = None
 
         self.action_dict = \
             {
@@ -46,11 +46,9 @@ class DayTalkView(IGameView):
 
         self.current_player = None
         self.timer_handler = None
-        super().__init__(session, game, DayTalkModel(game))
 
-    @property
-    def _next(self):
-        return self._view, self._model
+        super().__init__(session, game, DayTalkModel(game))
+        self.continue_timer()
 
     def _greeting(self):
         self._messages[M.Main] = self._session.send_message(text="Главное меню")
@@ -104,21 +102,26 @@ class DayTalkView(IGameView):
 
     def card_button_callback(self, bot, update, number):
         kb = kbf.empty()
+
         for card in self._model.get_possible_cards(True):
             kb += kbf.button(Cards.get_name(card), self.to_card_state, (number, card.value))
-        self._session.send_message(text="Вы хотите применять карту?",
-                                   reply_markup=kb + kbf.close_button())
+
+        self._messages[M.Card] = self._session.send_message(text="Вы хотите применять карту?",
+                                                            reply_markup=kb + kbf.close_button())
 
     def to_card_state(self, bot, update, args):
+        if self.current_player is None:
+            return
+
+        self._session.delete_message(self._messages[M.Card])
         self._session.delete_message(self._messages[M.Main])
         number_initiator, card = args
         card = Cards(card)
 
         self.game.current_player = number_initiator
 
-        from GameView import CardView
-        self._view = CardView
-        self._model = GSP.Card(card)
+        self._next_state = GSP.Card(card)
+        self.pause_timer()
 
         self._session.to_next_state()
 
@@ -145,15 +148,14 @@ class DayTalkView(IGameView):
 
             from GameLogic.Models.Cards import UndercoverModel
             from GameView import CardView
-            self._view = CardView
-            self._model = UndercoverModel
+            self._next_state = CardView, UndercoverModel
         else:
             candidates = [emoji_number(candidate) for candidate in self.game.candidates]
 
             self._session.delete_message(self._messages[M.Main])
             self._session.send_message("Выставлены:\n\n{}".format("\n".join(candidates)))
 
-            self._view = CivilianVotingView
+            self._next_state = CivilianVotingView
 
         return self._session.to_next_state()
 
@@ -164,8 +166,7 @@ class DayTalkView(IGameView):
         from GameLogic.Models.Cards import HealModel
         from GameView import CardView
 
-        self._view = CardView
-        self._model = HealModel
+        self._next_state = CardView, HealModel
 
         self._session.to_next_state()
 
@@ -176,7 +177,10 @@ class DayTalkView(IGameView):
         self.timer_handler = TimerMessageHandler(session=self._session,
                                                  current_player=self.game[number],
                                                  callback=self._player_clock_callback,
-                                                 stop_callback=self._stop_clock_callback)
+                                                 stop_callback=self._stop_clock_callback,
+                                                 seconds=self.game[number][GameInfo.Seconds])
+
+        self._messages[M.Timer] = self.timer_handler.message
 
     def _player_clock_callback(self, bot, update, action):
         self.timer_handler.callback(action)
@@ -185,8 +189,22 @@ class DayTalkView(IGameView):
         if number != self.current_player:
             return
 
+        self.game[self.current_player][GameInfo.Seconds] = 0
+
         self.current_player = None
         self._model.ban_talk(number)
         self.timer_handler = None
         self.update_message()
 
+    def continue_timer(self):
+        for number in self.game.get_alive():
+            if self.game[number][GameInfo.Seconds] != 0:
+                self.start_clock_button_callback(None, None, number)
+                return
+
+    def pause_timer(self):
+        if self.current_player is None:
+            return
+        self._player_clock_callback(None, None, "pause")
+        self.game[self.current_player][GameInfo.Seconds] = self.timer_handler.get_current_seconds
+        self._session.delete_message(self._messages[M.Timer])

@@ -52,6 +52,7 @@ class Game:
             player[GI.IsOnVote] = False
             player[GI.Role] = R.Civilian
             player[GI.Warnings] = 0
+            player[GI.Seconds] = 0
 
         self.players = dict([(player.number, player) for player in self.players])
 
@@ -147,4 +148,6 @@ class Game:
             self.players[number][GI.IsOnVote] = False
             self.players[number][GI.IsNotTalked] = True
             self.players[number][GI.IsHaveVote] = True
+            self.players[number][GI.Seconds] = 0
+
         self.candidates.clear()

@@ -9,8 +9,11 @@ from Utils.KeyboardUtils import KeyboardFactory, MultiPageKeyboardFactory
 class EveningHostAdd(IState):
     def __init__(self, session):
         super().__init__(session)
-        self._next = CalculationOfPlayers
         self._evening = self._session.get_evening()
+
+    @property
+    def _next(self):
+        return CalculationOfPlayers
 
     def _greeting(self):
         self._message = self._session.send_message("Хотите добавить еще ведущих в игру?\n"
@@ -19,7 +22,8 @@ class EveningHostAdd(IState):
                                                        self._add_evening_host_callback, self._end_evening_host_manager))
 
     def _add_evening_host_callback(self, bot, update):
-        self._message = self._session.edit_message(self._message, "Кандидаты в ведущие:", reply_markup=self.get_hosts_kb)
+        self._message = self._session.edit_message(self._message, "Кандидаты в ведущие:",
+                                                   reply_markup=self.get_hosts_kb)
 
     def _add_host_callback(self, bot, update, argument):
         self._evening.add_host(self._session.db.get_member(int(argument)))
@@ -35,7 +39,6 @@ class EveningHostAdd(IState):
 
     @property
     def get_hosts_kb(self):
-
         hosts = [host for host in self._session.db.get_hosts() if host not in self._evening.get_hosts]
 
         kb = KeyboardFactory.players_with_action(hosts,

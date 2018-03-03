@@ -7,7 +7,10 @@ from Utils import kbf
 class ChooseGameMode(IState):
     def __init__(self, session):
         super().__init__(session)
-        self._next = GameStartConfirmation
+
+    @property
+    def _next(self):
+        return GameStartConfirmation
 
     def _greeting(self) -> None:
         self._message = self._session.send_message("Выберите режим игры", reply_markup=self.game_mode_kb)
@@ -25,4 +28,3 @@ class ChooseGameMode(IState):
         self._session.evening.get_game(owner).set_mode(mode)
         self._session.edit_message(self._message, "Выбран {}".format(GameMode.get_name(mode)))
         self._session.to_next_state()
-

@@ -32,6 +32,7 @@ class EveningManagement(IState):
                                         "Добавьте игроков. \n"
                                         "Вы можете открыть список игроков")
 
+    @property
     def _next(self):
         return EveningHostAdd
 

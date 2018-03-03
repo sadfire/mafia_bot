@@ -24,4 +24,7 @@ class UndercoverModel(ICardModel):
 
     def final(self):
         self._target = self._initiator
-        return "Игрок {} ушел под прикрытие." if super().final() else None
+        if super().final():
+            self.end_message = "Игрок {} ушел под прикрытие."
+
+        return self.next_state

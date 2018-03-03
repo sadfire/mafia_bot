@@ -1,5 +1,6 @@
-from GameLogic import Game, GameInfo, Roles
-from GameView import DayTalkView
+from GameLogic import Game, GameInfo, Roles, GameMode
+from GameLogic.Models.Cards import JacketModel
+from GameView import DayTalkView, IntroductionView, DeathView, CardView, CommissarCheck, MafiaVotingView
 
 from SessionStates import IState, GameStartConfirmation
 
@@ -29,17 +30,16 @@ class TestGameManagement(IState):
         players = members[:size]
         for i in range(0, size):
             players[i].number = i + 1
-        self._evening.games[session.t_id] = Game(session.owner, self._evening, players)
+        self._evening.games[session.t_id] = Game(session.owner, self._evening, players, mode=GameMode.Beginner)
         self._evening.games[session.t_id][1][GameInfo.Role] = Roles.Mafia
         self._evening.games[session.t_id][2][GameInfo.Role] = Roles.Mafia
-        self._evening.games[session.t_id][3][GameInfo.Role] = Roles.Mafia
         self._evening.games[session.t_id][4][GameInfo.Role] = Roles.Commissar
         self._evening.games[session.t_id].candidates = [1]
+        self._evening.games[session.t_id].course_count += 1
 
     def _start(self, bot, update):
         self._session.remove_markup(update)
         self._session.to_next_state()
 
     def next(self):
-        self._evening.games[self._session.t_id].course_count += 1
         return DayTalkView(session=self._session, game=self._evening.games[self._session.t_id])

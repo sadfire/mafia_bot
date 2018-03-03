@@ -1,8 +1,9 @@
+from GameLogic import GameInfo
 from GameLogic.Models.ICard import ICardModel
 from GameView.DayTalkView import DayTalkView
 
 
-class AlibyModel(ICardModel):
+class AlibiModel(ICardModel):
     def get_candidate(self, is_target):
         return self.game.get_alive()
 
@@ -18,4 +19,3 @@ class AlibyModel(ICardModel):
     def final(self) -> type:
         super().final()
         return DayTalkView
-

@@ -10,10 +10,12 @@ class MafiaVotingView(IGameView):
     def __init__(self, session, game: Game, model=None):
         super().__init__(session, game, VotingModel(game, True))
 
-        from GameView.IntroductionView import IntroductionView
-        self._next = IntroductionView, False
-
         self.req_initiator = None
+
+    @property
+    def _next(self):
+        from GameView.IntroductionView import IntroductionView
+        return IntroductionView, False
 
     def _greeting(self):
         self._message = self._session.send_message(text="Приветствую тебя мафия.\n"
@@ -66,7 +68,7 @@ class MafiaVotingView(IGameView):
             from GameLogic.Models.Cards import RecruitmentModel
             self._next = CardView, RecruitmentModel
             self._session.to_next_state()
-        #  TODO Add other night cards
+            #  TODO Add other night cards
 
     def recruitment_callback(self, bot, update, mafia_number):
         mafia_number = int(mafia_number)

@@ -6,7 +6,10 @@ class GameStartConfirmation(IGameView):
     def __init__(self, session, game=None, model=None, is_greeting=True):
         game = session.evening.get_game(session.owner)
         super().__init__(session, game, None, is_greeting)
-        self._next = game.get_state(None)
+
+    @property
+    def _next(self):
+        return self.game.get_state(None)
 
     def _greeting(self) -> None:
         self._session.send_message(text="Вы готовы начать игру?",

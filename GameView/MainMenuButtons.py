@@ -67,7 +67,8 @@ def get_clock_button(action_dict, game, number):
 
 def get_card_button(action_dict, game, number):
     card = game[number][GI.Card]
-    if card is not None and game.cards[card]:
+
+    if card is not None and not game.cards[card]:
 
         if game[number][GI.Card] is Cards.Leader:
             card_button = action_dict[Buttons.Leader]
@@ -80,6 +81,7 @@ def get_card_button(action_dict, game, number):
 
     else:
         card_button = action_dict[Buttons.Card]
+
     return card_button
 
 

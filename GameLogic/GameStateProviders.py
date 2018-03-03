@@ -4,7 +4,22 @@ from GameLogic import GameMode
 class GameStateProviders:
     @classmethod
     def Morning(cls, game):
-        return GameStateProviders.Death
+        return cls.DeathStart(game)
+
+    @classmethod
+    def Day(cls, game):
+        from GameView import DayTalkView
+        return DayTalkView
+
+    @classmethod
+    def Evening(cls, game):
+        if game.mode is GameMode.Beginner:
+            from GameView import CardView
+            from GameLogic.Models.Cards import UndercoverModel
+            return CardView, UndercoverModel
+        elif game.mode is GameMode.Standard:
+            from GameView import IntroductionView
+            return IntroductionView, True
 
     @classmethod
     def Death(cls, game, previous=None):
@@ -44,12 +59,13 @@ class GameStateProviders:
             return CardView, HealModel
 
     @classmethod
-    def Morning(cls, game):
-        pass
+    def Card(cls, card):
+        from GameView import CardView
+        import GameLogic.Models.Cards as CardModels
+        return CardView, getattr(CardModels, "{}Model".format(card.name), None)
 
     @classmethod
-    def Card(cls, card):
-        import GameLogic.Models.Cards as CardModels
-        attr = getattr(CardModels, "{}Model".format(card.name))
-        attr = getattr(CardModels, "{}Model".format(card.name))
-        pass
+    def HalfOfVote(cls, game):
+        from GameLogic.Models.Cards import LeaderModel
+        from GameView import CardView
+        return CardView, LeaderModel
