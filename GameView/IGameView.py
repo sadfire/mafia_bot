@@ -31,7 +31,7 @@ class IGameView(IState):
                                           game=self.game,
                                           model=model)
         except TypeError as e:
-            print(next_state_class.__name__ if next_state_class is not None else "None", self.__class__, e)
+            print(next_state_class.__name__ if getattr(next_state_class, __name__, None) is not None else "None", self.__class__, e)
             exit(0)
 
         return next_state.next() if next_state.is_pseudo else next_state

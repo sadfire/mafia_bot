@@ -1,5 +1,4 @@
 from GameLogic.Models import ICardModel
-from GameView import DayTalkView
 
 
 class TheftModel(ICardModel):
@@ -18,7 +17,7 @@ class TheftModel(ICardModel):
     def is_target_needed(self):
         return True
 
-    @property
-    def next_state(self):
+    def final(self):
+        super().final()
+        from GameView.DayTalkView import DayTalkView
         return DayTalkView
-
