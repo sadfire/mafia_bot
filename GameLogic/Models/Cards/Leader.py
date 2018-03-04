@@ -45,4 +45,4 @@ class LeaderModel(ICardModel):
         else:
             self.game.cards[self.get_card] = True
             self.end_message = "👨🏽‍⚖️ Лидер сделал свой выбор"
-            return GSP.DeathStart
+            return GSP.DeathStart(self.game)

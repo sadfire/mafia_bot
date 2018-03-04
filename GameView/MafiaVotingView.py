@@ -14,8 +14,11 @@ class MafiaVotingView(IGameView):
 
     @property
     def _next(self):
-        from GameView.IntroductionView import IntroductionView
-        return IntroductionView, False
+        if self._next_state  is not None:
+            return self._next_state
+        else:
+            from GameView.IntroductionView import IntroductionView
+            return IntroductionView, False
 
     def _greeting(self):
         self._message = self._session.send_message(text="Приветствую тебя мафия.\n"
@@ -66,9 +69,9 @@ class MafiaVotingView(IGameView):
         if card is Cards.Recruitment:
             from GameView import CardView
             from GameLogic.Models.Cards import RecruitmentModel
-            self._next = CardView, RecruitmentModel
+            self._next_state = CardView, RecruitmentModel
             self._session.to_next_state()
-            #  TODO Add other night cards
+
 
     def recruitment_callback(self, bot, update, mafia_number):
         mafia_number = int(mafia_number)

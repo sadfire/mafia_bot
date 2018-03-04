@@ -20,3 +20,16 @@ class RecruitmentModel(ICardModel):
         if is_target:
             return [number for number in self.game.get_alive() if self.game[number][GI.Role] is not R.Mafia]
         return self.game.get_alive(R.Mafia)
+
+    @property
+    def get_initiator_question(self):
+        return "Номер игрока, использующего карту:"
+
+    @property
+    def get_target_question(self):
+        return "Какого игрока вербуем?"
+
+    def final(self):
+        self.end_message = "Игрок {} завербован" if super().final() else None
+        from GameView import MafiaVotingView
+        return MafiaVotingView

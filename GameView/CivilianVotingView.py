@@ -84,5 +84,5 @@ class CivilianVotingView(IGameView):
 
         if len(self.candidates) == 0:
             self.vote_callback(None, self._session.send_message("За {} проголосовали {} человек"), self._voters_count)
-
-        self._session.send_message(self.vote_message, self.vote_keyboard)
+        else:
+            self._session.send_message(self.vote_message, self.vote_keyboard)
