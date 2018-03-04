@@ -14,7 +14,7 @@ class MafiaVotingView(IGameView):
 
     @property
     def _next(self):
-        if self._next_state  is not None:
+        if self._next_state is not None:
             return self._next_state
         else:
             from GameView.IntroductionView import IntroductionView
@@ -71,21 +71,3 @@ class MafiaVotingView(IGameView):
             from GameLogic.Models.Cards import RecruitmentModel
             self._next_state = CardView, RecruitmentModel
             self._session.to_next_state()
-
-
-    def recruitment_callback(self, bot, update, mafia_number):
-        mafia_number = int(mafia_number)
-        self.game[mafia_number][GameInfo.IsCardSpent] = True
-        self.game.wasted_cards.append(Cards.Recruitment)
-        self.req_initiator = mafia_number
-
-        kb = kbf.empty()
-        for number in self.game.get_civilian_number:
-            kb += kbf.button(emn(number), self.recruitment_process_callback, number)
-        self._session.edit_message(self._req_message, "Кого вербуем?", reply_markup=kb)
-
-    def recruitment_process_callback(self, bot, update, number):
-        number = int(number)
-        self.game[number][GameInfo.Role] = Roles.Mafia
-        self.game.log_event(Event.Recruitment, initiator_players=self.req_initiator, target_player=number)
-        self._session.edit_message(self._req_message, "Завербован {}".format(emn(number)))
