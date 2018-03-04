@@ -47,8 +47,11 @@ class CardsProvider:
         pass
 
     def Theft(self, initiator, target):
-        self.game[initiator][GI.Card], self.game[target][GI.Card] = \
-            self.game[target][GI.Card], self.game[initiator][GI.Card]
+        if target is 0:
+            self.game[initiator][GI.Card] = None
+        else:
+            self.game[initiator][GI.Card], self.game[target][GI.Card] = \
+                self.game[target][GI.Card], self.game[initiator][GI.Card]
 
     def Mole(self, initiator, target):
         pass
