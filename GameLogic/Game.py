@@ -1,6 +1,6 @@
 from GameLogic import Cards as C, CardsProvider, GameMode as GM, GameModeCards, GameInfo as GI, Member, Roles as R, \
     Event
-from Utils.MafiaDatabaseApi import Database as db
+from Utils.MafiaDatabaseApi import Database as db, Database
 
 
 class Game:
@@ -37,6 +37,8 @@ class Game:
         self.cards = dict([(card, True) for card in cards])
 
     def __getitem__(self, key: int):
+        if key is 0:
+            return Database().get_member(self._host_id)
         return self.players.get(key, None)
 
     def __setitem__(self, key, value):

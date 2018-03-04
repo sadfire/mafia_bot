@@ -4,8 +4,11 @@ from GameLogic.Models import ICardModel
 class TheftModel(ICardModel):
     def get_candidate(self, is_target):
         candidate = self.game.get_alive()
+        
         if is_target:
             candidate.remove(self._initiator)
+            candidate.append(0)
+
         return candidate
 
     @property
